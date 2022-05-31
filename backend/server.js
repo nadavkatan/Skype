@@ -7,6 +7,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const authRouter = require('./routes/auth.route');
+const userRouter = require('./routes/user.route');
 
 const app = express();
 const PORT = process.env.PORT || 8000
@@ -41,6 +42,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 mongoose.connection.once("open", ()=>{
     console.log("Connected to database");

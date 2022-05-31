@@ -5,6 +5,8 @@ const userSchema = new mongoose.Schema({
     last_name: {type: String, required: true, trim: true},
     username: {type: String, required: true, trim: true, unique: true},
     email: {type: String, required: true, trim: true, unique: true},
+    friends:{type:[String]},
+    friendRequestesFrom: {type: [String]},
     hash: {type: String, required: true, trim: true},
     salt: {type: String, required: true, trim: true}
 });

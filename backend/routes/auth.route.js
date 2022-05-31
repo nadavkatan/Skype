@@ -30,14 +30,15 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-router.get("/logout", (req, res)=>{
-    console.log(req.user)
-     req.logout();
+router.post('/logout', (req, res, next)=>{
+    req.logout((err)=> {
+      if (err) { return next(err); }
     req.session.destroy((err)=>{
         res.clearCookie("connect.sid", {path: "/"})
         res.json(false)
     });
-});
+    });
+  });
 
 router.get("/check-auth", (req, res)=>{
     if(req.isAuthenticated()){
