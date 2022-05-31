@@ -1,0 +1,17 @@
+const {genPassword} = require('../utils/crypto.utilities');
+const User = require('../models/user.model');
+
+const createUser = async(newUser)=>{
+    const {password, ...restOfUser} = newUser;
+    saltAndHash = genPassword(password);
+    const createdUser = new User({...restOfUser, ...saltAndHash});
+    
+    try{
+        createdUser.save();
+        return createdUser;
+    }catch(err){
+        console.log(err)
+    }
+}
+
+module.exports = createUser;
