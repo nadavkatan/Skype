@@ -23,8 +23,8 @@ router.post('/login', (req, res, next) => {
         if(info) return res.json({info, isAuth: false});
         req.logIn(user, e => {
             if(e) return next(e);
-            console.log(req.session);
-            return res.json({isAuth: true}) 
+            console.log(req.user);
+            return res.json({isAuth: true, userId: req.user._id}) 
             
         });
     })(req, res, next);

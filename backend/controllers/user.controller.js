@@ -9,6 +9,24 @@ const getAllUsers = async()=>{
     }
 }
 
+const getUserById = async(id)=>{
+    try{
+        const user = await User.findById({_id:id});
+        return user;
+    }catch(e){
+        console.log(e)
+    }
+}
+
+const getUserByName = async(username)=>{
+    try{
+        const foundUser = await User.findOne({username:username});
+        return foundUser;
+    }catch(e){
+        console.log(e)
+    }
+}
+
 const getUserByUsername = async(username)=>{
     try{
         const foundUser = await User.findOne({username: username});
@@ -18,20 +36,29 @@ const getUserByUsername = async(username)=>{
     }
 }
 
-const addFriend = async(id,friendId)=>{
+const addFriend = async(id,username, friendId, friendName)=>{
     try{
-        const updatedUser1 = await User.findByIdAndUpdate({_id:id},{$push: {friends: [friendId]}, $pull: {friendRequestesFrom: friendId}});
-        const updatedUser2 = await User.findByIdAndUpdate({_id:friendId},{$push: {friends: [id]}});
+        const updatedUser1 = await User.findByIdAndUpdate({_id:id},{$push: {friends: [{friendId: friendId, friendName: friendName}]}, $pull: {friendRequestesFrom: {friendId: friendId, friendName: friendName}}}, { safe: true });
+        const updatedUser2 = await User.findByIdAndUpdate({_id:friendId},{$push: {friends: [{friendId: id, friendName: username}]}, $pull: {friendRequestesFrom: {friendId: id, friendName: username}}}, { safe: true });
         return [updatedUser1, updatedUser2]
     }catch(e){
         console.log(e)
     }
 }
 
-const sendFriendRequest = async(id, friendId)=>{
+const sendFriendRequest = async(id, username, friendId)=>{
     try{
-        const updatedUser = await User.findByIdAndUpdate({_id:friendId},{$push: {friendRequestesFrom: [id]}});
-        return updatedUser;
+        const user = await getUserById(friendId);
+        const exsitingFriendRequest = user.friendRequestesFrom.some(e => e.friendId === id);
+        const existingFriend = user.friends.some(e => e.friendId === id);
+        if(!exsitingFriendRequest && !existingFriend){
+            const updatedUser = await User.findByIdAndUpdate({_id:friendId},{$push: {friendRequestesFrom: [{friendId: id, friendName: username}]}});
+            return updatedUser;
+        }else{
+            console.log("existingFriendRequest: ", exsitingFriendRequest)
+            console.log("existingFriend: ", existingFriend)
+            console.log("request or friend already exists")
+        }
     }catch(e){
         console.log(e)
     }
@@ -45,14 +72,14 @@ const deleteUser = async(username)=>{
     }
 }
 
-const unfriend = async(id, friendId)=>{
+const unfriend = async(id, username, friendId, friendName)=>{
     try{
-        const updatedUser1 = await User.findByIdAndUpdate({_id: id}, {$pull: {friends: friendId}});
-        const updatedUser2 = await User.findByIdAndUpdate({_id: friendId}, {$pull: {friends: id}});
+        const updatedUser1 = await User.findByIdAndUpdate({_id: id}, {$pull: {friends: { friendId: friendId, friendName: friendName}}}, { safe: true },);
+        const updatedUser2 = await User.findByIdAndUpdate({_id: friendId}, {$pull: {friends: {friendId: id, friendName: username}}}, { safe: true },);
     }catch(e){
         console.log(e)
     }
 }
 
 
-module.exports={getAllUsers, getUserByUsername, deleteUser, addFriend, sendFriendRequest, unfriend}
+module.exports={getAllUsers, getUserById, getUserByName, getUserByUsername, deleteUser, addFriend, sendFriendRequest, unfriend}
