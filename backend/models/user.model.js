@@ -2,7 +2,15 @@ const mongoose = require('mongoose');
 
 const friendSchema= new mongoose.Schema({
     friendId:{type: String, required: true},
-    friendName:{type: String, required: true}
+    friendName:{type: String, required: true},
+    chatId:{type: String, required: true}
+});
+
+const friendRequestSchema = new mongoose.Schema({
+    sender_id: {type: String, required: true},
+    sender_name: {type: String, required: true},
+    // receiver_id: {type: String, required: true},
+    // receiver_name: {type: String, required: true},
 })
 
 const userSchema = new mongoose.Schema({
@@ -13,7 +21,7 @@ const userSchema = new mongoose.Schema({
     // friends:{type:[String]},
     friends: {type: [friendSchema], required: true},
     // friendRequestesFrom: {type: [String]},
-    friendRequestesFrom: {type: [friendSchema]},
+    friendRequestesFrom: {type: [friendRequestSchema]},
     hash: {type: String, required: true, trim: true},
     salt: {type: String, required: true, trim: true}
 });

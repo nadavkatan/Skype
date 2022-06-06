@@ -1,4 +1,6 @@
 const User = require('../models/user.model');
+const { uuid } = require('uuidv4');
+const {createNewChat} = require('./chat.controller');
 
 const getAllUsers = async()=>{
     try{
@@ -38,9 +40,11 @@ const getUserByUsername = async(username)=>{
 
 const addFriend = async(id,username, friendId, friendName)=>{
     try{
-        const updatedUser1 = await User.findByIdAndUpdate({_id:id},{$push: {friends: [{friendId: friendId, friendName: friendName}]}, $pull: {friendRequestesFrom: {friendId: friendId, friendName: friendName}}}, { safe: true });
-        const updatedUser2 = await User.findByIdAndUpdate({_id:friendId},{$push: {friends: [{friendId: id, friendName: username}]}, $pull: {friendRequestesFrom: {friendId: id, friendName: username}}}, { safe: true });
-        return [updatedUser1, updatedUser2]
+        const newChat = await createNewChat();
+        console.log(newChat);
+        const updatedUser1 = await User.findByIdAndUpdate({_id:id},{$push: {friends: [{friendId: friendId, friendName: friendName, chatId: newChat._id}]}, $pull: {friendRequestesFrom: {friendId: friendId, friendName: friendName}}}, { safe: true });
+        const updatedUser2 = await User.findByIdAndUpdate({_id:friendId},{$push: {friends: [{friendId: id, friendName: username, chatId: newChat._id}]}, $pull: {friendRequestesFrom: {friendId: id, friendName: username}}}, { safe: true });
+        return updatedUser1
     }catch(e){
         console.log(e)
     }
@@ -52,7 +56,7 @@ const sendFriendRequest = async(id, username, friendId)=>{
         const exsitingFriendRequest = user.friendRequestesFrom.some(e => e.friendId === id);
         const existingFriend = user.friends.some(e => e.friendId === id);
         if(!exsitingFriendRequest && !existingFriend){
-            const updatedUser = await User.findByIdAndUpdate({_id:friendId},{$push: {friendRequestesFrom: [{friendId: id, friendName: username}]}});
+            const updatedUser = await User.findByIdAndUpdate({_id:friendId},{$push: {friendRequestesFrom: [{sender_id: id, sender_name: username}]}});
             return updatedUser;
         }else{
             console.log("existingFriendRequest: ", exsitingFriendRequest)

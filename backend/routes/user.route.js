@@ -11,8 +11,13 @@ router.get('/:id', async(req, res) => {
     res.status(200).json(user);
 })
 
+router.post('/:id', async(req, res) => {
+    const user = await getUserById(req.body.id);
+    res.status(200).json(user);
+})
+
 router.post('/one', async(req, res) => {
-    console.log(req.body.username)
+    // console.log(req.body.username)
     const user = await getUserByName(req.body.username);
     res.status(200).json(user);
 })
@@ -23,12 +28,14 @@ router.post('/', async(req, res) => {
 });
 
 router.put('/', async(req, res) => {
-    const updatedUsers = await addFriend(req.body.id, req.body.username, req.body.friendId, req.body.friendName);
-    res.status(200).json('Friend added');
+    // console.log(req.body);
+    const updatedUser = await addFriend(req.body.id, req.body.username, req.body.friendId, req.body.friendName);
+    res.status(200).json(updatedUser);
 })
 
 router.put('/request', async(req, res) => {
-    const updatedUser = await sendFriendRequest(req.body.id, req.body.username, req.body.friendId);
+    // console.log(req.body)
+    const updatedUser = await sendFriendRequest(req.body.id, req.body.friendName, req.body.friendId);
     res.status(200).json('Friend request sent');
 })
 
