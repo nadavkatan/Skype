@@ -42,8 +42,8 @@ const addFriend = async(id,username, friendId, friendName)=>{
     try{
         const newChat = await createNewChat();
         console.log(newChat);
-        const updatedUser1 = await User.findByIdAndUpdate({_id:id},{$push: {friends: [{friendId: friendId, friendName: friendName, chatId: newChat._id}]}, $pull: {friendRequestesFrom: {friendId: friendId, friendName: friendName}}}, { safe: true });
-        const updatedUser2 = await User.findByIdAndUpdate({_id:friendId},{$push: {friends: [{friendId: id, friendName: username, chatId: newChat._id}]}, $pull: {friendRequestesFrom: {friendId: id, friendName: username}}}, { safe: true });
+        const updatedUser1 = await User.findByIdAndUpdate({_id:id},{$push: {friends: [{friendId: friendId, friendName: friendName, chatId: newChat._id}]}, $pull: {friendRequestesFrom: {sender_id: friendId, sender_name: friendName}}}, { safe: true });
+        const updatedUser2 = await User.findByIdAndUpdate({_id:friendId},{$push: {friends: [{friendId: id, friendName: username, chatId: newChat._id}]}, $pull: {friendRequestesTo: {friend_id: id}}}, { safe: true });
         return updatedUser1
     }catch(e){
         console.log(e)
@@ -56,6 +56,7 @@ const sendFriendRequest = async(id, username, friendId)=>{
         const exsitingFriendRequest = user.friendRequestesFrom.some(e => e.friendId === id);
         const existingFriend = user.friends.some(e => e.friendId === id);
         if(!exsitingFriendRequest && !existingFriend){
+            const updatedSender = await User.findByIdAndUpdate({_id:id},{$push: {friendRequestesTo: [{friend_id:friendId}]}})
             const updatedUser = await User.findByIdAndUpdate({_id:friendId},{$push: {friendRequestesFrom: [{sender_id: id, sender_name: username}]}});
             return updatedUser;
         }else{

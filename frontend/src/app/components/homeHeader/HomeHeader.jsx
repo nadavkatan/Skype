@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import {AppContext} from '../../context/Context';
 import { useContext } from 'react';
 import {useStyles} from './styles/styles';
+import Drawer from '../drawer/Drawer';
 
 
 const HomeHeader = () => {
@@ -15,7 +16,7 @@ const HomeHeader = () => {
   return (
     <div className={classes.profileContainer}>
     <div  className={classes.avatarContainer}>
-    <Avatar/>
+    <Drawer/>
     </div>
     <div className={classes.searchContainerLink} onClick={()=>toggleTabs("Search")}>
     <SearchIcon />

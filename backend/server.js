@@ -38,6 +38,18 @@ io.on("connection", (socket) => {
         console.log(data.message);
       socket.to(data.room).emit("receive_message", data);
     });
+
+    // const UsersChangeStream = mongoose.connection.collection('users').watch();
+    // UsersChangeStream.on("change", (change)=>{
+    //     console.log("change stream: ",change);
+    //     if(change.operationType === "update"){
+    //         console.log("update: ",change.updateDescription.updatedFields);
+    //         if(change.updateDescription.updatedFields.friends){
+    //             io.emit("addFriend", change.updateDescription.updatedFields.friends)
+    //         }
+    //     }
+    // })
+
   
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id);
@@ -80,12 +92,20 @@ app.use('/friend-requests', friendRequestsRouter);
 
 mongoose.connection.once("open", ()=>{
     console.log("Connected to database");
+    // mongoose.connection.collection('chats').deleteMany({})
 
-    //Listen to changes in DB
-    // const UsersChangeStream = mongoose.connection.collection('users').watch();
-    // UsersChangeStream.on("change", (change)=>{
-    //     console.log("change stream: ",change);
-    // })
+    // Listen to changes in DB
+    const UsersChangeStream = mongoose.connection.collection('users').watch();
+    UsersChangeStream.on("change", (change)=>{
+        console.log("change stream: ",change);
+        if(change.operationType === "update"){
+            console.log("update: ",change.updateDescription.updatedFields);
+            if(change.updateDescription.updatedFields.friends){
+                io.emit("addFriend", change.updateDescription.updatedFields.friends)
+            }
+        }
+    })
+
     const friendRequestsChangeStream = mongoose.connection.collection('friendrequests').watch();
     friendRequestsChangeStream.on("change", (change)=>{
         console.log("change stream: ",change);

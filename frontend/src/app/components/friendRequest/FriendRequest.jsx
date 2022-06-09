@@ -6,10 +6,16 @@ import Fab from "@mui/material/Fab";
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {useStyles} from './styles/styles';
+// import {deleteFriendRequest} from '../../features/users/usersSlice';
+import {deleteFriendRequest} from '../../features/friendRequests/friendRequestsSlice';
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Radio from '@mui/material/Radio'
+import {setFriendRequestsFrom} from '../../features/friendRequests/friendRequestsSlice';
 
 const FriendRequest = ({ requestSender }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
+  const {friendRequestsFrom} =useSelector((state) => state.friendRequests);
   const classes = useStyles();
 
   const confirmFriendRequest = () => {
@@ -20,6 +26,18 @@ const FriendRequest = ({ requestSender }) => {
       friendName: requestSender.sender_name,
     };
     dispatch(addFriend(data));
+
+    const deleteFriendRequestData={
+      sender_id: requestSender.sender_id,
+      receiver_id: requestSender.receiver_id
+    }
+    
+    dispatch(deleteFriendRequest(deleteFriendRequestData))
+    setFriendRequestsFrom(friendRequestsFrom.filter(friendRequest => {
+      return friendRequest.sender_id !== requestSender.sender_id && friendRequest.receiver_id !== requestSender.receiver_id
+    }));
+
+    //delete friend request from user document
   };
 
   return (

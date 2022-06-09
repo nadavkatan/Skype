@@ -81,7 +81,6 @@ const HomePage = () => {
         {/* {
             showChat ? <Chat /> : <Welcome/> 
         } */}
-        <Button onClick={handleLogout} variant="contained" color="primary">Logout</Button>
       </div>
 
       {/* {currentUser && <ContactsList contacts={currentUser.friends} />} */}

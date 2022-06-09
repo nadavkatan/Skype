@@ -20,6 +20,11 @@ export const getAllContacts = createAsyncThunk("contacs/getAllContacs",
     const contactsSlice = createSlice({
         name:"contacts",
         initialState,
+        reducers:{
+            addContact: (state, {payload})=>{
+                state.contactsList = [...state.contactsList, payload];
+            }
+        },
         extraReducers:{
             [getAllContacts.pending]: (state)=>{
                 state.status = "loading"
@@ -34,4 +39,5 @@ export const getAllContacts = createAsyncThunk("contacs/getAllContacs",
         }
     });
     
+    export const {addContact} = contactsSlice.actions
     export default contactsSlice.reducer;

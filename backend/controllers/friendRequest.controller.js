@@ -11,4 +11,9 @@ const createFriendRequest = async(data)=>{
         }
 }
 
-module.exports={createFriendRequest}
+const deleteFriendRequest = async(friendRequest)=>{
+    const deletedFriendRequest =  FriendRequest.findOneAndDelete(friendRequest);
+    return deletedFriendRequest
+}
+
+module.exports={createFriendRequest, deleteFriendRequest}

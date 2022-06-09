@@ -13,6 +13,10 @@ const friendRequestSchema = new mongoose.Schema({
     // receiver_name: {type: String, required: true},
 })
 
+const friendRequestToSchema = new mongoose.Schema({
+    friend_id: {type: String, required: true},
+})
+
 const userSchema = new mongoose.Schema({
     first_name: {type: String, required: true, trim: true},
     last_name: {type: String, required: true, trim: true},
@@ -22,6 +26,7 @@ const userSchema = new mongoose.Schema({
     friends: {type: [friendSchema], required: true},
     // friendRequestesFrom: {type: [String]},
     friendRequestesFrom: {type: [friendRequestSchema]},
+    friendRequestesTo:{type: [friendRequestToSchema]},
     hash: {type: String, required: true, trim: true},
     salt: {type: String, required: true, trim: true}
 });

@@ -4,7 +4,8 @@ import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
 import Fab from "@mui/material/Fab";
 import {useStyles} from './styles/styles';
-import {sendFriendRequest, storeFriendRequest} from '../../features/users/usersSlice';
+// import {sendFriendRequest, storeFriendRequest} from '../../features/users/usersSlice';
+import {sendFriendRequest, storeFriendRequest} from '../../features/friendRequests/friendRequestsSlice';
 import {useSelector, useDispatch} from 'react-redux';
 
 const SearchResult = ({ foundUser }) => {

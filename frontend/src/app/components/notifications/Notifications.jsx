@@ -12,6 +12,7 @@ const Notifications = () => {
 
     const {currentUser} = useSelector((state) => state.auth);
     const {friendRequests} = useContext(AppContext);
+    const {friendRequestsFrom} = useSelector((state) => state.friendRequests)
     const classes = useStyles();
     const dispatch= useDispatch();
 
@@ -33,7 +34,10 @@ const Notifications = () => {
         {/* {currentUser && currentUser.friendRequestesFrom.map((friendRequest) =>{
         return <FriendRequest requestSender={friendRequest} key={friendRequest.friendId} />
     })} */}
-    {friendRequests.length>0 && friendRequests.map((friendRequest) =>{
+    {/* {friendRequests.length>0 && friendRequests.map((friendRequest) =>{
+        return <FriendRequest requestSender={friendRequest} key={friendRequest.sender_id} />
+    })} */}
+    {friendRequestsFrom.length>0 && friendRequestsFrom.map((friendRequest) =>{
         return <FriendRequest requestSender={friendRequest} key={friendRequest.sender_id} />
     })}
     </div>
