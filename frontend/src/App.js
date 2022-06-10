@@ -5,12 +5,18 @@ import ProtectedRoute from './app/components/protectedRoute/ProtectedRoute';
 import HomePage from './app/pages/homePage/HomePage';
 import Context from './app/context/Context';
 import io from 'socket.io-client';
+import { useMediaQuery } from '@mui/material';
+import DesktopScreen from './app/screens/desktopScreen/DesktopScreen';
 
 // const BASE_URL=process.env.REACT_APP_BASE_URL;
 
 // const socket = io.connect(BASE_URL)
 
 function App() {
+
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
+
   return (
     <BrowserRouter>
     <Context>
@@ -20,7 +26,10 @@ function App() {
     <Route path={"/login"} element={<LoginPage />} />
     <Route path={"/"} element={
     <ProtectedRoute>
-    <HomePage />
+    {
+      isSmallScreen ?   <HomePage /> : <DesktopScreen/>
+    }
+  
     </ProtectedRoute>
     
     } />

@@ -8,7 +8,18 @@ export const useStyles = makeStyles({
         padding:'1em',
         borderBottom: '0.5px solid lightgray'
     },
+    lgScreenChatHeaderContainer:{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding:'1em',
+        borderBottom: '0.5px solid lightgray'
+    },
     headerFriendName:{
         fontWeight: 'bold',
+        marginLeft: '1.5em'
+    },
+    chatHeaderUserInfo:{
+        display: 'flex',
     }
 })

@@ -4,7 +4,7 @@ import ContactsIcon from "@mui/icons-material/Contacts";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CallIcon from "@mui/icons-material/Call";
 import { useStyles } from "./styles/styles";
-import { Badge, Typography } from "@mui/material";
+import { Badge, Typography, useMediaQuery } from "@mui/material";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
@@ -15,9 +15,11 @@ const NavigationTab = () => {
   // const { toggleTabs, activeTab, friendRequests } = useContext(AppContext);
   const { toggleTabs, activeTab } = useContext(AppContext);
   const {friendRequestsFrom} = useSelector((state) => state.friendRequests);
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
 
   return (
-    <div className={classes.navTabContainer}>
+    <div className={isSmallScreen ? classes.navTabContainer : classes.lgScreenNavTabContainer}>
       <div
         onClick={() => toggleTabs("ChatsList")}
         className={classes.iconContainer}

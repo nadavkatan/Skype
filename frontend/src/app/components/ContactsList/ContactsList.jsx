@@ -24,7 +24,7 @@ const ContactsList = ({contacts}) => {
 
   return (
     <>
-    <h1>Contacts</h1>
+    {/* <h1>Contacts</h1> */}
     {/* {
      contacts && contacts.map(contact =>{
         return <Contact key={contact.friendName} contact={contact}/>

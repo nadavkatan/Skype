@@ -10,6 +10,13 @@ export const useStyles = makeStyles({
         padding: '1em',
         borderTop: '0.5px solid gray'
     },
+    lgScreenNavTabContainer:{
+        display: 'flex',
+        justifyContent: 'space-around',
+        padding: '1em',
+        // borderTop: '0.5px solid gray',
+        // borderBottom: '0.5px solid gray'
+    },
     iconContainer:{
         display: 'flex',
         flexDirection: 'column',
@@ -20,9 +27,11 @@ export const useStyles = makeStyles({
         color:'gray'
     },
     tabIcon:{
-        color:'#383838'
+        color:'#383838',
+        cursor: 'pointer'
     },
     activeTabIcon:{
-        color:'purple'
+        color:'#47B5FF',
+        cursor: 'pointer'
     }
 })

@@ -4,7 +4,8 @@ export const useStyles = makeStyles({
     contactContainer:{
         display: 'flex',
         alignItems: 'center',
-        padding: '0.5em'
+        padding: '0.5em',
+        cursor: 'pointer'
     },
     contactName:{
         marginLeft: '0.5em',

@@ -10,6 +10,7 @@ import Message from '../message/Message';
 import {useStyles} from './styles/styles';
 import SendIcon from '@mui/icons-material/Send';
 import { useRef } from 'react';
+import { useMediaQuery } from '@mui/material';
 
 const Chat = () => {
 
@@ -22,6 +23,7 @@ const Chat = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const chatBody = useRef();
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const handleSendMessage=()=>{
     if(currentRoom !== "" && currentMessage !== ""){
@@ -48,7 +50,7 @@ const Chat = () => {
 },[chatContent])
 
   useEffect(() =>{
-    socket.on("receive_message", (data)=>{
+    socket.off("receive_message").on("receive_message", (data)=>{
       console.log(data);
       dispatch(setChatContent(data));
     })
@@ -63,7 +65,7 @@ const Chat = () => {
 
   return (
     <div>
-    <div className={classes.chatBody} ref={chatBody}>
+    <div className={ isSmallScreen? classes.chatBody : classes.lgScreenChatBody} ref={chatBody}>
       {chatContent.length > 0 && chatContent.map((message, i)=>{
         return  message.author === currentUser.username ? 
          <Message key={i} message={message}/>
@@ -74,9 +76,9 @@ const Chat = () => {
 
     </div>
     <div className={classes.chatFooter}>
-    <div className={classes.typeMessageInputContainer}>
+    <div className={ isSmallScreen? classes.typeMessageInputContainer : classes.lgScreenTypeMessageInputContainer}>
     <input type="text" className={classes.typeMessage} placeholder="Type a message" value={currentMessage} onChange={e=>setCurrentMessage(e.target.value)}/>
-      <SendIcon onClick={handleSendMessage}/>
+      <SendIcon className={classes.sendIcon} onClick={handleSendMessage}/>
     </div>
     </div>
     </div>

@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
@@ -29,10 +29,11 @@ const HomePage = () => {
   );
   const { showChat } = useSelector((state) => state.chat);
   const { activeTab, toggleTabs } = useContext(AppContext);
-  // const [activeTab, setActiveTab] = useState("ChatsList");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
 
   const classes = useStyles();
 
@@ -50,6 +51,7 @@ const HomePage = () => {
     <div>
       {activeTab === "Notifications" ? (
         <>
+          {!isSmallScreen && <HomeHeader /> }
           <Notifications />
         </>
       ) : activeTab === "Calls" ? (
@@ -62,7 +64,7 @@ const HomePage = () => {
           <HomeHeader />
           <ContactsList contacts={currentUser.friends} />
         </>
-      ) : activeTab === "Chat" ? (
+      ) : isSmallScreen && activeTab === "Chat" ? (
         <>
           <ChatHeader />
           <Chat />
@@ -75,17 +77,8 @@ const HomePage = () => {
           <ChatsList contacts={currentUser.friends} />
         </>
       )}
-
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        {/* <SideBar/> */}
-        {/* {
-            showChat ? <Chat /> : <Welcome/> 
-        } */}
-      </div>
-
-      {/* {currentUser && <ContactsList contacts={currentUser.friends} />} */}
-      {/* <Notifications /> */}
-      <NavigationTab />
+      <div style={{ display: "flex", justifyContent: "space-between" }}></div>
+       {isSmallScreen && <NavigationTab />}
     </div>
   );
 };

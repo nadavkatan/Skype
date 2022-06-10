@@ -10,13 +10,29 @@ export const useStyles = makeStyles({
     searchContainerLink:{
         border: 'none',
         borderRadius: '10px',
-        backgroundColor: 'lightgray',
+        backgroundColor: '#F1F1F4',
         display:'flex',
-        width:'70%',
+        width:'80%',
         padding: '0.2em',
         marginBottom: '0.5em',
     },
+    searchPlaceholder:{
+        color:'#73777B',
+        fontSize: '0.8em',
+        paddingTop: '0.4em',
+    },
+    searchIcon:{
+        padding: '0.2em 0.2em'
+    },
     avatarContainer:{
         margin: '0.5em'
+    },
+    lgScreenUserInfo:{
+        display:'flex',
+        width: '100%',
+        padding: '1em 1em 0.3em 3.2em'
+    },
+    sideBarHeaderUsername:{
+        fontWeight:'bold',
     }
 })
