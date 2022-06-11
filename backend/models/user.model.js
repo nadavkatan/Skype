@@ -21,12 +21,13 @@ const userSchema = new mongoose.Schema({
     first_name: {type: String, required: true, trim: true},
     last_name: {type: String, required: true, trim: true},
     username: {type: String, required: true, trim: true, unique: true},
-    email: {type: String, required: true, trim: true, unique: true},
+    email: {type: String, required: true, trim: true},
     // friends:{type:[String]},
     friends: {type: [friendSchema], required: true},
     // friendRequestesFrom: {type: [String]},
     friendRequestesFrom: {type: [friendRequestSchema]},
     friendRequestesTo:{type: [friendRequestToSchema]},
+    socket_id:{type: String},
     hash: {type: String, required: true, trim: true},
     salt: {type: String, required: true, trim: true}
 });

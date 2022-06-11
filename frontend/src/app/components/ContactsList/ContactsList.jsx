@@ -7,20 +7,31 @@ import { useContext } from 'react';
 import {setCurrentRoom} from '../../features/chat/chatSlice';
 import {setShowChat} from '../../features/chat/chatSlice';
 import Contact from '../contact/Contact';
+import {addContact, initializeContacts} from '../../features/contacts/contacsSlice';
 
 const ContactsList = ({contacts}) => {
 
   const {currentUser}= useSelector((state) => state.auth);
+  const {contactsList} = useSelector((state) => state.contacts);
   const {handleJoinRoom} = useContext(AppContext);
 
 
   const dispatch = useDispatch();
 
-    useEffect(()=>{
-      console.log('mount')
-      console.log(contacts);
-      console.log(currentUser)
-    },[])
+    // useEffect(()=>{
+    //   console.log('mount')
+    //   console.log(contacts);
+    //   console.log(currentUser)
+    // },[])
+
+    // useEffect(()=>{
+    //   console.log('users friends', currentUser.friends)
+    //   dispatch(initializeContacts(currentUser.friends))
+    // },[])
+
+    // useEffect(()=>{
+    //   console.log(contactsList);
+    // },[contactsList])
 
   return (
     <>
@@ -35,6 +46,11 @@ const ContactsList = ({contacts}) => {
         return <Contact key={friend.friendId} contact={friend}/>
       })
     }
+    {/* {
+      contactsList.length > 0 && contactsList.map(friend => {
+        return <Contact key={friend.friendId} contact={friend}/>
+      })
+    } */}
     </>
   )
 }

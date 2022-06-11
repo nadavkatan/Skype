@@ -13,33 +13,26 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {register} from '../../features/auth/authSlice';
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+import { AppContext } from '../../context/Context';
+import { useContext } from 'react';
 
 const theme = createTheme();
 
 export default function RegisterPage() {
+
+  const {notifyServerForUserConnection} = useContext(AppContext);
 
   const [userData, setUserData] = useState({
     first_name: "",
     last_name: "",
     email: "",
     username:"",
-    password: ""
+    password: "",
+    socket_id:"123"
+    // socket_id:""
   })
 
   const dispatch = useDispatch();
@@ -48,6 +41,7 @@ export default function RegisterPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(register(userData));
+    notifyServerForUserConnection(userData)
     navigate("/");
   };
 

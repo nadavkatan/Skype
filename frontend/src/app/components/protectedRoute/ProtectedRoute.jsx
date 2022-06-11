@@ -15,12 +15,13 @@ const ProtectedRoute = ({children}) => {
         console.log(state)
     },[isAuth])
     
-    useEffect(()=>{
-        dispatch(checkAuth);
-    },[])
+    // useEffect(()=>{
+    //     dispatch(checkAuth());
+    // },[])
     
-    if(status === 'loading')return <div>Loading...</div>;
-    if(!isAuth) return <Navigate to='/login' replace />
+    if(status === 'loading' || isAuth === "undefined") return <div>Loading...</div>;
+    // if(!isAuth) return <Navigate to='/login' replace />
+    if(isAuth===false) return <Navigate to='/login' replace />
 
   return children
 // return <div>ProtectedRoute</div>

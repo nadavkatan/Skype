@@ -26,6 +26,7 @@ export const useStyles = makeStyles({
         }
     },
     searchBarArrowBack:{
-        color:'white'
+        color:'white',
+        cursor: 'pointer'
     }
 })

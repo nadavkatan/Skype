@@ -16,9 +16,9 @@ const Contact = ({contact}) => {
     toggleTabs("Chat")
   }
 
-    useEffect(() => {
-        console.log(contact);
-    },[])
+    // useEffect(() => {
+    //     console.log(contact);
+    // },[])
 
   return (
     <div className={classes.contactContainer}>

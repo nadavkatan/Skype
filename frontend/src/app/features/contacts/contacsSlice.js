@@ -21,7 +21,11 @@ export const getAllContacts = createAsyncThunk("contacs/getAllContacs",
         name:"contacts",
         initialState,
         reducers:{
+            initializeContacts: (state, {payload})=>{
+                state.contactsList = payload;
+            },
             addContact: (state, {payload})=>{
+                console.log(payload);
                 state.contactsList = [...state.contactsList, payload];
             }
         },
@@ -39,5 +43,5 @@ export const getAllContacts = createAsyncThunk("contacs/getAllContacs",
         }
     });
     
-    export const {addContact} = contactsSlice.actions
+    export const {addContact, initializeContacts} = contactsSlice.actions
     export default contactsSlice.reducer;

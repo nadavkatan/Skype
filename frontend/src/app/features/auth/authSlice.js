@@ -2,7 +2,6 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-
 export const checkAuth = createAsyncThunk("auth/checkAuth",
     async(args, {getState})=>{
         const response = await axios.get(`${BASE_URL}/auth/check-auth`,{withCredentials: true} );
@@ -69,7 +68,7 @@ export const getUpdatedCurrentUser = createAsyncThunk("auth/getUpdatedCurrentUse
 )
 
     const initialState = {
-        isAuth: false,
+        isAuth: undefined,
         authMessage:"",
         currentUser:"",
         currentUserId:"",

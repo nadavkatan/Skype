@@ -7,7 +7,9 @@ import {io} from 'socket.io-client';
 import { getUpdatedCurrentUser } from '../features/auth/authSlice';
 import {setChatContent, setCurrentRoom, setShowChat} from '../features/chat/chatSlice';
 import { addContact } from '../features/contacts/contacsSlice';
-import {setFriendRequestsFrom} from '../features/friendRequests/friendRequestsSlice';
+import {setFriendRequestsFrom, setNotifications} from '../features/friendRequests/friendRequestsSlice';
+import {checkAuth} from '../features/auth/authSlice';
+import { getAllUserNotifications } from '../features/notifications/notificationsSlice';
 
 
 export const AppContext = createContext();
@@ -18,10 +20,9 @@ const Context = ({children}) => {
 
     const{currentUser} = useSelector((state)=> state.auth);
     const{contactsList} = useSelector((state)=> state.contacts);
-    const {friendRequestsFrom} = useSelector((state)=> state.friendRequests);
+    const {friendRequestsFrom, notifications} = useSelector((state)=> state.friendRequests);
     const [activeTab, setActiveTab] = useState("ChatsList");
     const [currentContact, setCurrentContact] = useState("");
-    // const [friendRequests, setFriendRequests] = useState([]);
     const dispatch = useDispatch();
 
     // socket.off("newFriendRequest").on("newFriendRequest", (friendRequest)=>{
@@ -40,40 +41,44 @@ const Context = ({children}) => {
       if(friendRequest.receiver_id === currentUser._id){
         // setFriendRequests(prev=> [...prev, friendRequest]);
         console.log("relevant user")
+        const notification = {
+          title: "friendRequest",
+          content: friendRequest
+        }
         dispatch(setFriendRequestsFrom([...friendRequestsFrom, friendRequest]));
+        dispatch(setNotifications([...friendRequestsFrom, notification]));
       }
     })
 
     socket.off("addFriend").on("addFriend", (friend)=>{
       console.log("add friend event",friend)
-      if(friend.length > 0){
-          console.log("relevant user")
-        // dispatch(addContact(friend.friends[0]))
+      // if(friend.length > 0){
+      //     console.log("relevant user")
+      //   // dispatch(addContact(friend.friends[0]))
+      //   const notification = {
+      //     title: "connectionConfirmation",
+      //     content: `You and ${friend[0].friendName} are now connected`
+      //   }
+        // dispatch(setNotifications([...notifications,notification ]));
         dispatch(getUpdatedCurrentUser(currentUser._id))
-      }
+        // dispatch(addContact(friend[0]));
+      // }
+    })
+
+    socket.off("notificationUpdate").on("notificationUpdate", (notification)=>{
+      console.log("notification update");
+      dispatch(getAllUserNotifications(currentUser._id));
+
     })
 
     const value = {
         socket: socket,
         activeTab,
         currentContact,
-        // friendRequests,
         joinRoom: (room)=>{
             console.log(BASE_URL)
             socket.emit("join_room", room);
         },
-        // sendMessage: async(message, chatId, cb)=>{
-        //     if(message !== ""){
-        //         const messageData = {
-        //             room: chatId,
-        //             author: currentUser.username,
-        //             message: message,
-        //             time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
-        //         }
-        //       await socket.emit("send_message", messageData);  
-        //       cb(chatContent=> [...chatContent, messageData])
-        //     }
-        // }
         sendMessage: async(messageData, cb)=>{
               await socket.emit("send_message", messageData);  
               dispatch(setChatContent(messageData));
@@ -107,30 +112,23 @@ const Context = ({children}) => {
           value.joinRoom(chatId)
           dispatch(setCurrentRoom(chatId))
           setCurrentContact(friendName)
-          // dispatch(setShowChat(true))
+        },
+        notifyServerForUserConnection: (user)=>{
+          socket.emit("user_connected", user);
         }
     }
 
     useEffect(()=>{
-      // console.log("friendRequests: ", friendRequests)
       console.log("currentUser: ", currentUser)
-
-      // socket.on("newFriendRequest", (friendRequest)=>{
-      //   console.log("friendRequest from back: ", friendRequest);
-      //   // if(friendRequest.receiver_id === currentUser._id && friendRequests.some(e => e.sender_id !== friendRequest.sender._id)){
-      //   //   setFriendRequests(prev=> [...prev, friendRequest]);
-      //   // }
-      // })
-
-      // return () => {
-      //   socket.off("newFriendRequest");
-      // };
+      dispatch(checkAuth());
     },[])
 
     useEffect(()=>{
       if(currentUser){
-        // setFriendRequests(currentUser.friendRequestesFrom)
         dispatch(setFriendRequestsFrom(currentUser.friendRequestesFrom))
+        dispatch(getAllUserNotifications(currentUser._id));
+        // dispatch(setNotifications(currentUser.friendRequestesFrom))
+        value.notifyServerForUserConnection(currentUser)
       }
     },[currentUser])
 

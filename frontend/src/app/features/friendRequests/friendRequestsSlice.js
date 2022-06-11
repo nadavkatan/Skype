@@ -53,6 +53,7 @@ async(friendRequest, {getState})=>{
 const initialState={
     friendRequestsFrom:[],
     friendRequestsTo:[],
+    notifications:[]
 }
 
 const friendRequestsSlice = createSlice({
@@ -60,8 +61,10 @@ const friendRequestsSlice = createSlice({
     initialState,
     reducers:{
         setFriendRequestsFrom: (state, {payload})=>{
-            console.log(payload)
             state.friendRequestsFrom = payload
+        },
+        setNotifications: (state, {payload})=>{
+            state.notifications = payload
         }
     },
     extraReducers:{
@@ -95,5 +98,5 @@ const friendRequestsSlice = createSlice({
     }
 });
 
-export const {setFriendRequestsFrom} = friendRequestsSlice.actions
+export const {setFriendRequestsFrom, setNotifications} = friendRequestsSlice.actions
 export default friendRequestsSlice.reducer;

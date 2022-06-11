@@ -15,6 +15,7 @@ const NavigationTab = () => {
   // const { toggleTabs, activeTab, friendRequests } = useContext(AppContext);
   const { toggleTabs, activeTab } = useContext(AppContext);
   const {friendRequestsFrom} = useSelector((state) => state.friendRequests);
+  const {notifications} = useSelector((state) => state.notifications);
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
 
@@ -65,8 +66,8 @@ const NavigationTab = () => {
         onClick={() => toggleTabs("Notifications")}
         className={classes.iconContainer}
       >
-        {friendRequestsFrom.length ? (
-          <Badge badgeContent={friendRequestsFrom.length} color="error">
+        {notifications.length ? (
+          <Badge badgeContent={notifications.length} color="error">
             <NotificationsIcon
               className={
                 activeTab === "Notifications"

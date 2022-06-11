@@ -4,6 +4,7 @@ import authSlice from './features/auth/authSlice';
 import chatSlice from './features/chat/chatSlice';
 import contactsSlice from './features/contacts/contacsSlice';
 import friendRequestsSlice from './features/friendRequests/friendRequestsSlice';
+import notificationsSlice from './features/notifications/notificationsSlice';
 
 export const store = configureStore({
     reducer:{
@@ -11,6 +12,7 @@ export const store = configureStore({
         auth:authSlice,
         chat: chatSlice,
         contacts:contactsSlice,
-        friendRequests:friendRequestsSlice
+        friendRequests:friendRequestsSlice,
+        notifications:notificationsSlice
     }
 })

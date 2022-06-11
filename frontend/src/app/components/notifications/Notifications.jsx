@@ -1,24 +1,36 @@
 import React from "react";
 import FriendRequest from "../friendRequest/FriendRequest";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { Typography } from "@mui/material";
 import { useStyles } from "./styles/styles";
+import {setNotifications} from '../../features/friendRequests/friendRequestsSlice';
 
 const Notifications = () => {
   const { currentUser } = useSelector((state) => state.auth);
   const { friendRequestsFrom } = useSelector((state) => state.friendRequests);
+  const {notifications } = useSelector((state) => state.notifications);
   const classes = useStyles();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log("Notifications: " + currentUser);
-  }, []);
+  // useEffect(() => {
+  //   console.log("Notifications: " + notifications.length);
+  // }, [notifications]);
+
+  // useEffect(() => {
+  //   return ()=>{
+  //     dispatch(setNotifications([]))
+  //   }
+  // })
+  useEffect(()=>{
+    console.log("notifications page: ", notifications)
+  },[notifications])
 
   return (
     <div className={classes.notificationsContainer}>
-      <Typography className={classes.notificationsHeading} variant="h5">
+      {/* <Typography className={classes.notificationsHeading} variant="h5">
         Notifications
-      </Typography>
+      </Typography> 
       {friendRequestsFrom.length > 0 &&
         friendRequestsFrom.map((friendRequest) => {
           return (
@@ -27,6 +39,27 @@ const Notifications = () => {
               key={friendRequest.sender_id}
             />
           );
+        })} */}
+        {notifications.length > 0 &&
+        notifications.map((notification) => {
+          if(notification.title === "friend_request"){
+            const requestSender = {
+              ...notification.content,
+              sender_id: notification.sender_id
+            }
+            return (
+            <FriendRequest
+              requestSender={requestSender}
+              key={notification.sender_id}
+            />
+          )
+          }
+          if(notification.title === "connection_confirmation"){
+            return (
+              <p key={notification.content.confirmation_text}>{notification.content.confirmation_text}</p>
+            )
+          }
+
         })}
     </div>
   );

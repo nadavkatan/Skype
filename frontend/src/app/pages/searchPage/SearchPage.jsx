@@ -8,6 +8,7 @@ import SearchResult from '../../components/searchResult/SearchResult';
 const SearchPage = () => {
 
     const {allUsers} = useSelector((state) => state.users);
+    const {currentUser} = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const [searchResults, setSearchResults] = useState([]);
 
@@ -29,7 +30,10 @@ const SearchPage = () => {
         <div>
             {
                 searchResults.length > 0 && searchResults.map(contact=>{
-                    return <SearchResult key={contact._id} foundUser={contact} />
+                    if(currentUser.friends.some(e=> e.friendId === contact._id)){
+                        return <SearchResult key={contact._id} foundUser={contact} areFriends={true}/>
+                    }
+                    return <SearchResult key={contact._id} foundUser={contact} areFriends={false} />
                 })   
             }
         </div>

@@ -13,7 +13,6 @@ router.post("/register", async(req,res)=>{
        }
        if(!user){
            const createdUser = await createUser(req.body);
-        //    res.status(201).json(createdUser);
            res.status(201).json({isAuth: true, message: "", user: createdUser});
        }
    })
@@ -25,7 +24,7 @@ router.post('/login', (req, res, next) => {
         if(info) return res.json({info, isAuth: false});
         req.logIn(user, e => {
             if(e) return next(e);
-            console.log(req.user);
+            // console.log(req.user);
             return res.json({isAuth: true, userId: req.user._id, user:req.user}) 
             
         });
@@ -33,7 +32,7 @@ router.post('/login', (req, res, next) => {
 });
 
 router.post('/logout', (req, res, next)=>{
-    console.log(req.user)
+    // console.log(req.user)
     req.logout((err)=> {
       if (err) { return next(err); }
     req.session.destroy((err)=>{

@@ -11,6 +11,7 @@ import {deleteFriendRequest} from '../../features/friendRequests/friendRequestsS
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import {setFriendRequestsFrom} from '../../features/friendRequests/friendRequestsSlice';
+import { createNotification, deleteNotification } from "../../features/notifications/notificationsSlice";
 
 const FriendRequest = ({ requestSender }) => {
   const dispatch = useDispatch();
@@ -19,23 +20,32 @@ const FriendRequest = ({ requestSender }) => {
   const classes = useStyles();
 
   const confirmFriendRequest = () => {
-    const data = {
-      id: currentUser._id,
-      username: currentUser.username,
-      friendId: requestSender.sender_id,
-      friendName: requestSender.sender_name,
-    };
-    dispatch(addFriend(data));
-
+    console.log(currentUser)
+    if(!currentUser.friends.some(e=> e.friendId === requestSender.sender_id)){
+      console.log('not yet friend')
+      const data = {
+        id: currentUser._id,
+        username: currentUser.username,
+        friendId: requestSender.sender_id,
+        friendName: requestSender.sender_name,
+      };
+      //delete friendReqeust confirmation
+      dispatch(deleteNotification({user_id:currentUser._id, sender_id:requestSender.sender_id}))
+      //create notification of connection confirmation for the current user
+      dispatch(createNotification({user_id:requestSender.sender_id, title:"connection_confirmation", content:{confirmation_text:`You are now connected with ${currentUser.username}`}}))
+      //create notification of connection confirmation for the new friend
+      dispatch(createNotification({user_id:currentUser._id, title:"connection_confirmation", content:{confirmation_text:`You are now connected with ${requestSender.sender_name}`}}))
+      dispatch(addFriend(data));
+    }
     const deleteFriendRequestData={
       sender_id: requestSender.sender_id,
       receiver_id: requestSender.receiver_id
     }
     
-    dispatch(deleteFriendRequest(deleteFriendRequestData))
-    setFriendRequestsFrom(friendRequestsFrom.filter(friendRequest => {
-      return friendRequest.sender_id !== requestSender.sender_id && friendRequest.receiver_id !== requestSender.receiver_id
-    }));
+    // dispatch(deleteFriendRequest(deleteFriendRequestData))
+    // setFriendRequestsFrom(friendRequestsFrom.filter(friendRequest => {
+    //   return friendRequest.sender_id !== requestSender.sender_id && friendRequest.receiver_id !== requestSender.receiver_id
+    // }));
 
     //delete friend request from user document
   };

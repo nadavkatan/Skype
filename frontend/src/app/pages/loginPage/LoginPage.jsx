@@ -12,34 +12,21 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useSelector, useDispatch} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import {login} from '../../features/auth/authSlice';
 import { useState } from 'react';
-import { useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import {checkAuth} from '../../features/auth/authSlice';
-
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../context/Context';
+import { useContext } from 'react';
 
 const theme = createTheme();
 
 export default function LoginPage() {
 
 const dispatch = useDispatch();
-const {isAuth, currentUserId} = useSelector((state)=> state.auth)
-const [test, setTest] = useState(false);
 const navigate = useNavigate();
+
+const {notifyServerForUserConnection} = useContext(AppContext);
 
 const [userData, setUserData] = useState({
   username:"",
@@ -49,28 +36,9 @@ const [userData, setUserData] = useState({
   const handleSubmit = (event) => {
     event.preventDefault();
      dispatch(login(userData));
-    // console.log(currentUserId)
-    // setTest(true)
+     notifyServerForUserConnection(userData)
     navigate("/")
   };
-
-  useEffect(()=>{
-    console.log("isAuth is: ", isAuth)
-  },[isAuth])
-
-  // useEffect(()=>{
-  //   if(isAuth){
-  //     // navigate(`/${currentUserId}`)
-  //   }
-  // },[setTest])
-      
-  useEffect(()=>{
-    console.log('loginPage checkAuth...')
-    dispatch(checkAuth());
-},[])
-
-// if(isAuth && currentUserId) return <Navigate to={`/${currentUserId}`} replace />
-if(isAuth) return <Navigate to="/" replace />
 
   return (
     <ThemeProvider theme={theme}>
