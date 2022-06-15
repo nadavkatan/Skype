@@ -7,10 +7,22 @@ import { useContext } from "react";
 import Chat from "../../components/chat/Chat";
 import ChatHeeader from "../../components/chatHeader/ChatHeader";
 import { useStyles } from "./styles/styles";
+import VideoCall from "../../components/videoCall/VideoCall";
+import IncomingCall from "../../components/incomingCall/IncomingCall";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const DesktopScreen = () => {
   const { activeTab } = useContext(AppContext);
+  const {callInitiator, receivingCall, callAnswered} = useSelector((state) => state.videoCall);
   const classes = useStyles();
+
+  useEffect(() => {
+    console.log(callAnswered)
+  },[callAnswered])
+
+  if(receivingCall && !callAnswered) return <IncomingCall/>;
+  if(callInitiator || callAnswered) return <VideoCall/>;
 
   return (
     <Grid container>

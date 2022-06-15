@@ -5,11 +5,15 @@ import Avatar from '../avatar/Avatar';
 import {useStyles} from './styles/styles';
 import { AppContext } from '../../context/Context';
 import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {setCurrentContact} from '../../features/contacts/contacsSlice';
 
 const Contact = ({contact}) => {
     
     const {handleJoinRoom, toggleTabs} = useContext(AppContext);
     const classes = useStyles();
+
+    const dispatch = useDispatch();
 
   const openChat = ()=>{
     handleJoinRoom(contact.chatId, contact.friendName);
@@ -21,7 +25,7 @@ const Contact = ({contact}) => {
     // },[])
 
   return (
-    <div className={classes.contactContainer}>
+    <div className={classes.contactContainer} onClick={() => dispatch(setCurrentContact(contact))}>
      <Avatar />
     <Typography className={classes.contactName} variant="subtitle1" onClick={()=> openChat()}>{contact.friendName}</Typography>
     </div>

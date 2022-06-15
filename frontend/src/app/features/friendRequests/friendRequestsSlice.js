@@ -63,6 +63,12 @@ const friendRequestsSlice = createSlice({
         setFriendRequestsFrom: (state, {payload})=>{
             state.friendRequestsFrom = payload
         },
+        setFriendRequestsTo: (state, {payload})=>{
+            state.friendRequestsTo.push(payload) 
+        },
+        initializeFriendRequestsTo: (state, {payload})=>{
+            state.friendRequestsTo= payload
+        },
         setNotifications: (state, {payload})=>{
             state.notifications = payload
         }
@@ -98,5 +104,5 @@ const friendRequestsSlice = createSlice({
     }
 });
 
-export const {setFriendRequestsFrom, setNotifications} = friendRequestsSlice.actions
+export const {setFriendRequestsFrom, setNotifications, setFriendRequestsTo, initializeFriendRequestsTo} = friendRequestsSlice.actions
 export default friendRequestsSlice.reducer;

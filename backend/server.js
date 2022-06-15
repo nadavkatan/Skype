@@ -57,18 +57,29 @@ io.on("connection", (socket) => {
       socket.to(data.room).emit("receive_message", data);
     });
 
-    // const UsersChangeStream = mongoose.connection.collection('users').watch();
-    // UsersChangeStream.on("change", (change)=>{
-    //     console.log("change stream: ",change);
-    //     if(change.operationType === "update"){
-    //         console.log("update: ",change.updateDescription.updatedFields);
-    //         if(change.updateDescription.updatedFields.friends){
-    //             io.emit("addFriend", change.updateDescription.updatedFields.friends)
-    //         }
-    //     }
-    // })
+    socket.on("callUser", (data) => {
+        console.log('call user', data)
+		io.to(data.userToCall).emit("incomingCall", { signal: data.signalData, from: data.from})
+	});
 
-  
+    socket.on('initiate_call', async(data)=>{
+        const relevantUser = await User.findById({_id: data.to});
+        console.log(relevantUser)
+        io.to(relevantUser.socket_id).emit('receiving_call', {from: data.from});
+    })
+
+    socket.on("end_call", async(data) => {
+        console.log('receieved end_call event', data);
+        const relevantUser = await User.findById(data.friendId);
+        io.to(relevantUser.socket_id).emit('call_ended', data);
+    })
+
+    socket.on("acceptCall", (data) => {
+        console.log('call accepted', data)
+        io.to(data.to).emit('callAccepted', data.signal);
+    });
+
+
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id);
     });
@@ -109,20 +120,20 @@ mongoose.connection.once("open", ()=>{
     // Listen to changes in DB
     const UsersChangeStream = mongoose.connection.collection('users').watch();
     UsersChangeStream.on("change", async(change)=>{
-        console.log("change stream: ",change);
-        if(change.operationType === "update"){
+        // console.log("change stream: ",change);
+        if(change.operationType === "update" && !change.updateDescription.updatedFields.hasOwnProperty("socket_id")){
                 const relevantUser = await User.findById({_id: change.documentKey._id});
-                console.log('relevant user: ', relevantUser);
-                io.to(relevantUser.socket_id).emit("addFriend", change.updateDescription.updatedFields.friends)
+                // console.log('relevant user: ', relevantUser);
+                io.to(relevantUser.socket_id).emit("addFriend", change)
         }
     })
 
     const notificationsChangeStream = mongoose.connection.collection('notifications').watch();
     notificationsChangeStream.on('change', async(change)=>{
-        console.log("notifications change stream: ",change);
+        // console.log("notifications change stream: ",change);
         if(change.operationType === "insert" && change.fullDocument.title === "friend_request"){
             const relevantUser = await User.findById({_id: change.fullDocument.user_id})
-            console.log('relevant user: ', relevantUser);
+            // console.log('relevant user: ', relevantUser);
             io.to(relevantUser.socket_id).emit("notificationUpdate", change)
         }
     })

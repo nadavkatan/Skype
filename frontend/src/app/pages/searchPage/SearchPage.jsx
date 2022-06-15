@@ -9,6 +9,7 @@ const SearchPage = () => {
 
     const {allUsers} = useSelector((state) => state.users);
     const {currentUser} = useSelector((state) => state.auth);
+    const {friendRequestsTo} = useSelector((state) => state.friendRequests);
     const dispatch = useDispatch();
     const [searchResults, setSearchResults] = useState([]);
 
@@ -30,10 +31,15 @@ const SearchPage = () => {
         <div>
             {
                 searchResults.length > 0 && searchResults.map(contact=>{
-                    if(currentUser.friends.some(e=> e.friendId === contact._id)){
-                        return <SearchResult key={contact._id} foundUser={contact} areFriends={true}/>
+                    const friend = currentUser.friends.find(friend => friend.friendId === contact._id)
+                    if(friend){
+                        return <SearchResult key={contact._id} foundUser={contact} areFriends={true} chatId={friend.chatId}/>
                     }
-                    return <SearchResult key={contact._id} foundUser={contact} areFriends={false} />
+                    const alreadyRequested = friendRequestsTo.find(friendRequest => friendRequest.friend_id === contact._id);
+                    if(alreadyRequested){
+                        return <SearchResult key={contact._id} foundUser={contact} areFriends={false} alreadyRequested={true}/>
+                    }
+                    return <SearchResult key={contact._id} foundUser={contact} areFriends={false} alreadyRequested={false}/>
                 })   
             }
         </div>

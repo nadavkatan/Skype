@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { Typography } from "@mui/material";
 import { useStyles } from "./styles/styles";
 import {setNotifications} from '../../features/friendRequests/friendRequestsSlice';
+import {deleteAllConnectionNotifications} from '../../features/notifications/notificationsSlice';
 
 const Notifications = () => {
   const { currentUser } = useSelector((state) => state.auth);
@@ -13,18 +14,16 @@ const Notifications = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   console.log("Notifications: " + notifications.length);
-  // }, [notifications]);
+  useEffect(() => {
+    return ()=>{
+      dispatch(deleteAllConnectionNotifications(currentUser._id))
+  }
+},[])
 
-  // useEffect(() => {
-  //   return ()=>{
-  //     dispatch(setNotifications([]))
-  //   }
-  // })
-  useEffect(()=>{
-    console.log("notifications page: ", notifications)
-  },[notifications])
+useEffect(() => {
+  console.log(notifications)
+},[notifications])
+
 
   return (
     <div className={classes.notificationsContainer}>
@@ -56,7 +55,7 @@ const Notifications = () => {
           }
           if(notification.title === "connection_confirmation"){
             return (
-              <p key={notification.content.confirmation_text}>{notification.content.confirmation_text}</p>
+            <Typography variant="subtitle1" key={notification.content.confirmation_text}>{notification.content.confirmation_text}</Typography>
             )
           }
 

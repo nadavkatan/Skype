@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {createNotification, getAllUserNotification, deleteNotification} = require('../controllers/notification.controller');
+const {createNotification, getAllUserNotification, deleteNotification, deleteAllConnectionNotifications} = require('../controllers/notification.controller');
 
 router.get("/:id", async(req, res)=>{
     const notifications = await getAllUserNotification(req.params.id);
@@ -18,6 +18,11 @@ router.post("/", async(req, res)=>{
 router.delete("/", async(req, res)=>{
     const deletedNotification = await deleteNotification(req.body);
     res.status(204).json(deletedNotification);
+});
+
+router.delete("/all", async(req, res)=>{
+    const deletedNotifications = await deleteAllConnectionNotifications(req.body);
+    res.status(204).json(deletedNotifications);
 })
 
 module.exports = router;

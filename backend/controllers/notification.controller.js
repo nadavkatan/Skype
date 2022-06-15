@@ -26,7 +26,15 @@ const deleteNotification = async(data)=>{
     }catch(e){
         console.log(e)
     }
-
 }
 
-module.exports={createNotification, getAllUserNotification, deleteNotification}
+const deleteAllConnectionNotifications = async(data)=>{
+    try{
+        const deletedNotifications = await Notification.deleteMany({user_id: data.user_id, title:"connection_confirmation"})
+        return deletedNotifications
+    }catch(e){
+        console.log(e)
+    }
+}
+
+module.exports={createNotification, getAllUserNotification, deleteNotification, deleteAllConnectionNotifications}

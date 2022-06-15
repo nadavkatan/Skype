@@ -12,7 +12,7 @@ import {addContact, initializeContacts} from '../../features/contacts/contacsSli
 const ContactsList = ({contacts}) => {
 
   const {currentUser}= useSelector((state) => state.auth);
-  const {contactsList} = useSelector((state) => state.contacts);
+  const {currentContact} = useSelector((state) => state.contacts);
   const {handleJoinRoom} = useContext(AppContext);
 
 
@@ -29,9 +29,9 @@ const ContactsList = ({contacts}) => {
     //   dispatch(initializeContacts(currentUser.friends))
     // },[])
 
-    // useEffect(()=>{
-    //   console.log(contactsList);
-    // },[contactsList])
+    useEffect(()=>{
+      console.log(currentContact);
+    },[currentContact])
 
   return (
     <>

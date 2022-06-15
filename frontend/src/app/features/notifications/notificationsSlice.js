@@ -37,6 +37,21 @@ export const deleteNotification = createAsyncThunk("notifications/deleteNotifica
     }
 )
 
+export const deleteAllConnectionNotifications = createAsyncThunk("notifications/deleteAllConnectionNotifications",
+    async(user_id, {getState})=>{
+        console.log(user_id)
+        const response = await axios({
+            method: 'DELETE',
+            url: `${BASE_URL}/notifications/all`,
+            data: {
+                user_id: user_id
+            }
+        });
+        console.log(response)
+        return response.data
+    }
+)
+
 const initialState = {
     status: 'idle',
     notifications:[]
@@ -45,6 +60,11 @@ const initialState = {
 const notificationsSlice = createSlice({
     name: 'notifications',
     initialState,
+    reducers:{
+        addNotification: (state, {payload})=>{
+            state.notifications.push(payload)
+        }
+    },
     extraReducers:{
         [createNotification.pending]: (state)=>{
             state.status='loading'
@@ -60,9 +80,13 @@ const notificationsSlice = createSlice({
             state.status = "loading"
         },
         [getAllUserNotifications.fulfilled]: (state, {payload})=>{
-            state.status = "success";
             console.log(payload)
-            state.notifications = payload
+            state.status = "success";
+            if(payload.message !== "no notifications"){
+                state.notifications = payload
+            }else{
+                state.notifications = [];
+            }
         },
         [getAllUserNotifications.rejected]: (state)=>{
             state.status = "failed"
@@ -72,6 +96,7 @@ const notificationsSlice = createSlice({
         },
         [deleteNotification.fulfilled]: (state, {payload})=>{
             state.status = "success";
+            console.log(state.notifications)
             state.notifications = state.notifications.filter(notification => {
                 return notification.user_id !== payload.user_id 
                        && notification.sender_id !== payload.sender_id 
@@ -80,8 +105,20 @@ const notificationsSlice = createSlice({
         },
         [deleteNotification.rejected]: (state)=>{
             state.status = "failed"
-        }
+        },
+        [deleteAllConnectionNotifications.pending]: (state)=>{
+            state.status = "loading"
+        },
+        [deleteAllConnectionNotifications.fulfilled]: (state, {payload})=>{
+            console.log(payload)
+            state.status = "success"
+            state.notifications = state.notifications.filter(notification => notification.title !== "connection_confirmation");
+        },
+        [deleteAllConnectionNotifications.rejected]: (state)=>{
+            state.status = "failed"
+        },
     }
 });
 
+export const {addNotification} = notificationsSlice.actions;
 export default notificationsSlice.reducer;

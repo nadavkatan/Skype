@@ -11,6 +11,8 @@ import {useStyles} from './styles/styles';
 import SendIcon from '@mui/icons-material/Send';
 import { useRef } from 'react';
 import { useMediaQuery } from '@mui/material';
+import IncomingCall from '../incomingCall/IncomingCall';
+import VideoCall from '../videoCall/VideoCall';
 
 const Chat = () => {
 
@@ -19,6 +21,7 @@ const Chat = () => {
   const {sendMessage, socket} = useContext(AppContext);
   const {currentRoom, chatContent} = useSelector((state) => state.chat);
   const{currentUser} = useSelector((state)=> state.auth);
+  const {receivingCall, callAnswered, callInitiator} = useSelector((state) => state.videoCall);
 
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -49,6 +52,10 @@ const Chat = () => {
         }) }
 },[chatContent])
 
+useEffect(()=>{
+  console.log('receivingCall: ', receivingCall)
+},[receivingCall])
+
   useEffect(() =>{
     socket.off("receive_message").on("receive_message", (data)=>{
       console.log(data);
@@ -65,7 +72,12 @@ const Chat = () => {
 
   return (
     <div>
-    <div className={ isSmallScreen? classes.chatBody : classes.lgScreenChatBody} ref={chatBody}>
+    {
+      receivingCall ? <VideoCall />
+      : callAnswered || callInitiator ? <VideoCall />
+        :    
+        <>
+         <div className={ isSmallScreen? classes.chatBody : classes.lgScreenChatBody} ref={chatBody}>
       {chatContent.length > 0 && chatContent.map((message, i)=>{
         return  message.author === currentUser.username ? 
          <Message key={i} message={message}/>
@@ -81,6 +93,9 @@ const Chat = () => {
       <SendIcon className={classes.sendIcon} onClick={handleSendMessage}/>
     </div>
     </div>
+    </>
+    }
+
     </div>
   )
 }
