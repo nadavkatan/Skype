@@ -12,7 +12,7 @@ import { getAllUserNotifications } from '../features/notifications/notifications
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Peer from "simple-peer";
-import {setReceivingCall, setCaller, setCallerSignal} from '../features/videoCall/videoCallSlice';
+import {setReceivingCall, setCaller, setCallerSignal, setCallAnswered} from '../features/videoCall/videoCallSlice';
 
 
 export const AppContext = createContext();
@@ -68,7 +68,19 @@ const Context = ({children}) => {
       console.log('received emit from back, receiving call');
       dispatch(setCaller(data.from))
       dispatch(setReceivingCall(true))
+    });
+
+    socket.off('call_answered').on('call_answered', (data)=>{
+      console.log('received emit from back, call answered');
+      dispatch(setCallAnswered(true));
     })
+
+    socket.off('call_cancelled').on('call_cancelled', (data)=>{
+      console.log('received emit from back, cancel call');
+      dispatch(setReceivingCall(false))
+      dispatch(setCaller(null))
+      //add missed call notification
+    });
 
     const value = {
         socket: socket,

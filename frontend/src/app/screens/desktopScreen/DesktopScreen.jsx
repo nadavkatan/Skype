@@ -9,6 +9,7 @@ import ChatHeeader from "../../components/chatHeader/ChatHeader";
 import { useStyles } from "./styles/styles";
 import VideoCall from "../../components/videoCall/VideoCall";
 import IncomingCall from "../../components/incomingCall/IncomingCall";
+import CallingScreen from "../../components/callingScreen/CallingScreen";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
@@ -21,8 +22,12 @@ const DesktopScreen = () => {
     console.log(callAnswered)
   },[callAnswered])
 
-  if(receivingCall && !callAnswered) return <IncomingCall/>;
-  if(callInitiator || callAnswered) return <VideoCall/>;
+  if(callInitiator && callAnswered) return <VideoCall/>;
+  if(receivingCall && callAnswered) return <VideoCall/>;
+  if(receivingCall) return <IncomingCall/>;
+  if(callInitiator) return <CallingScreen/>
+  // if(receivingCall) return <VideoCall/>;
+  // if(callInitiator) return <VideoCall/>
 
   return (
     <Grid container>

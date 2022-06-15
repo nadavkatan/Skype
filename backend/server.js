@@ -64,14 +64,27 @@ io.on("connection", (socket) => {
 
     socket.on('initiate_call', async(data)=>{
         const relevantUser = await User.findById({_id: data.to});
-        console.log(relevantUser)
+        // console.log(relevantUser)
         io.to(relevantUser.socket_id).emit('receiving_call', {from: data.from});
+    });
+
+    socket.on('answer_call', async(data)=>{
+        console.log('answer call', data);
+        const relevantUser = await User.findById({_id: data.friendId})
+        io.to(relevantUser.socket_id).emit('call_answered', data);
     })
 
     socket.on("end_call", async(data) => {
-        console.log('receieved end_call event', data);
+        // console.log('receieved end_call event', data);
         const relevantUser = await User.findById(data.friendId);
         io.to(relevantUser.socket_id).emit('call_ended', data);
+    });
+
+    socket.on('cancel_call', async(data) => {
+        // console.log("cancel call event",data)
+        const relevantUser = await User.findById(data.friendId);
+        // console.log("relevant user: ",relevantUser)
+        io.to(relevantUser.socket_id).emit('call_cancelled', data);
     })
 
     socket.on("acceptCall", (data) => {
