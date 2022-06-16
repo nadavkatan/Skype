@@ -10,6 +10,7 @@ import VideoCall from './app/components/videoCall/VideoCall';
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import IncomingCall from './app/components/incomingCall/IncomingCall';
+import EditPage from "./app/pages/editPage/EditPage";
 
 function App() {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -54,6 +55,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path={"/edit/:id"} element={<EditPage/>}/>
           </Routes>
         </div>
       </Context>

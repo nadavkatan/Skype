@@ -88,7 +88,7 @@ const chatSlice = createSlice({
         [getStoredChatContent.fulfilled]: (state, {payload})=>{
             console.log(payload);
             state.status = "success";
-            state.chatContent = payload.messages;
+            if(payload)state.chatContent = payload.messages;
         },
         [getStoredChatContent.rejected]: (state)=>{
             state.status = "failed";

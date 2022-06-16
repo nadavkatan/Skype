@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {getAllUsers, getUserById, getUserByName, getUserByUsername, addFriend, sendFriendRequest, deleteUser, unfriend} = require('../controllers/user.controller');
+const {getAllUsers, getUserById, findAllUserContacts, getUserByName, getUserByUsername, addFriend, sendFriendRequest, deleteUser, unfriend} = require('../controllers/user.controller');
 
 router.get('/', async(req, res) => {
     const users = await getAllUsers();
@@ -9,6 +9,12 @@ router.get('/', async(req, res) => {
 router.get('/:id', async(req, res) => {
     const user = await getUserById(req.params.id);
     res.status(200).json(user);
+})
+
+router.get('/contacts/:id', async(req, res) => {
+    const contacts = await findAllUserContacts(req.params.id);
+    console.log(contacts);
+    res.status(200).json(contacts);
 })
 
 router.post('/:id', async(req, res) => {

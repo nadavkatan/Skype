@@ -32,7 +32,6 @@ export default function RegisterPage() {
     username:"",
     password: "",
     socket_id:"123"
-    // socket_id:""
   })
 
   const dispatch = useDispatch();
@@ -44,10 +43,6 @@ export default function RegisterPage() {
     notifyServerForUserConnection(userData)
     navigate("/");
   };
-
-  // useEffect(() => {
-  //   console.log(userData)
-  // },[userData])
 
   return (
     <ThemeProvider theme={theme}>

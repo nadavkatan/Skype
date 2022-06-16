@@ -30,7 +30,8 @@ const CallingScreen = () => {
     <div className={classes.callingScreenHeader}>
         <Avatar/>
         <div>
-            <Typography variant="subtitle2">{currentContact.friendName}</Typography>
+            {/* <Typography variant="subtitle2">{currentContact.friendName}</Typography> */}
+            <Typography variant="subtitle2">{currentContact.username}</Typography>
             <Typography className={classes.connecting} variant="subtitle1">CONNECTING</Typography>
         </div>
     </div>

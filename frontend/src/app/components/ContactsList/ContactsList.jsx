@@ -12,7 +12,7 @@ import {addContact, initializeContacts} from '../../features/contacts/contacsSli
 const ContactsList = ({contacts}) => {
 
   const {currentUser}= useSelector((state) => state.auth);
-  const {currentContact} = useSelector((state) => state.contacts);
+  const {currentContact, contactsList} = useSelector((state) => state.contacts);
   const {handleJoinRoom} = useContext(AppContext);
 
 
@@ -41,16 +41,16 @@ const ContactsList = ({contacts}) => {
         return <Contact key={contact.friendName} contact={contact}/>
       })
     } */}
-    {
+    {/* {
      currentUser && currentUser.friends.length > 0 && currentUser.friends.map(friend => {
         return <Contact key={friend.friendId} contact={friend}/>
       })
-    }
-    {/* {
-      contactsList.length > 0 && contactsList.map(friend => {
-        return <Contact key={friend.friendId} contact={friend}/>
-      })
     } */}
+    {
+      contactsList.length > 0 && contactsList.map(contact => {
+        return <Contact key={contact._id} contact={contact}/>
+      })
+    }
     </>
   )
 }

@@ -86,5 +86,16 @@ const unfriend = async(id, username, friendId, friendName)=>{
     }
 }
 
+const findAllUserContacts = async(id)=>{
+    // db.users.find({awards: {$elemMatch: {award:'National Medal', year:1975}}})
 
-module.exports={getAllUsers, getUserById, getUserByName, getUserByUsername, deleteUser, addFriend, sendFriendRequest, unfriend}
+    try{
+        const contacts = await User.find({friends: {$elemMatch:{friendId:id}}});
+        return contacts
+    }catch(e){
+        console.log(e)
+    }
+}
+
+
+module.exports={getAllUsers,findAllUserContacts, getUserById, getUserByName, getUserByUsername, deleteUser, addFriend, sendFriendRequest, unfriend}

@@ -98,7 +98,8 @@ const VideoCall = () => {
 
     useEffect(()=>{
         if(callInitiator){
-            return callUser(currentContact.friendId)
+            // return callUser(currentContact.friendId)
+            return callUser(currentContact._id)
         }
         answerCall()
     },[])

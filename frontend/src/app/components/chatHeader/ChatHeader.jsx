@@ -23,7 +23,8 @@ const ChatHeader = () => {
 
   const handleVideoCall = ()=>{
     dispatch(setCallInitiator(true));
-    socket.emit('initiate_call', {to:currentContact.friendId, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:""}})
+    // socket.emit('initiate_call', {to:currentContact.friendId, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:""}})
+    socket.emit('initiate_call', {to:currentContact._id, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:""}})
   }
 
   return (
@@ -33,8 +34,11 @@ const ChatHeader = () => {
       )}
       <div className={classes.chatHeaderUserInfo}>
         <Avatar />
-        <Typography className={classes.headerFriendName} variant="subtitle1">
+        {/* <Typography className={classes.headerFriendName} variant="subtitle1">
           {currentContact.friendName}
+        </Typography> */}
+        <Typography className={classes.headerFriendName} variant="subtitle1">
+          {currentContact.username}
         </Typography>
       </div>
       <Fab size="small" color="secondary">

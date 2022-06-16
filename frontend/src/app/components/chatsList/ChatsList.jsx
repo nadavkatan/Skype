@@ -7,12 +7,18 @@ import Contact from '../contact/Contact';
 const ChatsList = ({contacts}) => {
 
     const {handleJoinRoom} = useContext(AppContext);
-
+    const {contactsList} = useSelector((state) => state.contacts);
+    // onClick={()=>handleJoinRoom(contact.chatId)}
   return (
     <>
-    {
+    {/* {
      contacts && contacts.map(contact =>{
-        return<Contact key={contact.friendName} onClick={()=>handleJoinRoom(contact.chatId)} contact={contact}/>
+        return<Contact key={contact.friendName}  contact={contact}/>
+      })
+    } */}
+    {
+      contactsList && contactsList.map(contact =>{
+        return<Contact key={contact._id}  contact={contact}/>
       })
     }
     </>

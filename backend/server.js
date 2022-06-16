@@ -64,7 +64,7 @@ io.on("connection", (socket) => {
 
     socket.on('initiate_call', async(data)=>{
         const relevantUser = await User.findById({_id: data.to});
-        // console.log(relevantUser)
+        console.log(relevantUser)
         io.to(relevantUser.socket_id).emit('receiving_call', {from: data.from});
     });
 
@@ -75,14 +75,17 @@ io.on("connection", (socket) => {
     })
 
     socket.on("end_call", async(data) => {
-        // console.log('receieved end_call event', data);
-        const relevantUser = await User.findById(data.friendId);
+        console.log('receieved end_call event', data);
+        // const relevantUser = await User.findById(data.friendId);
+        const relevantUser = await User.findById(data._id);
+        console.log('relevant user', relevantUser);
         io.to(relevantUser.socket_id).emit('call_ended', data);
     });
 
     socket.on('cancel_call', async(data) => {
         // console.log("cancel call event",data)
-        const relevantUser = await User.findById(data.friendId);
+        // const relevantUser = await User.findById(data.friendId);
+        const relevantUser = await User.findById(data._id);
         // console.log("relevant user: ",relevantUser)
         io.to(relevantUser.socket_id).emit('call_cancelled', data);
     })
@@ -128,7 +131,7 @@ app.use('/notifications', notificationsRouter);
 
 mongoose.connection.once("open", ()=>{
     console.log("Connected to database");
-    // mongoose.connection.collection('notifications').deleteMany({})
+    // mongoose.connection.collection('chats').deleteMany({})
 
     // Listen to changes in DB
     const UsersChangeStream = mongoose.connection.collection('users').watch();

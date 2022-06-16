@@ -11,12 +11,18 @@ import {setCurrentContact} from '../../features/contacts/contacsSlice';
 const Contact = ({contact}) => {
     
     const {handleJoinRoom, toggleTabs} = useContext(AppContext);
+    const {currentUser} = useSelector((state) => state.auth);
     const classes = useStyles();
 
     const dispatch = useDispatch();
 
   const openChat = ()=>{
-    handleJoinRoom(contact.chatId, contact.friendName);
+    const currentUserInContactObj = contact.friends.find(friend=> friend.friendId === currentUser._id);
+    console.log(currentUserInContactObj)
+    const chatId = currentUserInContactObj.chatId;
+    console.log('chatId: ' + chatId);
+    // handleJoinRoom(chatId, contact.username);
+    handleJoinRoom(chatId, contact);
     toggleTabs("Chat")
   }
 
@@ -27,7 +33,7 @@ const Contact = ({contact}) => {
   return (
     <div className={classes.contactContainer} onClick={() => dispatch(setCurrentContact(contact))}>
      <Avatar />
-    <Typography className={classes.contactName} variant="subtitle1" onClick={()=> openChat()}>{contact.friendName}</Typography>
+    <Typography className={classes.contactName} variant="subtitle1" onClick={()=> openChat()}>{contact.username}</Typography>
     </div>
   )
 }

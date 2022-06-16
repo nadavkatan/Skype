@@ -22,7 +22,7 @@ export default function TemporaryDrawer() {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {isAuth} = useSelector((state)=> state.auth);
+  const {isAuth, currentUser} = useSelector((state)=> state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -53,7 +53,7 @@ export default function TemporaryDrawer() {
           onClick={toggleDrawer(anchor, false)}
           onKeyDown={toggleDrawer(anchor, false)}
         >
-          <ListItemButton>
+          <ListItemButton onClick={()=> navigate(`/edit/${currentUser._id}`)}>
             <ListItemIcon>
               <EditIcon />
             </ListItemIcon>

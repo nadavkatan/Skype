@@ -4,11 +4,11 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export const getAllContacts = createAsyncThunk("contacs/getAllContacs",
     async(id, {getState})=>{
-        const response = axios({
+        const response = await axios({
             method: "GET",
-            url: `${BASE_URL}/users/${id}`
+            url: `${BASE_URL}/users/contacts/${id}`
         });
-        return response.data[0];
+        return response.data;
     }
     );
 

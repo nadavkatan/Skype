@@ -7,6 +7,7 @@ import {io} from 'socket.io-client';
 import { getUpdatedCurrentUser } from '../features/auth/authSlice';
 import {setChatContent, setCurrentRoom} from '../features/chat/chatSlice';
 import {setFriendRequestsFrom, initializeFriendRequestsTo, setNotifications} from '../features/friendRequests/friendRequestsSlice';
+import {getAllContacts} from '../features/contacts/contacsSlice';
 import {checkAuth} from '../features/auth/authSlice';
 import { getAllUserNotifications } from '../features/notifications/notificationsSlice';
 import { ToastContainer, toast } from "react-toastify";
@@ -122,11 +123,13 @@ const Context = ({children}) => {
               default: return setActiveTab("ChatList");
           }
       },
-       handleJoinRoom:(chatId, friendName)=>{
+      //  handleJoinRoom:(chatId, friendName)=>{
+       handleJoinRoom:(chatId, contact)=>{
         console.log(chatId)
           value.joinRoom(chatId)
           dispatch(setCurrentRoom(chatId))
-          setCurrentContact(friendName)
+          // setCurrentContact(friendName)
+          setCurrentContact(contact)
         },
         notifyServerForUserConnection: (user)=>{
           socket.emit("user_connected", user);
@@ -139,13 +142,17 @@ const Context = ({children}) => {
 
     },[])
 
+    useEffect(()=>{
+      console.log('contacts: ', contactsList)
+    }, [contactsList])
+
 
     useEffect(()=>{
       if(currentUser){
         dispatch(setFriendRequestsFrom(currentUser.friendRequestesFrom))
         dispatch(initializeFriendRequestsTo(currentUser.friendRequestesTo))
         dispatch(getAllUserNotifications(currentUser._id));
-        // dispatch(setNotifications(currentUser.friendRequestesFrom))
+        dispatch(getAllContacts(currentUser._id))
         value.notifyServerForUserConnection(currentUser)
       }
     },[currentUser])
