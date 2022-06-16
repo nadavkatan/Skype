@@ -31,6 +31,7 @@ const DesktopScreen = () => {
 
   return (
     <Grid container>
+    <IncomingCall/>
       <Grid item xs={3}>
         <HomePage />
       </Grid>

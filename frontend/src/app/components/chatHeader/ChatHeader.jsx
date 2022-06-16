@@ -21,10 +21,6 @@ const ChatHeader = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(currentContact);
-  }, []);
-
   const handleVideoCall = ()=>{
     dispatch(setCallInitiator(true));
     socket.emit('initiate_call', {to:currentContact.friendId, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:""}})

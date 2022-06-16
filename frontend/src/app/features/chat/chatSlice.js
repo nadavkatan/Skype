@@ -1,10 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
-import {io} from 'socket.io-client';
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const socket = io.connect(BASE_URL);
-
 
 export const getStoredChatContent = createAsyncThunk('chat/getStoredChatContent',
     async(chatId, {getState}) => {
@@ -19,7 +16,7 @@ export const getStoredChatContent = createAsyncThunk('chat/getStoredChatContent'
                 id:chatId
             }
         });
-        console.log(response);
+        // console.log(response);
         return response.data;
     }
 )
@@ -35,7 +32,7 @@ export const storeSentMessage = createAsyncThunk('chat/storeSentMessage',
                 message:args.messageData
             }
         });
-        console.log(response);
+        // console.log(response);
         return response.data;
     }
 )

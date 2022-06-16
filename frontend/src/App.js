@@ -9,6 +9,7 @@ import DesktopScreen from "./app/screens/desktopScreen/DesktopScreen";
 import VideoCall from './app/components/videoCall/VideoCall';
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import IncomingCall from './app/components/incomingCall/IncomingCall';
 
 function App() {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));

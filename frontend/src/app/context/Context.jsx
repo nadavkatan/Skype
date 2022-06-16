@@ -25,6 +25,7 @@ const Context = ({children}) => {
     const{contactsList} = useSelector((state)=> state.contacts);
     const {friendRequestsFrom, notifications} = useSelector((state)=> state.friendRequests);
     const [activeTab, setActiveTab] = useState("ChatsList");
+    const [openModal, setOpenModal] = useState(false);
     const [currentContact, setCurrentContact] = useState("");
     const dispatch = useDispatch();
 
@@ -66,6 +67,7 @@ const Context = ({children}) => {
 
     socket.off('receiving_call').on('receiving_call', (data)=>{
       console.log('received emit from back, receiving call');
+      setOpenModal(true)
       dispatch(setCaller(data.from))
       dispatch(setReceivingCall(true))
     });
@@ -86,6 +88,8 @@ const Context = ({children}) => {
         socket: socket,
         activeTab,
         currentContact,
+        openModal,
+        setOpenModal,
         joinRoom: (room)=>{
             console.log(BASE_URL)
             socket.emit("join_room", room);

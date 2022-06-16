@@ -9,7 +9,7 @@ export const createNotification = createAsyncThunk("notifications/createNotifica
             url: `${BASE_URL}/notifications`,
             data:args
         });
-        console.log(response);
+        // console.log(response);
         return response.data
     }
 )
@@ -20,7 +20,7 @@ export const getAllUserNotifications = createAsyncThunk("notifications/getAllUse
             method: 'GET',
             url: `${BASE_URL}/notifications/${id}`,
         });
-        console.log(response);
+        // console.log(response);
         return response.data
     }
 )
@@ -32,7 +32,7 @@ export const deleteNotification = createAsyncThunk("notifications/deleteNotifica
             url: `${BASE_URL}/notifications`,
             data: args
         })
-        console.log(response)
+        // console.log(response)
         return response.data
     }
 )
@@ -47,7 +47,7 @@ export const deleteAllConnectionNotifications = createAsyncThunk("notifications/
                 user_id: user_id
             }
         });
-        console.log(response)
+        // console.log(response)
         return response.data
     }
 )
@@ -80,7 +80,6 @@ const notificationsSlice = createSlice({
             state.status = "loading"
         },
         [getAllUserNotifications.fulfilled]: (state, {payload})=>{
-            console.log(payload)
             state.status = "success";
             if(payload.message !== "no notifications"){
                 state.notifications = payload
