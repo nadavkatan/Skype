@@ -136,7 +136,8 @@ mongoose.connection.once("open", ()=>{
     // Listen to changes in DB
     const UsersChangeStream = mongoose.connection.collection('users').watch();
     UsersChangeStream.on("change", async(change)=>{
-        // console.log("change stream: ",change);
+        console.log("change stream: ",change);
+        // if(change.operationType === "update" && !change.updateDescription.updatedFields.hasOwnProperty("socket_id")){
         if(change.operationType === "update" && !change.updateDescription.updatedFields.hasOwnProperty("socket_id")){
                 const relevantUser = await User.findById({_id: change.documentKey._id});
                 // console.log('relevant user: ', relevantUser);
@@ -156,7 +157,7 @@ mongoose.connection.once("open", ()=>{
 
     const friendRequestsChangeStream = mongoose.connection.collection('friendrequests').watch();
     friendRequestsChangeStream.on("change", (change)=>{
-        // console.log("change stream: ",change);
+        console.log("change stream: ",change);
         switch(change.operationType){
             case "insert":
                 // console.log('insert')

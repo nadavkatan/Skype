@@ -24,7 +24,7 @@ const ChatHeader = () => {
   const handleVideoCall = ()=>{
     dispatch(setCallInitiator(true));
     // socket.emit('initiate_call', {to:currentContact.friendId, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:""}})
-    socket.emit('initiate_call', {to:currentContact._id, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:""}})
+    socket.emit('initiate_call', {to:currentContact._id, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:currentUser.avatar.secure_url}})
   }
 
   return (
@@ -33,7 +33,7 @@ const ChatHeader = () => {
         <ArrowBackIcon onClick={() => toggleTabs("ChatList")} />
       )}
       <div className={classes.chatHeaderUserInfo}>
-        <Avatar />
+        <Avatar imgSrc={currentContact.avatar.secure_url}/>
         {/* <Typography className={classes.headerFriendName} variant="subtitle1">
           {currentContact.friendName}
         </Typography> */}

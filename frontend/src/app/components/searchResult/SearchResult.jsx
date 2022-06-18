@@ -73,7 +73,7 @@ const SearchResult = ({ foundUser, areFriends, chatId, alreadyRequested }) => {
     <div className={classes.searchResultContainer}>
       <ToastContainer />
       <div className={classes.searchResult}>
-        <Avatar />
+        <Avatar imgSrc={foundUser.avatar.secure_url}/>
         <Typography variant="subtitle1" className={classes.searchResultText}>
           {foundUser.username}
         </Typography>

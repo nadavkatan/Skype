@@ -1,15 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useStyles } from "./styles/styles";
 import Avatar from "../avatar/Avatar";
 import QuickAction from "../quickAction/QuickAction";
 import connectPic from "../../assets/images/quick-action-pic1.png";
+import Popover from '@mui/material/Popover';
+import {useNavigate} from 'react-router-dom';
 import { Grid } from "@mui/material";
+import {logout} from '../../features/auth/authSlice';
+import {setShowChat} from '../../features/chat/chatSlice';
 
 const Welcome = () => {
   const { currentUser } = useSelector((state) => state.auth);
   const classes = useStyles();
+  const dispatch= useDispatch();
+  const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
+const handleLogout = () => {
+  console.log('logout');
+  dispatch(logout());
+  dispatch(setShowChat(false));
+  navigate("/login");
+};
 
   return (
     <>
@@ -17,7 +42,7 @@ const Welcome = () => {
       <div className={classes.welcomContent}>
         <div className={classes.welcomeHeadingContainer}>
           <div className={classes.welcomeAvatarContainer}>
-            <Avatar avatarDimensions={{ width: 100, height: 100 }} />
+          {currentUser && <Avatar avatarDimensions={{ width: 100, height: 100 }} imgSrc={currentUser.avatar.secure_url} />}
           </div>
           <div>
             <Typography variant="h4">Welcome!</Typography>
@@ -52,7 +77,36 @@ const Welcome = () => {
       </div>
       <footer className={classes.welcomeFooter}>
       <Typography className={classes.welcomeFooterText} variant="subtitle2">You are signed in as <em>{currentUser.username}</em></Typography>
-      <Typography className={classes.welcomeFooterText} variant="subtitle2">Try <span className={classes.welcomeSwitchingAccouts}>switching accounts</span> if you don't see you contacts</Typography>
+      <Typography className={classes.welcomeFooterText} variant="subtitle2">
+      Try {" "} 
+      <span className={classes.welcomeSwitchingAccouts} aria-owns={open ? 'mouse-over-popover' : undefined}
+        aria-haspopup="true"
+        onMouseEnter={handlePopoverOpen}
+        onMouseLeave={handlePopoverClose}>
+         switching accounts
+        </span> {" "}
+         if you don't see you contacts</Typography>
+      <Popover
+        onClick={()=>handleLogout()}
+        id="mouse-over-popover"
+        sx={{
+          pointerEvents: 'none',
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography sx={{ p: 1 }}>Logout</Typography>
+      </Popover>
     </footer>
     </div>
 

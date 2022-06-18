@@ -67,6 +67,41 @@ export const getUpdatedCurrentUser = createAsyncThunk("auth/getUpdatedCurrentUse
     }
 )
 
+export const updateUserCredentials = createAsyncThunk("auth/updateUserCredentials",
+async(args, {getState})=>{
+        const{auth} = getState();
+    try{
+        const response = await axios({
+            method: 'PUT',
+            url: `${BASE_URL}/users/edit-credentials/${auth.currentUser._id}`,
+            data: args
+        })
+        console.log(response)
+        return response.data
+    }catch(e){
+        console.log(e)
+    }
+}
+);
+
+export const changePassword = createAsyncThunk("auth/changePassword",
+    async(args, {getState})=>{
+        const {auth} = getState();
+        try{
+            const response = await axios({
+                method:'PUT',
+                url: `${BASE_URL}/users/change-password/${auth.currentUser._id}`,
+                data: args
+            });
+            console.log(response)
+            return response.data
+        }catch(e){
+            console.log(e);
+        }
+
+    }
+)
+
     const initialState = {
         isAuth: undefined,
         authMessage:"",
@@ -135,6 +170,26 @@ export const getUpdatedCurrentUser = createAsyncThunk("auth/getUpdatedCurrentUse
                 state.currentUser = payload
             },
             [getUpdatedCurrentUser.rejected]:(state)=>{
+                state.status = "failed"
+            },
+            [updateUserCredentials.pending]: (state)=>{
+                state.status = "loading"
+            },
+            [updateUserCredentials.fulfilled]: (state, {payload})=>{
+                state.status = "success";
+                state.currentUser = payload;
+            },
+            [updateUserCredentials.rejected]: (state)=>{
+                state.status = "failed"
+            },
+            [changePassword.pending]: (state)=>{
+                state.status = "loading"
+            },
+            [changePassword.fulfilled]: (state, {payload})=>{
+                state.status = "success";
+                state.authMessage= payload.message
+            },
+            [changePassword.rejected]: (state)=>{
                 state.status = "failed"
             },
         }

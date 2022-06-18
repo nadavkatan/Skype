@@ -32,7 +32,7 @@ const Contact = ({contact}) => {
 
   return (
     <div className={classes.contactContainer} onClick={() => dispatch(setCurrentContact(contact))}>
-     <Avatar />
+     <Avatar imgSrc={contact.avatar.secure_url} />
     <Typography className={classes.contactName} variant="subtitle1" onClick={()=> openChat()}>{contact.username}</Typography>
     </div>
   )

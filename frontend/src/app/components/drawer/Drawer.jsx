@@ -84,7 +84,7 @@ export default function TemporaryDrawer() {
           {["top"].map((anchor) => (
             <React.Fragment key={anchor}>
               <Button onClick={toggleDrawer(anchor, true)}>
-                <Avatar />
+                <Avatar imgSrc={currentUser.avatar.secure_url}/>
               </Button>
               <Drawer
                 anchor={anchor}

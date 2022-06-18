@@ -1,15 +1,17 @@
 import { Typography } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
 import Avatar from "../avatar/Avatar";
 import { useStyles } from "./styles/styles";
 
 const MessageFriend = ({ message }) => {
   const classes = useStyles();
+  const {currentContact} = useSelector((state) => state.contacts);
 
   return (
     <div className={classes.messageWrapper}>
       <div className={classes.avatarContainer}>
-        <Avatar/>
+        <Avatar imgSrc={currentContact.avatar.secure_url}/>
       </div>
       <div className={classes.messageContainer}>
         <Typography className={classes.messageTime} variant="subtitle1">

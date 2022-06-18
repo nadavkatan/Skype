@@ -6,23 +6,17 @@ import Fab from "@mui/material/Fab";
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {useStyles} from './styles/styles';
-// import {deleteFriendRequest} from '../../features/users/usersSlice';
-import {deleteFriendRequest} from '../../features/friendRequests/friendRequestsSlice';
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Radio from '@mui/material/Radio'
-import {setFriendRequestsFrom} from '../../features/friendRequests/friendRequestsSlice';
-import { createNotification, deleteNotification, addNotification} from "../../features/notifications/notificationsSlice";
+import { createNotification, deleteNotification, deleteNotificationFromState, convertNotification} from "../../features/notifications/notificationsSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const FriendRequest = ({ requestSender }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
-  const {friendRequestsFrom} =useSelector((state) => state.friendRequests);
   const classes = useStyles();
 
+
   const confirmFriendRequest = () => {
-    console.log(currentUser)
     if(!currentUser.friends.some(e=> e.friendId === requestSender.sender_id)){
       console.log('not yet friend')
       const data = {
@@ -32,29 +26,22 @@ const FriendRequest = ({ requestSender }) => {
         friendName: requestSender.sender_name,
       };
 
-      // toast.success(`You are now connected with ${requestSender.sender_name}`);
-      dispatch(deleteNotification({user_id:currentUser._id, sender_id:requestSender.sender_id}))
+      //add the friend to database
       dispatch(addFriend(data));
-      //delete friendReqeust confirmation
-      //create notification of connection confirmation for the current user
+      //convert notification from friendRequest to connection confirmation
+      dispatch(convertNotification({title:"friend_request", sender_id:requestSender.sender_id, newNotification: {user_id:currentUser._id, title:"connection_confirmation", content:{confirmation_text:`You are now connected with ${requestSender.sender_name}`}}}))
+      //Delete friend Request from database
+      dispatch(deleteNotification({user_id:currentUser._id, sender_id:requestSender.sender_id}))
+      //create notification of connection confirmation for the friend request sender
       dispatch(createNotification({user_id:requestSender.sender_id, title:"connection_confirmation", content:{confirmation_text:`You are now connected with ${currentUser.username}`}}))
-      //create notification of connection confirmation for the new friend
-      // dispatch(createNotification({user_id:currentUser._id, title:"connection_confirmation", content:{confirmation_text:`You are now connected with ${requestSender.sender_name}`}}))
-
-      // dispatch(addNotification({user_id:currentUser._id, title:"connection_confirmation", content:{confirmation_text:`You are now connected with ${requestSender.sender_name}`}}))
     }
-    const deleteFriendRequestData={
-      sender_id: requestSender.sender_id,
-      receiver_id: requestSender.receiver_id
-    }
-    
-    // dispatch(deleteFriendRequest(deleteFriendRequestData))
-    // setFriendRequestsFrom(friendRequestsFrom.filter(friendRequest => {
-    //   return friendRequest.sender_id !== requestSender.sender_id && friendRequest.receiver_id !== requestSender.receiver_id
-    // }));
-
-    //delete friend request from user document
   };
+
+  const declineFriendRequest = ()=>{
+    dispatch(deleteNotification({user_id:currentUser._id, sender_id:requestSender.sender_id}))
+    dispatch(deleteNotificationFromState({title:"friend_request", sender_id:requestSender.sender_id}))
+
+  }
 
   return (
     // <div>
@@ -69,7 +56,7 @@ const FriendRequest = ({ requestSender }) => {
         <Fab color="primary" size="small" className={classes.friendRequestFab} onClick={confirmFriendRequest}>
     <DoneIcon/>
         </Fab>
-        <Fab size="small" color="error">
+        <Fab size="small" color="error" onClick={declineFriendRequest}>
     <DeleteForeverIcon/>
         </Fab>
           {/* <Button

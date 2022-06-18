@@ -15,7 +15,15 @@ const friendRequestSchema = new mongoose.Schema({
 
 const friendRequestToSchema = new mongoose.Schema({
     friend_id: {type: String, required: true},
-})
+});
+
+const AvatarSchema = {
+    _id: false,
+    public_id: String,
+    format: String,
+    bytes: Number,
+    secure_url: {type: String, default: 'https://res.cloudinary.com/disyvovh2/image/upload/v1655451340/avatars/profile-pic_r1feca.jpg'},
+  };
 
 const userSchema = new mongoose.Schema({
     first_name: {type: String, required: true, trim: true},
@@ -28,6 +36,7 @@ const userSchema = new mongoose.Schema({
     friendRequestesFrom: {type: [friendRequestSchema]},
     friendRequestesTo:{type: [friendRequestToSchema]},
     socket_id:{type: String},
+    avatar: AvatarSchema,
     hash: {type: String, required: true, trim: true},
     salt: {type: String, required: true, trim: true}
 });

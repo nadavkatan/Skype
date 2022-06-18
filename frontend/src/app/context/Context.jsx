@@ -11,6 +11,7 @@ import {getAllContacts} from '../features/contacts/contacsSlice';
 import {checkAuth} from '../features/auth/authSlice';
 import { getAllUserNotifications } from '../features/notifications/notificationsSlice';
 import { ToastContainer, toast } from "react-toastify";
+import {addContact} from '../features/contacts/contacsSlice';
 import "react-toastify/dist/ReactToastify.css";
 import Peer from "simple-peer";
 import {setReceivingCall, setCaller, setCallerSignal, setCallAnswered} from '../features/videoCall/videoCallSlice';
@@ -31,25 +32,36 @@ const Context = ({children}) => {
     const dispatch = useDispatch();
 
 
-    socket.off("newFriendRequest").on("newFriendRequest", (friendRequest)=>{
-      console.log("currentUser: ",currentUser);
-      console.log("friendRequest from back: ", friendRequest);
-      if(friendRequest.receiver_id === currentUser._id){
-        console.log("relevant user")
-        const notification = {
-          title: "friendRequest",
-          content: friendRequest
-        }
-        dispatch(setFriendRequestsFrom([...friendRequestsFrom, friendRequest]));
-        dispatch(setNotifications([...friendRequestsFrom, notification]));
-      }
-    })
+    // socket.off("newFriendRequest").on("newFriendRequest", (friendRequest)=>{
+    //   console.log("currentUser: ",currentUser);
+    //   console.log("friendRequest from back: ", friendRequest);
+    //   if(friendRequest.receiver_id === currentUser._id){
+    //     console.log("relevant user")
+    //     const notification = {
+    //       title: "friendRequest",
+    //       content: friendRequest
+    //     }
+    //     dispatch(setFriendRequestsFrom([...friendRequestsFrom, friendRequest]));
+    //     dispatch(setNotifications([...friendRequestsFrom, notification]));
+    //   }
+    // })
 
     socket.off("addFriend").on("addFriend", (friend)=>{
-      console.log("add friend event",friend.updateDescription.updatedFields)
+      // console.log("add friend event, ", friend)
+      // console.log("add friend event",friend.updateDescription.updatedFields)
+      // console.log("add friend event",friend.updateDescription.updatedFields.friendId)
         if(currentUser){
-          dispatch(getUpdatedCurrentUser(currentUser._id))
-          toast.success(`You are now connected with `);
+          const update =friend.updateDescription.updatedFields 
+          // console.log("test friend ",update[Object.keys(update)[0]].friendId)
+          if(update[Object.keys(update)[0]].friendId){
+             console.log("friends update")
+             return dispatch(getAllContacts(currentUser._id))
+          }
+          
+          // dispatch(getUpdatedCurrentUser(currentUser._id))
+          // dispatch(getAllContacts(currentUser._id))
+
+          // toast.success(`You are now connected with `);
 
         }
     })
@@ -149,6 +161,7 @@ const Context = ({children}) => {
 
     useEffect(()=>{
       if(currentUser){
+        console.log('currentUser: ', currentUser)
         dispatch(setFriendRequestsFrom(currentUser.friendRequestesFrom))
         dispatch(initializeFriendRequestsTo(currentUser.friendRequestesTo))
         dispatch(getAllUserNotifications(currentUser._id));

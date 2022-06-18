@@ -8,20 +8,38 @@ import Avatar from "../../components/avatar/Avatar";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import Fab from "@mui/material/Fab";
-import EditIcon from '@mui/icons-material/Edit';
+import ChangePasswordForm from '../../components/changePasswordForm/ChangePasswordForm';
+import {updateUserCredentials} from '../../features/auth/authSlice';
+import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router-dom'
 
 const EditPage = () => {
+
+  const { currentUser } = useSelector((state) => state.auth);
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
+    if(data.avatar.length){
+      const formData = new FormData()
+      formData.append("avatar",data.avatar[0])
+      formData.append("first_name",data.first_name)
+      formData.append("last_name",data.last_name)
+      formData.append("username",data.username)
+      formData.append("email",data.email)
+    dispatch(updateUserCredentials(formData))
+    }else{
+      dispatch(updateUserCredentials(data))
+    }
   };
-  const { currentUser } = useSelector((state) => state.auth);
-  const classes = useStyles();
 
   return (
     <Box className={classes.editPageWrapper}>
@@ -32,6 +50,12 @@ const EditPage = () => {
         People on Skype will get to know you with the info below
       </Typography>
       </Box>
+      <Grid container spacing={2}>
+        <Grid item md={6} xs={12}></Grid>
+        <Grid item md={6} xs={12}>
+          
+        </Grid>
+      </Grid>
       <Box
         className={classes.editPageFormContainer}
         component="form"
@@ -39,15 +63,18 @@ const EditPage = () => {
       >
         <Box className={classes.formHeader}>
             <Box className={classes.editPageAvatarContainer}>
-              <Avatar avatarDimensions={{ width: 150, height: 150 }}/>
-              <Fab size="small" color="warning" className={classes.editIcon}>
-                <EditIcon/>
-                <TextField
-                  style={{ display: "none" }}
+            <div className={classes.editPageAvatar}>
+            <Avatar  avatarDimensions={{ width: 150, height: 150 }} imgSrc={currentUser.avatar.secure_url}/>
+            </div>
+              <Button variant="outlined" component='label'>
+              Change profile picture
+              <input
+                  style={{ width:'100%', position:'absolute', display:'none' }}
                   type="file"
+                  accept="image/png, image/jpeg"
                   {...register("avatar")}
                 />
-              </Fab>
+              </Button>
               </Box>
               <Button type="submit" variant="contained">
                 Done
@@ -91,7 +118,11 @@ const EditPage = () => {
           </Grid>
         </Grid>
       </Box>
+      <ChangePasswordForm/>
     </Box>
+    <Box className={classes.backBtnContainer}>
+    <Button variant="contained" onClick={()=> navigate("/")}>Back</Button>
+    </Box>          
     </Box>
   );
 };

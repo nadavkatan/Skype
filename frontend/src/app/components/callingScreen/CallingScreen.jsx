@@ -28,7 +28,7 @@ const CallingScreen = () => {
   return (
       <div>
     <div className={classes.callingScreenHeader}>
-        <Avatar/>
+        <Avatar imgSrc={currentContact.avatar.secure_url}/>
         <div>
             {/* <Typography variant="subtitle2">{currentContact.friendName}</Typography> */}
             <Typography variant="subtitle2">{currentContact.username}</Typography>
@@ -37,7 +37,7 @@ const CallingScreen = () => {
     </div>
     <div className={classes.callingScreenBody}>
       <div className={classes.callingAvatarContainer}>
-        <Avatar avatarDimensions={{ width: 200, height: 200 }} />
+        <Avatar avatarDimensions={{ width: 200, height: 200 }} imgSrc={currentContact.avatar.secure_url} />
       </div>
       <NewtonsCradle size={40} speed={1.4} color="black" />
       <Fab size="small" color="error" className={classes.callingScreenEndCall} onClick={cancelCall}>

@@ -1,6 +1,9 @@
 const User = require('../models/user.model');
 const { uuid } = require('uuidv4');
 const {createNewChat} = require('./chat.controller');
+const {validatePassword, genPassword} = require('../utils/crypto.utilities');
+
+
 
 const getAllUsers = async()=>{
     try{
@@ -97,5 +100,32 @@ const findAllUserContacts = async(id)=>{
     }
 }
 
+const updateUserCredentials = async(id, update)=>{
+    try{
+        const updatedUser = await User.findByIdAndUpdate({_id: id}, update, {new: true});
+        return updatedUser
+    }catch(e){
+        console.log(e)
+    }
+}
 
-module.exports={getAllUsers,findAllUserContacts, getUserById, getUserByName, getUserByUsername, deleteUser, addFriend, sendFriendRequest, unfriend}
+const changePassword = async(id, update)=>{
+    const {salt, hash} = await User.findById({_id:id})
+    const valid = validatePassword(update.currentPassword, hash, salt);
+    if(valid){
+        const saltAndHash = genPassword(update.newPassword);
+        try{
+            const updatedUser = await User.findByIdAndUpdate({_id: id}, saltAndHash, {new: true});
+            return {message: "Password changed successfully"}
+        }catch(e){
+            console.log(e)
+        }
+    }else{
+        console.log("incorrect password")
+        return {message: "Incorrect password"}
+    }
+
+}
+
+
+module.exports={getAllUsers,findAllUserContacts, changePassword, updateUserCredentials, getUserById, getUserByName, getUserByUsername, deleteUser, addFriend, sendFriendRequest, unfriend}

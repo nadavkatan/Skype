@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const {getAllUsers, getUserById, findAllUserContacts, getUserByName, getUserByUsername, addFriend, sendFriendRequest, deleteUser, unfriend} = require('../controllers/user.controller');
+const {getAllUsers, getUserById, changePassword, updateUserCredentials, findAllUserContacts, getUserByName, getUserByUsername, addFriend, sendFriendRequest, deleteUser, unfriend} = require('../controllers/user.controller');
+const upload = require('../config/multer.config');
+const {uploadFile} = require('../controllers/cloudinary.controller');
 
 router.get('/', async(req, res) => {
     const users = await getAllUsers();
@@ -37,12 +39,34 @@ router.put('/', async(req, res) => {
     // console.log(req.body);
     const updatedUser = await addFriend(req.body.id, req.body.username, req.body.friendId, req.body.friendName);
     res.status(200).json(updatedUser);
-})
+});
 
 router.put('/request', async(req, res) => {
     // console.log(req.body)
     const updatedUser = await sendFriendRequest(req.body.id, req.body.friendName, req.body.friendId);
     res.status(200).json('Friend request sent');
+});
+
+router.put('/edit-credentials/:id', upload.single("avatar") ,async(req, res) => {
+    console.log(req)
+    if(req.file){
+        console.log("there is a file")
+        const {public_id, format, bytes, secure_url} = await uploadFile(req.file, req.file.fieldname + "-" + Date.now() , 'avatars');
+        const userWithAvatar = {...req.body, avatar: {public_id, format, bytes, secure_url}};
+        const updatedUser = await updateUserCredentials(req.params.id, userWithAvatar);
+        console.log(updatedUser);
+        res.status(200).json(updatedUser);
+    }else{
+        const updatedUser = await updateUserCredentials(req.params.id, req.body);
+        console.log(updatedUser);
+        res.status(200).json(updatedUser);
+    }
+});
+
+router.put('/change-password/:id', async(req, res) => {
+    const updatedUser = await changePassword(req.params.id, req.body)
+    console.log(updatedUser);
+    res.status(200).json(updatedUser);
 })
 
 router.put('/unfriend', async(req, res) => {

@@ -63,6 +63,17 @@ const notificationsSlice = createSlice({
     reducers:{
         addNotification: (state, {payload})=>{
             state.notifications.push(payload)
+        },
+        deleteNotificationFromState: (state, {payload})=>{
+            state.notifications = state.notifications.filter(notification => {
+                return notification.title !== payload.title && notification.sender_id !== payload.sender_id
+            });
+        },
+        convertNotification: (state, {payload})=>{
+            state.notifications = state.notifications.filter(notification => {
+                return notification.title !== payload.title && notification.sender_id !== payload.sender_id
+            });
+            state.notifications.push(payload.newNotification)
         }
     },
     extraReducers:{
@@ -96,11 +107,11 @@ const notificationsSlice = createSlice({
         [deleteNotification.fulfilled]: (state, {payload})=>{
             state.status = "success";
             console.log(state.notifications)
-            state.notifications = state.notifications.filter(notification => {
-                return notification.user_id !== payload.user_id 
-                       && notification.sender_id !== payload.sender_id 
-                       && notification.title !== payload.title
-            })
+            // state.notifications = state.notifications.filter(notification => {
+            //     return notification.user_id !== payload.user_id 
+            //            && notification.sender_id !== payload.sender_id 
+            //            && notification.title !== payload.title
+            // })
         },
         [deleteNotification.rejected]: (state)=>{
             state.status = "failed"
@@ -119,5 +130,5 @@ const notificationsSlice = createSlice({
     }
 });
 
-export const {addNotification} = notificationsSlice.actions;
+export const {addNotification, deleteNotificationFromState, convertNotification} = notificationsSlice.actions;
 export default notificationsSlice.reducer;
