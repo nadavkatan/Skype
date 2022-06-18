@@ -14,6 +14,7 @@ const notificationsRouter = require('./routes/notification.route');
 const {Server} = require('socket.io');
 const http = require('http');
 const User = require('./models/user.model');
+const Chat = require('./models/chat.model');
 
 
 const app = express();
@@ -76,17 +77,13 @@ io.on("connection", (socket) => {
 
     socket.on("end_call", async(data) => {
         console.log('receieved end_call event', data);
-        // const relevantUser = await User.findById(data.friendId);
         const relevantUser = await User.findById(data._id);
         console.log('relevant user', relevantUser);
         io.to(relevantUser.socket_id).emit('call_ended', data);
     });
 
     socket.on('cancel_call', async(data) => {
-        // console.log("cancel call event",data)
-        // const relevantUser = await User.findById(data.friendId);
         const relevantUser = await User.findById(data._id);
-        // console.log("relevant user: ",relevantUser)
         io.to(relevantUser.socket_id).emit('call_cancelled', data);
     })
 
@@ -94,6 +91,11 @@ io.on("connection", (socket) => {
         console.log('call accepted', data)
         io.to(data.to).emit('callAccepted', data.signal);
     });
+
+    socket.on("decline_call", async(data) => {
+        const relevantUser = await User.findById(data.friendId);
+        io.to(relevantUser.socket_id).emit('call_declined', data);
+    })
 
 
     socket.on("disconnect", () => {
@@ -153,6 +155,14 @@ mongoose.connection.once("open", ()=>{
             // console.log('relevant user: ', relevantUser);
             io.to(relevantUser.socket_id).emit("notificationUpdate", change)
         }
+    })
+
+    const chatsChangeStream = mongoose.connection.collection('chats').watch();
+    chatsChangeStream.on('change', async(change)=>{
+        const updatedChat = change.documentKey._id
+        const relevantUsers = await User.find({friends: {$elemMatch: {chatId:updatedChat}}})
+        io.to(relevantUsers[0].socket_id).emit("message_update", {updatedChat, messageInfo : {senderName: relevantUsers[1].username, senderId: relevantUsers[1]._id}})
+        io.to(relevantUsers[1].socket_id).emit("message_update", {updatedChat, messageInfo :{senderName: relevantUsers[0].username, senderId: relevantUsers[0]._id}})
     })
 
     const friendRequestsChangeStream = mongoose.connection.collection('friendrequests').watch();

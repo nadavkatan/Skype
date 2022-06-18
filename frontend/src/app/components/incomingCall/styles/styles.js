@@ -11,6 +11,16 @@ export const useStyles = makeStyles({
     width: '15vw',
     boxShadow: '0 0 20px gray'
   },
+  smScreenIncomingCallModal: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    borderRadius: "10px",
+    height: '100vh',
+    width: '100vw',
+    boxShadow: '0 0 20px gray'
+  },
   incomingCallContainer: {
     backgroundColor: "black",
     height: "100%",

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppContext} from '../../context/Context';
-import {storeSentMessage, getStoredChatContent, setChatContent} from '../../features/chat/chatSlice'; 
+import {storeSentMessage, getStoredChatContent, setChatContent, deleteMessagesFromUnread} from '../../features/chat/chatSlice'; 
 import MessageFriend from '../messageFriend/MessageFriend';
 import Message from '../message/Message';
 import {useStyles} from './styles/styles';
@@ -22,6 +22,7 @@ const Chat = () => {
   const {currentRoom, chatContent} = useSelector((state) => state.chat);
   const{currentUser} = useSelector((state)=> state.auth);
   const {receivingCall, callAnswered, callInitiator} = useSelector((state) => state.videoCall);
+  const {currentContact} = useSelector((state) => state.contacts)
 
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -52,9 +53,6 @@ const Chat = () => {
         }) }
 },[chatContent])
 
-useEffect(()=>{
-  console.log('receivingCall: ', receivingCall)
-},[receivingCall])
 
   useEffect(() =>{
     socket.off("receive_message").on("receive_message", (data)=>{
@@ -63,12 +61,27 @@ useEffect(()=>{
     })
   },[socket])
 
+  // useEffect(() =>{
+  //   if(currentContact){
+  //     dispatch(deleteMessagesFromUnread(currentContact._id))
+  //   }
+  //   return ()=>{
+  //     console.log(' on unmount delete unreadMessages')
+  //     dispatch(deleteMessagesFromUnread(currentContact._id))
+  // }
 
+  // },[])
 
   useEffect(()=>{
     dispatch(getStoredChatContent(currentRoom));
-    // setChatContent(storedChat.messages)
-  },[])
+    if(currentContact){
+      dispatch(deleteMessagesFromUnread(currentContact._id))
+    }
+    return ()=>{
+      console.log(' on unmount delete unreadMessages')
+      dispatch(deleteMessagesFromUnread(currentContact._id))
+  }
+  },[currentContact])
 
   return (
     <div>

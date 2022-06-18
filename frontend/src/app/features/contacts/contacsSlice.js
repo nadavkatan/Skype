@@ -30,6 +30,7 @@ export const getAllContacts = createAsyncThunk("contacs/getAllContacs",
                 state.contactsList = [...state.contactsList, payload];
             },
             setCurrentContact: (state, {payload})=>{
+                console.log(payload)
                 state.currentContact = payload
             }
         },

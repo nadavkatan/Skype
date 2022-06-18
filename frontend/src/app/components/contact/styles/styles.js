@@ -8,6 +8,6 @@ export const useStyles = makeStyles({
         cursor: 'pointer'
     },
     contactName:{
-        marginLeft: '0.5em',
+        marginLeft: '0.5em!important',
     }
 })

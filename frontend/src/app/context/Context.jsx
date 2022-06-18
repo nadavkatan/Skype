@@ -5,16 +5,16 @@ import { createContext } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {io} from 'socket.io-client';
 import { getUpdatedCurrentUser } from '../features/auth/authSlice';
-import {setChatContent, setCurrentRoom} from '../features/chat/chatSlice';
+import {setChatContent, setCurrentRoom, addMessageToUnread} from '../features/chat/chatSlice';
 import {setFriendRequestsFrom, initializeFriendRequestsTo, setNotifications} from '../features/friendRequests/friendRequestsSlice';
-import {getAllContacts} from '../features/contacts/contacsSlice';
+import {getAllContacts, setCurrentContact} from '../features/contacts/contacsSlice';
 import {checkAuth} from '../features/auth/authSlice';
 import { getAllUserNotifications } from '../features/notifications/notificationsSlice';
 import { ToastContainer, toast } from "react-toastify";
 import {addContact} from '../features/contacts/contacsSlice';
 import "react-toastify/dist/ReactToastify.css";
 import Peer from "simple-peer";
-import {setReceivingCall, setCaller, setCallerSignal, setCallAnswered} from '../features/videoCall/videoCallSlice';
+import {setReceivingCall, setCaller, setCallInitiator, setCallerSignal, setCallAnswered} from '../features/videoCall/videoCallSlice';
 
 
 export const AppContext = createContext();
@@ -25,10 +25,12 @@ const Context = ({children}) => {
 
     const{currentUser} = useSelector((state)=> state.auth);
     const{contactsList} = useSelector((state)=> state.contacts);
+    const {receivingCall} = useSelector((state)=> state.videoCall);
+    const {currentRoom} = useSelector((state)=> state.chat);
     const {friendRequestsFrom, notifications} = useSelector((state)=> state.friendRequests);
     const [activeTab, setActiveTab] = useState("ChatsList");
     const [openModal, setOpenModal] = useState(false);
-    const [currentContact, setCurrentContact] = useState("");
+    // const [currentContact, setCurrentContact] = useState("");
     const dispatch = useDispatch();
 
 
@@ -79,7 +81,7 @@ const Context = ({children}) => {
     // })
 
     socket.off('receiving_call').on('receiving_call', (data)=>{
-      console.log('received emit from back, receiving call');
+      console.log('received emit from back, receiving call', data);
       setOpenModal(true)
       dispatch(setCaller(data.from))
       dispatch(setReceivingCall(true))
@@ -93,14 +95,25 @@ const Context = ({children}) => {
     socket.off('call_cancelled').on('call_cancelled', (data)=>{
       console.log('received emit from back, cancel call');
       dispatch(setReceivingCall(false))
+      setOpenModal(false)
       dispatch(setCaller(null))
       //add missed call notification
     });
 
+    socket.off("call_declined").on("call_declined", (data)=>{
+      dispatch(setCallInitiator(false));
+    });
+
+    socket.off("message_update").on("message_update", data=>{
+      if(data.updatedChat !== currentRoom){
+        dispatch(addMessageToUnread(data.messageInfo))
+      }
+    })
+
     const value = {
         socket: socket,
         activeTab,
-        currentContact,
+        // currentContact,
         openModal,
         setOpenModal,
         joinRoom: (room)=>{
@@ -141,7 +154,7 @@ const Context = ({children}) => {
           value.joinRoom(chatId)
           dispatch(setCurrentRoom(chatId))
           // setCurrentContact(friendName)
-          setCurrentContact(contact)
+          // dispatch(setCurrentContact(contact))
         },
         notifyServerForUserConnection: (user)=>{
           socket.emit("user_connected", user);
@@ -157,6 +170,13 @@ const Context = ({children}) => {
     useEffect(()=>{
       console.log('contacts: ', contactsList)
     }, [contactsList])
+
+    useEffect(()=>{
+      console.log('receiving call: ', receivingCall)
+      console.log('open modal: ', openModal)
+    }, [receivingCall])
+
+
 
 
     useEffect(()=>{

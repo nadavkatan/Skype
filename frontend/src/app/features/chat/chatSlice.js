@@ -51,7 +51,8 @@ const initialState = {
     status:'idle',
     currentRoom:"",
     chatContent:[],
-    showChat: false
+    showChat: false,
+    unreadMessages:[]
     // socket: socket,
 }
 
@@ -66,8 +67,15 @@ const chatSlice = createSlice({
             state.showChat = payload
         },
         setChatContent: (state, {payload}) =>{
-            console.log(payload)
+            // console.log(payload)
             state.chatContent = [...state.chatContent, payload]
+        },
+        addMessageToUnread: (state, {payload}) =>{
+            state.unreadMessages.push(payload)
+        },
+        deleteMessagesFromUnread: (state, {payload}) =>{
+            console.log(payload)
+            state.unreadMessages = state.unreadMessages.filter(unreadMessage => unreadMessage.senderId !== payload);
         }
         // joinRoom: (state, {payload})=>{
         //     console.log(BASE_URL)
@@ -114,5 +122,5 @@ const chatSlice = createSlice({
     }
 })
 
-export const {setCurrentRoom, joinRoom, receiveMessage, setShowChat, setChatContent} = chatSlice.actions
+export const {setCurrentRoom, joinRoom, deleteMessagesFromUnread, addMessageToUnread, receiveMessage, setShowChat, setChatContent} = chatSlice.actions
 export default chatSlice.reducer;
