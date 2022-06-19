@@ -83,6 +83,8 @@ const Context = ({children}) => {
     socket.off('receiving_call').on('receiving_call', (data)=>{
       console.log('received emit from back, receiving call', data);
       setOpenModal(true)
+      dispatch(setCurrentContact(data.from))
+      dispatch(setCurrentRoom(data.room))
       dispatch(setCaller(data.from))
       dispatch(setReceivingCall(true))
     });

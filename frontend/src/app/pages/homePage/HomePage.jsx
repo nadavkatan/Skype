@@ -22,6 +22,7 @@ import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import SearchPage from "../searchPage/SearchPage";
 import HomeHeader from "../../components/homeHeader/HomeHeader";
+import CallsList from '../../components/callsList/CallsList';
 
 const HomePage = () => {
   const { isAuth, currentUserId, currentUser } = useSelector(
@@ -57,7 +58,7 @@ const HomePage = () => {
       ) : activeTab === "Calls" ? (
         <>
           <HomeHeader />
-          <div>Calls</div>
+         <CallsList/>
         </>
       ) : activeTab === "ContactsList" ? (
         <>

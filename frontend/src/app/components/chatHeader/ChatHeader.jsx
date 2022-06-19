@@ -17,6 +17,7 @@ const ChatHeader = () => {
   const { toggleTabs, socket } = useContext(AppContext);
   const {currentContact} = useSelector((state) => state.contacts);
   const {currentUser} = useSelector((state) => state.auth);
+  const {currentRoom} = useSelector((state) => state.chat)
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const dispatch = useDispatch();
@@ -24,7 +25,8 @@ const ChatHeader = () => {
   const handleVideoCall = ()=>{
     dispatch(setCallInitiator(true));
     // socket.emit('initiate_call', {to:currentContact.friendId, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:""}})
-    socket.emit('initiate_call', {to:currentContact._id, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:currentUser.avatar.secure_url}})
+    // socket.emit('initiate_call', {to:currentContact._id, from: {username: currentUser.username, friendId: currentUser._id, socket_id: currentContact.socket_id, avatar:currentUser.avatar.secure_url}})
+    socket.emit('initiate_call', {to:currentContact._id, from: currentUser, room: currentRoom})
   }
 
   return (

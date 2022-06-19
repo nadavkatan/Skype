@@ -1,0 +1,22 @@
+const Call = require('../models/call.model');
+
+const storeCall = async(call)=>{
+    const newCall = new Call(call);
+    try{
+        newCall.save();
+        return newCall
+    }catch(e){
+        console.log(e)
+    }
+};
+
+const getParticipantCalls = async(id)=>{
+    try{
+        const calls = await Call.find({participats: {$elemMatch: {participant_id:id}}})
+        return calls
+    }catch(e){
+        console.log(e)
+    }
+}
+
+module.exports= {storeCall, getParticipantCalls}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Peer } from "peerjs";
@@ -9,18 +9,24 @@ import {
   setCallAnswered,
   setReceivingCall,
   setCallInitiator,
+  storeCall
 } from "../../features/videoCall/videoCallSlice";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import Fab from "@mui/material/Fab";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import { useMediaQuery } from "@mui/material";
+import CallTimer from '../callTimer/CallTimer';
+
 
 const VideoCall = () => {
   const { callInitiator, caller } = useSelector((state) => state.videoCall);
   const { currentUser } = useSelector((state) => state.auth);
   const { currentContact } = useSelector((state) => state.contacts);
   const { socket } = useContext(AppContext);
+  const [activateTimer, setActivateTimer] = useState(false);
+  const [time, setTime] = useState(0);
+
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -72,29 +78,47 @@ const VideoCall = () => {
   };
 
   const endCall = () => {
-    const myStream = currentUserVideoRef.current.srcObject;
-    const remotePartnerStream = remoteVideoRef.current.srcObject;
-    const myTracks = myStream.getTracks();
-    const remotePartnerTracks = remotePartnerStream.getTracks();
+    if(callInitiator){
+      const callData={
+        participants:[
+          {
+            participant_username: currentUser.username,
+            participant_id: currentUser._id,
+          },
+          {
+            participant_username: currentContact.username,
+            participant_id: currentContact._id
+          },
+        ],
+        call_duration: new Date(time).toISOString().slice(11, 19),
+      }
+      console.log(callData)
+      dispatch(storeCall(callData))
+    }
 
-    myTracks.forEach(function (track) {
-      track.stop();
-    });
-
-    remotePartnerTracks.forEach(function (track) {
-      track.stop();
-    });
-
-    currentUserVideoRef.current.srcObject = null;
-    remoteVideoRef.current.srcObject = null;
-
-    peerInstance.current.destroy();
-
-    //resetting video call states
-    dispatch(setCallEnded(true));
-    dispatch(setCallAnswered(false));
-    dispatch(setCallInitiator(false));
-    dispatch(setReceivingCall(false));
+      const remotePartnerStream = remoteVideoRef.current.srcObject;
+      const myStream = currentUserVideoRef.current.srcObject;
+      const myTracks = myStream.getTracks();
+      const remotePartnerTracks = remotePartnerStream.getTracks();
+  
+      myTracks.forEach(function (track) {
+        track.stop();
+      });
+  
+      remotePartnerTracks.forEach(function (track) {
+        track.stop();
+      });
+  
+      currentUserVideoRef.current.srcObject = null;
+      remoteVideoRef.current.srcObject = null;
+  
+      peerInstance.current.destroy();
+  
+      //resetting video call states
+      dispatch(setCallEnded(true));
+      dispatch(setCallAnswered(false));
+      dispatch(setCallInitiator(false));
+      dispatch(setReceivingCall(false));
   };
 
   const handleEndCall = () => {
@@ -103,10 +127,12 @@ const VideoCall = () => {
   };
 
   socket.off("call_ended").on("call_ended", (data) => {
+    console.log('received call ended event')
     endCall();
   });
 
   useEffect(() => {
+    setActivateTimer(true)
     if (callInitiator) {
       // return callUser(currentContact.friendId)
       return callUser(currentContact._id);
@@ -116,6 +142,7 @@ const VideoCall = () => {
 
   return (
     <div className={classes.videosPageContainer}>
+    <CallTimer time={time} setTime={setTime}/>
       <div
         className={
           isSmallScreen

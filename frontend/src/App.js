@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import IncomingCall from './app/components/incomingCall/IncomingCall';
 import EditPage from "./app/pages/editPage/EditPage";
+import CallTimer from './app/components/callTimer/CallTimer';
 
 function App() {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
@@ -32,6 +33,7 @@ function App() {
                       ? <MobileScreen />
                       : <DesktopScreen />
                }
+               {/* <CallTimer/> */}
                 </ProtectedRoute>
               }
             />

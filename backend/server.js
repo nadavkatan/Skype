@@ -11,6 +11,7 @@ const userRouter = require('./routes/user.route');
 const chatRouter = require('./routes/chat.route');
 const friendRequestsRouter = require('./routes/friendRequest.route');
 const notificationsRouter = require('./routes/notification.route');
+const callsRouter = require('./routes/calls.route');
 const {Server} = require('socket.io');
 const http = require('http');
 const User = require('./models/user.model');
@@ -66,12 +67,13 @@ io.on("connection", (socket) => {
     socket.on('initiate_call', async(data)=>{
         const relevantUser = await User.findById({_id: data.to});
         console.log(relevantUser)
-        io.to(relevantUser.socket_id).emit('receiving_call', {from: data.from});
+        io.to(relevantUser.socket_id).emit('receiving_call', {from: data.from, room: data.room});
     });
 
     socket.on('answer_call', async(data)=>{
         console.log('answer call', data);
-        const relevantUser = await User.findById({_id: data.friendId})
+        // const relevantUser = await User.findById({_id: data.friendId})
+        const relevantUser = await User.findById({_id: data._id})
         io.to(relevantUser.socket_id).emit('call_answered', data);
     })
 
@@ -130,6 +132,7 @@ app.use('/users', userRouter);
 app.use('/chats', chatRouter);
 app.use('/friend-requests', friendRequestsRouter);
 app.use('/notifications', notificationsRouter);
+app.use('/calls', callsRouter);
 
 mongoose.connection.once("open", ()=>{
     console.log("Connected to database");
