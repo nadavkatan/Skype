@@ -18,31 +18,46 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/Context';
 import { useContext } from 'react';
+import { useForm } from "react-hook-form";
+import { toast, ToastContainer } from 'react-toastify';
 
 const theme = createTheme();
 
 export default function LoginPage() {
 
+// const [authMessage, setAuthMessage] = useState("");
+const {notifyServerForUserConnection} = useContext(AppContext);
 const dispatch = useDispatch();
 const navigate = useNavigate();
 
-const {notifyServerForUserConnection} = useContext(AppContext);
+const {
+  register,
+  handleSubmit,
+  formState: { errors },
+} = useForm();
 
-const [userData, setUserData] = useState({
-  username:"",
-  password:""
-})
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-     dispatch(login(userData));
-     notifyServerForUserConnection(userData)
-    navigate("/")
+// const [userData, setUserData] = useState({
+//   username:"",
+//   password:""
+// })
+
+  const onSubmit = async(data) => {
+     const attempt = await dispatch(login(data));
+     console.log(attempt)
+     if(attempt.payload.isAuth){
+      notifyServerForUserConnection(data)
+      navigate("/")
+     }else{
+      toast.error(attempt.payload.message)
+     }
+
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
+      <ToastContainer/>
         <CssBaseline />
         <Grid
           item
@@ -74,7 +89,7 @@ const [userData, setUserData] = useState({
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -84,9 +99,17 @@ const [userData, setUserData] = useState({
                 name="username"
                 autoComplete="username"
                 autoFocus
-                value={userData.username}
-                onChange={e=>setUserData({...userData, [e.target.name]: e.target.value})}
+                // value={userData.username}
+                // onChange={e=>setUserData({...userData, [e.target.name]: e.target.value})}
+                {...register("username", {
+                    required: "Please fill in your username",
+                  })}
               />
+                   {errors.username && (
+                  <Typography variant="subtitle2" color="error">
+                    {errors.username.message}
+                  </Typography>
+                )}
               <TextField
                 margin="normal"
                 required
@@ -96,9 +119,17 @@ const [userData, setUserData] = useState({
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                value={userData.password}
-                onChange={e=>setUserData({...userData, [e.target.name]: e.target.value})}
+                // value={userData.password}
+                // onChange={e=>setUserData({...userData, [e.target.name]: e.target.value})}
+                {...register("password", {
+                  required: "Please fill in your password"
+                })}
               />
+                {errors.password && (
+                  <Typography variant="subtitle2" color="error">
+                    {errors.password.message}
+                  </Typography>
+                )}
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"

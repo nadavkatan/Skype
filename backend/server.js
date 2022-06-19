@@ -54,33 +54,31 @@ io.on("connection", (socket) => {
     });
   
     socket.on("send_message", (data) => {
-        console.log(data)
-        console.log(data.message);
       socket.to(data.room).emit("receive_message", data);
     });
 
-    socket.on("callUser", (data) => {
-        console.log('call user', data)
-		io.to(data.userToCall).emit("incomingCall", { signal: data.signalData, from: data.from})
-	});
+    // socket.on("callUser", (data) => {
+    //     console.log('call user', data)
+	// 	io.to(data.userToCall).emit("incomingCall", { signal: data.signalData, from: data.from})
+	// });
 
     socket.on('initiate_call', async(data)=>{
         const relevantUser = await User.findById({_id: data.to});
-        console.log(relevantUser)
+        // console.log(relevantUser)
         io.to(relevantUser.socket_id).emit('receiving_call', {from: data.from, room: data.room});
     });
 
     socket.on('answer_call', async(data)=>{
-        console.log('answer call', data);
+        // console.log('answer call', data);
         // const relevantUser = await User.findById({_id: data.friendId})
         const relevantUser = await User.findById({_id: data._id})
         io.to(relevantUser.socket_id).emit('call_answered', data);
     })
 
     socket.on("end_call", async(data) => {
-        console.log('receieved end_call event', data);
+        // console.log('receieved end_call event', data);
         const relevantUser = await User.findById(data._id);
-        console.log('relevant user', relevantUser);
+        // console.log('relevant user', relevantUser);
         io.to(relevantUser.socket_id).emit('call_ended', data);
     });
 
@@ -89,13 +87,14 @@ io.on("connection", (socket) => {
         io.to(relevantUser.socket_id).emit('call_cancelled', data);
     })
 
-    socket.on("acceptCall", (data) => {
-        console.log('call accepted', data)
-        io.to(data.to).emit('callAccepted', data.signal);
-    });
+    // socket.on("acceptCall", (data) => {
+    //     console.log('call accepted', data)
+    //     io.to(data.to).emit('callAccepted', data.signal);
+    // });
 
     socket.on("decline_call", async(data) => {
-        const relevantUser = await User.findById(data.friendId);
+        console.log(data)
+        const relevantUser = await User.findById(data._id);
         io.to(relevantUser.socket_id).emit('call_declined', data);
     })
 

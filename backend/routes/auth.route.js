@@ -9,7 +9,7 @@ router.post("/register", async(req,res)=>{
        if(user) {
            // console.log("User already exists")
         //    res.send("User already exists");
-           res.json({isAuth: false, message: "User already exists"});
+           res.json({isAuth: false, message: "Username is already taken"});
        }
        if(!user){
            const createdUser = await createUser(req.body);

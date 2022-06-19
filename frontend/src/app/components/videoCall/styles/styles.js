@@ -50,7 +50,8 @@ export const useStyles = makeStyles({
     smScreenvideosContainer:{
         position:'relative',
         width:'100vw',
-        height:'100vh'
+        height:'100vh',
+        overflow:'hidden',
     },
     videosPageContainer:{
         display: 'flex',
@@ -65,5 +66,16 @@ export const useStyles = makeStyles({
         position:'absolute',
         bottom: '6%',
         left: '50%'
+    },
+    smScreenTimerContainer:{
+        position: 'absolute',
+        right: '36%',
+        bottom: '100px',
+        zIndex: 10
+    },
+    timerContainer:{
+    position: 'absolute',
+    bottom: '-40px',
+    right: '45%'
     }
 })

@@ -1,3 +1,4 @@
+import { Box, Typography } from '@mui/material';
 import React, {useState, useEffect} from 'react';
 
 const CallTimer = ({time,setTime}) => {
@@ -15,11 +16,9 @@ const CallTimer = ({time,setTime}) => {
       return () => clearInterval(interval);
     }, [running]);
     return (
-      <div className="stopwatch">
-        <div className="numbers">
-          <span>{new Date(time).toISOString().slice(11, 19)}</span>
-        </div>
-      </div>
+        <Box className="timer-container">
+          <Typography variant="subtitle1" color="white">{new Date(time).toISOString().slice(11, 19)}</Typography>
+        </Box>
     );
 }
 

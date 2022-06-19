@@ -24,7 +24,6 @@ const VideoCall = () => {
   const { currentUser } = useSelector((state) => state.auth);
   const { currentContact } = useSelector((state) => state.contacts);
   const { socket } = useContext(AppContext);
-  const [activateTimer, setActivateTimer] = useState(false);
   const [time, setTime] = useState(0);
 
 
@@ -43,7 +42,7 @@ const VideoCall = () => {
       navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia;
 
-    getUserMedia({ video: true }, (mediaStream) => {
+    getUserMedia({ video: true, audio: true }, (mediaStream) => {
       currentUserVideoRef.current.srcObject = mediaStream;
 
       const call = peer.call(remotePeerId, mediaStream);
@@ -65,7 +64,7 @@ const VideoCall = () => {
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia;
 
-      getUserMedia({ video: true }, (mediaStream) => {
+      getUserMedia({ video: true, audio: true }, (mediaStream) => {
         currentUserVideoRef.current.srcObject = mediaStream;
         call.answer(mediaStream);
         call.on("stream", (remoteStream) => {
@@ -132,7 +131,6 @@ const VideoCall = () => {
   });
 
   useEffect(() => {
-    setActivateTimer(true)
     if (callInitiator) {
       // return callUser(currentContact.friendId)
       return callUser(currentContact._id);
@@ -142,7 +140,6 @@ const VideoCall = () => {
 
   return (
     <div className={classes.videosPageContainer}>
-    <CallTimer time={time} setTime={setTime}/>
       <div
         className={
           isSmallScreen
@@ -150,6 +147,9 @@ const VideoCall = () => {
             : classes.videosContainer
         }
       >
+        <div  className={isSmallScreen ? classes.smScreenTimerContainer : classes.timerContainer} >
+        <CallTimer time={time} setTime={setTime}/>
+        </div>
         <video
           ref={remoteVideoRef}
           autoPlay
@@ -168,6 +168,7 @@ const VideoCall = () => {
         >
           <video
             ref={currentUserVideoRef}
+            muted
             autoPlay
             className={
               isSmallScreen ? classes.smScreenMyVideo : classes.myVideo

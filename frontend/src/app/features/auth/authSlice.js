@@ -44,7 +44,7 @@ export const logout = createAsyncThunk("auth/logout",
     }
 ) 
 
-export const register = createAsyncThunk("auth/register",
+export const registerUser = createAsyncThunk("auth/registerUser",
     async(userData, {getState})=>{
         const response = await axios({
             method: "POST",
@@ -150,16 +150,17 @@ export const changePassword = createAsyncThunk("auth/changePassword",
             [logout.rejected]: (state)=>{
                 state.status = "failed"
             },
-            [register.pending]: (state)=>{
+            [registerUser.pending]: (state)=>{
                 state.status = "loading"
             },
-            [register.fulfilled]: (state, {payload})=>{
+            [registerUser.fulfilled]: (state, {payload})=>{
+                console.log(payload)
                 state.status = "success";
                 state.isAuth = payload.isAuth;
                 state.authMessage = payload.authMessage;
                 state.currentUser = payload.user;
             },
-            [register.rejected]: (state)=>{
+            [registerUser.rejected]: (state)=>{
                 state.status = "failed"
             },
             [getUpdatedCurrentUser.pending]:(state)=>{

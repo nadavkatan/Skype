@@ -17,7 +17,7 @@ const CallsList = () => {
     <Box>
     {
         calls.length > 0 && calls.map((call, i) => {
-            const username = call.participants.filter(participant => participant.username !== currentUser.username);
+            const username = call.participants.filter(participant => participant.participant_username !== currentUser.username);
             return <Box key={i} style={{ display:'flex', justifyContent: 'space-around', marginBottom:'0.3em'}}>
              <Typography variant="subtitle1">{username[0].participant_username}</Typography>
                <Typography variant="subtitle1">{call.call_duration}</Typography>

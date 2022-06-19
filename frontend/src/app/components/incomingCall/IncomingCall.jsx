@@ -49,7 +49,7 @@ const IncomingCall = () => {
         <Paper elevation={0} className={classes.incomingCallContainer}>
           <div className={classes.incomingCallBody}>
           {caller && <>
-          <Avatar imgSrc={caller.avatar} avatarDimensions={isSmallScreen ? {width: 230, height: 230}: { width: 100, height: 100 }} />
+          <Avatar imgSrc={currentContact.avatar.secure_url} avatarDimensions={isSmallScreen ? {width: 230, height: 230}: { width: 100, height: 100 }} />
           <Typography variant="subtitle2" color="white">
               {caller.username}
             </Typography>
