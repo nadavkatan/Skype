@@ -19,7 +19,6 @@ const SearchPage = () => {
     },[])
 
     useEffect(()=>{
-        console.log(allUsers)
         if(allUsers.length){
             setSearchResults(allUsers)
         }

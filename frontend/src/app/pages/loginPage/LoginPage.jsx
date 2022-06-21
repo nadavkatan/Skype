@@ -14,7 +14,6 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useDispatch} from 'react-redux';
 import {login} from '../../features/auth/authSlice';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/Context';
 import { useContext } from 'react';
@@ -24,23 +23,16 @@ import { toast, ToastContainer } from 'react-toastify';
 const theme = createTheme();
 
 export default function LoginPage() {
-
-// const [authMessage, setAuthMessage] = useState("");
 const {notifyServerForUserConnection} = useContext(AppContext);
+
 const dispatch = useDispatch();
 const navigate = useNavigate();
-
 const {
   register,
   handleSubmit,
   formState: { errors },
 } = useForm();
 
-
-// const [userData, setUserData] = useState({
-//   username:"",
-//   password:""
-// })
 
   const onSubmit = async(data) => {
      const attempt = await dispatch(login(data));
@@ -99,8 +91,6 @@ const {
                 name="username"
                 autoComplete="username"
                 autoFocus
-                // value={userData.username}
-                // onChange={e=>setUserData({...userData, [e.target.name]: e.target.value})}
                 {...register("username", {
                     required: "Please fill in your username",
                   })}
@@ -119,8 +109,6 @@ const {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                // value={userData.password}
-                // onChange={e=>setUserData({...userData, [e.target.name]: e.target.value})}
                 {...register("password", {
                   required: "Please fill in your password"
                 })}
@@ -154,7 +142,6 @@ const {
                   </Link>
                 </Grid>
               </Grid>
-              {/* <Copyright sx={{ mt: 5 }} /> */}
             </Box>
           </Box>
         </Grid>

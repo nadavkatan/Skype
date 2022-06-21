@@ -17,19 +17,12 @@ const http = require('http');
 const User = require('./models/user.model');
 const Chat = require('./models/chat.model');
 
-
 const app = express();
 const server = http.createServer(app)
 const PORT = process.env.PORT || 8000
 const io = require('socket.io')(server, {cors:{
     origin: 'http://localhost:3000'
 }});
-
-// const io = new Server(server, {
-//     cors: {
-//         origin: 'http://localhost:3000'
-//     }
-// });
 
 mongoConnect();
 
@@ -39,6 +32,7 @@ const sessionStore = MongoStore.create({
     collectionName: "sessions"
 })
 
+// === socket.io listeners and emitters === //
 io.on("connection", (socket) => {
     console.log(`User Connected: ${socket.id}`);
     
@@ -56,28 +50,18 @@ io.on("connection", (socket) => {
       socket.to(data.room).emit("receive_message", data);
     });
 
-    // socket.on("callUser", (data) => {
-    //     console.log('call user', data)
-	// 	io.to(data.userToCall).emit("incomingCall", { signal: data.signalData, from: data.from})
-	// });
-
     socket.on('initiate_call', async(data)=>{
         const relevantUser = await User.findById({_id: data.to});
-        // console.log(relevantUser)
         io.to(relevantUser.socket_id).emit('receiving_call', {from: data.from, room: data.room});
     });
 
     socket.on('answer_call', async(data)=>{
-        // console.log('answer call', data);
-        // const relevantUser = await User.findById({_id: data.friendId})
         const relevantUser = await User.findById({_id: data._id})
         io.to(relevantUser.socket_id).emit('call_answered', data);
     })
 
     socket.on("end_call", async(data) => {
-        // console.log('receieved end_call event', data);
         const relevantUser = await User.findById(data._id);
-        // console.log('relevant user', relevantUser);
         io.to(relevantUser.socket_id).emit('call_ended', data);
     });
 
@@ -86,24 +70,19 @@ io.on("connection", (socket) => {
         io.to(relevantUser.socket_id).emit('call_cancelled', data);
     })
 
-    // socket.on("acceptCall", (data) => {
-    //     console.log('call accepted', data)
-    //     io.to(data.to).emit('callAccepted', data.signal);
-    // });
-
     socket.on("decline_call", async(data) => {
-        console.log(data)
         const relevantUser = await User.findById(data._id);
         io.to(relevantUser.socket_id).emit('call_declined', data);
     })
-
 
     socket.on("disconnect", () => {
       console.log("User Disconnected", socket.id);
     });
   });
 
+// === END socket.io listeners and emitters === //
 
+// === Middlewares === //
 app.use(cors({
     credentials: true,
     origin: 'http://localhost:3000'
@@ -125,6 +104,11 @@ require('./config/auth.config');
 app.use(passport.initialize());
 app.use(passport.session());
 
+// === END Middlewares === //
+
+
+// === Routes === //
+
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/chats', chatRouter);
@@ -132,57 +116,41 @@ app.use('/friend-requests', friendRequestsRouter);
 app.use('/notifications', notificationsRouter);
 app.use('/calls', callsRouter);
 
+// === END Routes === //
+
+
 mongoose.connection.once("open", ()=>{
     console.log("Connected to database");
     // mongoose.connection.collection('chats').deleteMany({})
 
-    // Listen to changes in DB
+    // === Listen to changes in mongodb === //
+
+    // Notify frontend on update in the user's friends array
     const UsersChangeStream = mongoose.connection.collection('users').watch();
     UsersChangeStream.on("change", async(change)=>{
-        // console.log("change stream: ",change);
-        // if(change.operationType === "update" && !change.updateDescription.updatedFields.hasOwnProperty("socket_id")){
         if(change.operationType === "update" && !change.updateDescription.updatedFields.hasOwnProperty("socket_id")){
                 const relevantUser = await User.findById({_id: change.documentKey._id});
-                // console.log('relevant user: ', relevantUser);
                 io.to(relevantUser.socket_id).emit("addFriend", change)
         }
     })
 
+    // Notify frontend on insert of new notification
     const notificationsChangeStream = mongoose.connection.collection('notifications').watch();
     notificationsChangeStream.on('change', async(change)=>{
-        // console.log("notifications change stream: ",change);
         if(change.operationType === "insert" && change.fullDocument.title === "friend_request"){
             const relevantUser = await User.findById({_id: change.fullDocument.user_id})
-            // console.log('relevant user: ', relevantUser);
             io.to(relevantUser.socket_id).emit("notificationUpdate", change)
         }
     })
 
+    //Notify frontend on update of chats (for displaying unread messages)
     const chatsChangeStream = mongoose.connection.collection('chats').watch();
     chatsChangeStream.on('change', async(change)=>{
-        console.log(change)
         if(change.operationType === "update"){
             const updatedChat = change.documentKey._id
             const relevantUsers = await User.find({friends: {$elemMatch: {chatId:updatedChat}}})
             io.to(relevantUsers[0].socket_id).emit("message_update", {updatedChat, messageInfo : {senderName: relevantUsers[1].username, senderId: relevantUsers[1]._id}})
             io.to(relevantUsers[1].socket_id).emit("message_update", {updatedChat, messageInfo :{senderName: relevantUsers[0].username, senderId: relevantUsers[0]._id}})
-        }
-    })
-
-    const friendRequestsChangeStream = mongoose.connection.collection('friendrequests').watch();
-    friendRequestsChangeStream.on("change", (change)=>{
-        // console.log("change stream: ",change);
-        switch(change.operationType){
-            case "insert":
-                // console.log('insert')
-                const friendRequest = {
-                    sender_name: change.fullDocument.sender_name,
-                    sender_id: change.fullDocument.sender_id,
-                    receiver_id: change.fullDocument.receiver_id,
-                    receiver_name: change.fullDocument.receiver_name,
-                }
-
-                io.emit("newFriendRequest", friendRequest);
         }
     })
 

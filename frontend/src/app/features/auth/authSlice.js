@@ -152,16 +152,8 @@ export const changePassword = createAsyncThunk("auth/changePassword",
             [registerUser.pending]: (state)=>{
                 state.status = "loading"
             },
-            // [registerUser.fulfilled]: (state, {payload})=>{
-            //     console.log(payload)
-            //     state.status = "success";
-            //     state.isAuth = payload.isAuth;
-            //     state.authMessage = payload.authMessage;
-            //     state.currentUser = payload.user;
-            // },
             [registerUser.fulfilled]: (state, {payload})=>{
                 state.status = "success";
-                // state.isAuth = payload.isAuth;
                 state.authMessage = payload.message;
                 state.currentUser = payload.user;
             },

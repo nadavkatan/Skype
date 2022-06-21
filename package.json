@@ -1,0 +1,21 @@
+{
+  "name": "skype",
+  "version": "1.0.0",
+  "description": "Skype clone",
+  "main": "backend/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server.js",
+    "heroku-postbuild": "cd frontend && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nadavkatan/Skype.git"
+  },
+  "author": "Nadav Katan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nadavkatan/Skype/issues"
+  },
+  "homepage": "https://github.com/nadavkatan/Skype#readme"
+}

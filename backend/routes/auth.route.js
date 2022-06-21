@@ -3,18 +3,6 @@ const passport = require('passport');
 const createUser = require('../controllers/auth.controller');
 const User = require('../models/user.model');
 
-// router.post("/register", async(req,res)=>{
-//     User.findOne({username: req.body.username}, async (err, user)=>{
-//        if(err) throw err;
-//        if(user) {
-//            res.json({isAuth: false, message: "Username is already taken"});
-//        }
-//        if(!user){
-//            const createdUser = await createUser(req.body);
-//            res.status(201).json({isAuth: true, message: "", user: createdUser});
-//        }
-//    })
-// });
 
 router.post("/register", async(req,res)=>{
     User.findOne({username: req.body.username}, async (err, user)=>{
@@ -57,7 +45,6 @@ router.post('/logout', async(req, res, next)=>{
   });
 
 router.get("/check-auth", (req, res)=>{
-    // console.log(req.user)
     if(req.isAuthenticated()){
         res.json({isAuth: true, userId: req.user._id, user: req.user})
     }else{

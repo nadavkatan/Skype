@@ -3,8 +3,6 @@ const { uuid } = require('uuidv4');
 const {createNewChat} = require('./chat.controller');
 const {validatePassword, genPassword} = require('../utils/crypto.utilities');
 
-
-
 const getAllUsers = async()=>{
     try{
         const users = await User.find({});
@@ -43,7 +41,6 @@ const getUserByUsername = async(username)=>{
 
 const addFriend = async(id,username, friendId, friendName)=>{
     try{
-        // const newChat = await createNewChat();
         const newChat = await createNewChat({members:[id, friendId]});
         console.log(newChat);
         const updatedUser1 = await User.findByIdAndUpdate({_id:id},{$push: {friends: [{friendId: friendId, friendName: friendName, chatId: newChat._id}]}, $pull: {friendRequestesFrom: {sender_id: friendId, sender_name: friendName}}}, { safe: true });
@@ -63,10 +60,6 @@ const sendFriendRequest = async(id, username, friendId)=>{
             const updatedSender = await User.findByIdAndUpdate({_id:id},{$push: {friendRequestesTo: [{friend_id:friendId}]}})
             const updatedUser = await User.findByIdAndUpdate({_id:friendId},{$push: {friendRequestesFrom: [{sender_id: id, sender_name: username}]}});
             return updatedUser;
-        }else{
-            console.log("existingFriendRequest: ", exsitingFriendRequest)
-            console.log("existingFriend: ", existingFriend)
-            console.log("request or friend already exists")
         }
     }catch(e){
         console.log(e)
@@ -91,8 +84,6 @@ const unfriend = async(id, username, friendId, friendName)=>{
 }
 
 const findAllUserContacts = async(id)=>{
-    // db.users.find({awards: {$elemMatch: {award:'National Medal', year:1975}}})
-
     try{
         const contacts = await User.find({friends: {$elemMatch:{friendId:id}}});
         return contacts
@@ -122,7 +113,6 @@ const changePassword = async(id, update)=>{
             console.log(e)
         }
     }else{
-        console.log("incorrect password")
         return {message: "Incorrect password"}
     }
 

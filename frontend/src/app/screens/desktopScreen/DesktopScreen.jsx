@@ -1,26 +1,25 @@
-import React from "react";
-import HomePage from "../../pages/homePage/HomePage";
-import Welcome from "../../components/welcome/Welcome";
-import { Grid } from "@mui/material";
-import { AppContext } from "../../context/Context";
-import { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import Chat from "../../components/chat/Chat";
 import ChatHeeader from "../../components/chatHeader/ChatHeader";
-import { useStyles } from "./styles/styles";
+import HomePage from "../../pages/homePage/HomePage";
+import Welcome from "../../components/welcome/Welcome";
 import VideoCall from "../../components/videoCall/VideoCall";
 import IncomingCall from "../../components/incomingCall/IncomingCall";
 import CallingScreen from "../../components/callingScreen/CallingScreen";
+import Grid from "@mui/material/Grid";
+import { AppContext } from "../../context/Context";
+import { useStyles } from "./styles/styles";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 
 const DesktopScreen = () => {
   const { activeTab } = useContext(AppContext);
   const {callInitiator, receivingCall, callAnswered} = useSelector((state) => state.videoCall);
+
   const classes = useStyles();
 
-  useEffect(() => {
-    console.log(callAnswered)
-  },[callAnswered])
+  // useEffect(() => {
+  //   console.log(callAnswered)
+  // },[callAnswered])
 
   if(callInitiator && callAnswered) return <VideoCall/>;
   if(receivingCall && callAnswered) return <VideoCall/>;

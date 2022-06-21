@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const Chat = require('../models/chat.model');
 const {addMessage, getChat, getUsersChats} = require('../controllers/chat.controller');
 
 router.post('/', async(req,res)=>{

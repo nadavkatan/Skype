@@ -19,38 +19,33 @@ router.get('/contacts/:id', async(req, res) => {
     res.status(200).json(contacts);
 })
 
-router.post('/:id', async(req, res) => {
-    const user = await getUserById(req.body.id);
-    res.status(200).json(user);
-})
+// router.post('/:id', async(req, res) => {
+//     const user = await getUserById(req.body.id);
+//     res.status(200).json(user);
+// })
 
 router.post('/one', async(req, res) => {
-    // console.log(req.body.username)
     const user = await getUserByName(req.body.username);
     res.status(200).json(user);
 })
 
-router.post('/', async(req, res) => {
-    const foundUser = await getUserByUsername(req.body.username);
-    res.status(200).json(foundUser);
-});
+// router.post('/', async(req, res) => {
+//     const foundUser = await getUserByUsername(req.body.username);
+//     res.status(200).json(foundUser);
+// });
 
 router.put('/', async(req, res) => {
-    // console.log(req.body);
     const updatedUser = await addFriend(req.body.id, req.body.username, req.body.friendId, req.body.friendName);
     res.status(200).json(updatedUser);
 });
 
 router.put('/request', async(req, res) => {
-    // console.log(req.body)
     const updatedUser = await sendFriendRequest(req.body.id, req.body.friendName, req.body.friendId);
     res.status(200).json('Friend request sent');
 });
 
 router.put('/edit-credentials/:id', upload.single("avatar") ,async(req, res) => {
-    console.log(req)
     if(req.file){
-        console.log("there is a file")
         const {public_id, format, bytes, secure_url} = await uploadFile(req.file, req.file.fieldname + "-" + Date.now() , 'avatars');
         const userWithAvatar = {...req.body, avatar: {public_id, format, bytes, secure_url}};
         const updatedUser = await updateUserCredentials(req.params.id, userWithAvatar);
@@ -73,7 +68,6 @@ router.put('/unfriend', async(req, res) => {
     const updatedUser = await unfriend(req.body.id, req.body.username, req.body.friendId, req.body.friendName);
     res.status(200).json('Unfriended');
 })
-
 
 router.delete('/', async(req, res) => {
     await deleteUser(req.body.username);

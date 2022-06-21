@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,16 +22,16 @@ import { useContext } from "react";
 const theme = createTheme();
 
 export default function RegisterPage() {
-  const { notifyServerForUserConnection } = useContext(AppContext);
   const [authMessage, setAuthMessage] = useState("");
+  const { notifyServerForUserConnection } = useContext(AppContext);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     data.socket_id = "123";
@@ -202,7 +202,6 @@ export default function RegisterPage() {
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 5 }} /> */}
       </Container>
     </ThemeProvider>
   );
