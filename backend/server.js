@@ -118,6 +118,14 @@ app.use('/calls', callsRouter);
 
 // === END Routes === //
 
+if (process.env.NODE_ENV === "production") {
+    const path = require('path');
+    app.use(express.static(path.join(__dirname,'..', 'frontend', "build")));
+    app.get("*", function(req, res) {
+      res.sendFile(path.join(__dirname,'..', 'frontend', "build", "index.html"));
+    });
+  }
+
 
 mongoose.connection.once("open", ()=>{
     console.log("Connected to database");
