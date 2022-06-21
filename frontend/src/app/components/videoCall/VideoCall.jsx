@@ -105,23 +105,27 @@ const VideoCall = () => {
       dispatch(storeCall(callData));
     }
 
-    const remotePartnerStream = remoteVideoRef.current.srcObject;
-    const myStream = currentUserVideoRef.current.srcObject;
-    const myTracks = myStream.getTracks();
-    const remotePartnerTracks = remotePartnerStream.getTracks();
+    if(remoteVideoRef.current.srcObject){
+      const remotePartnerStream = remoteVideoRef.current.srcObject;
+      const remotePartnerTracks = remotePartnerStream.getTracks();
+      remotePartnerTracks.forEach(function (track) {
+        track.stop();
+      });
+      remoteVideoRef.current.srcObject = null;
 
-    // Stop getting user media
-    myTracks.forEach(function (track) {
-      track.stop();
-    });
+    }
 
-    remotePartnerTracks.forEach(function (track) {
-      track.stop();
-    });
-
-    currentUserVideoRef.current.srcObject = null;
-    remoteVideoRef.current.srcObject = null;
-
+    if(currentUserVideoRef.current.srcObject){
+      const myStream = currentUserVideoRef.current.srcObject;
+      const myTracks = myStream.getTracks();
+  
+      // Stop getting user media
+      myTracks.forEach(function (track) {
+        track.stop();
+      });
+      currentUserVideoRef.current.srcObject = null;
+    }
+ 
     peerInstance.current.destroy();
 
     //reset video call states
