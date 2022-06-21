@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { registerUser } from "../../features/auth/authSlice";
+import { registerUser, login } from "../../features/auth/authSlice";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -35,8 +35,10 @@ export default function RegisterPage() {
 
   const onSubmit = async (data) => {
     data.socket_id = "123";
+    data.is_logged_in = true;
     const attempt = await dispatch(registerUser(data));
-    if (attempt.payload.isAuth) {
+    if (attempt.payload.message === "Created") {
+      dispatch(login({username: data.username, password: data.password}))
       notifyServerForUserConnection(data);
       navigate("/");
     } else {

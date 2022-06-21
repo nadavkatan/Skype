@@ -1,31 +1,51 @@
-import { Divider, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
-import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {getUserCalls} from '../../features/videoCall/videoCallSlice';
+import React, { useEffect } from "react";
+import Avatar from "../avatar/Avatar";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserCalls } from "../../features/videoCall/videoCallSlice";
+import {useStyles} from "./styles/styles";
 
 const CallsList = () => {
-    const {calls} = useSelector((state) => state.videoCall);
-    const {currentUser} = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
+  const { calls } = useSelector((state) => state.videoCall);
+  const { currentUser } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const classes = useStyles();
 
-    useEffect(()=>{
+  //Fetch all calls from database. In return, filter the calls to keep the ones relevant to the current user.
+  useEffect(() => {
     dispatch(getUserCalls(currentUser._id));
-    },[])
+  }, []);
+
+  useEffect(()=>{
+    console.log(calls)
+  }, [calls])
 
   return (
     <Box>
-    {
-        calls.length > 0 && calls.map((call, i) => {
-            const username = call.participants.filter(participant => participant.participant_username !== currentUser.username);
-            return <Box key={i} style={{ display:'flex', justifyContent: 'space-around', marginBottom:'0.3em'}}>
-             <Typography variant="subtitle1">{username[0].participant_username}</Typography>
-               <Typography variant="subtitle1">{call.call_duration}</Typography>
+      {calls.length > 0 &&
+        calls.map((call, i) => {
+          const username = call.participants.filter(
+            (participant) =>
+              participant.participant_username !== currentUser.username
+          );
+          return (
+            <Box
+              key={i}
+              className={classes.callItemContainer}
+            >
+            <Box className={classes.callItemAvatarUsername}>
+            <Avatar imgSrc={username[0].participant_avatar} noBadge={true} />
+              <Typography variant="subtitle1" className={classes.callItemUsername}>
+                {username[0].participant_username}
+              </Typography>
             </Box>
-        })
-        }
+              <Typography variant="subtitle1">{call.call_duration}</Typography>
+            </Box>
+          );
+        })}
     </Box>
-  )
-}
+  );
+};
 
-export default CallsList
+export default CallsList;

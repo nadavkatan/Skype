@@ -1,7 +1,7 @@
 import React from "react";
+import SearchResult from "../searchResult/SearchResult";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import SearchResult from "../searchResult/SearchResult";
 
 const SearchResults = ({ foundUser }) => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;

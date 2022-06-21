@@ -41,11 +41,10 @@ const sessionStore = MongoStore.create({
 
 io.on("connection", (socket) => {
     console.log(`User Connected: ${socket.id}`);
-
-    // socket.to(socket.id).emit("user_connection", socket.id);
     
     socket.on("user_connected", async(user)=>{
         const updatedUser = await User.findOneAndUpdate({username: user.username}, {socket_id: socket.id}, {new:true})
+        console.log(`User Connected: ${updatedUser}`)
     })
 
     socket.on("join_room", (data) => {
@@ -140,7 +139,7 @@ mongoose.connection.once("open", ()=>{
     // Listen to changes in DB
     const UsersChangeStream = mongoose.connection.collection('users').watch();
     UsersChangeStream.on("change", async(change)=>{
-        console.log("change stream: ",change);
+        // console.log("change stream: ",change);
         // if(change.operationType === "update" && !change.updateDescription.updatedFields.hasOwnProperty("socket_id")){
         if(change.operationType === "update" && !change.updateDescription.updatedFields.hasOwnProperty("socket_id")){
                 const relevantUser = await User.findById({_id: change.documentKey._id});
@@ -169,7 +168,7 @@ mongoose.connection.once("open", ()=>{
 
     const friendRequestsChangeStream = mongoose.connection.collection('friendrequests').watch();
     friendRequestsChangeStream.on("change", (change)=>{
-        console.log("change stream: ",change);
+        // console.log("change stream: ",change);
         switch(change.operationType){
             case "insert":
                 // console.log('insert')

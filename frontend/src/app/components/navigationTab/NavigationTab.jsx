@@ -3,19 +3,19 @@ import ChatIcon from "@mui/icons-material/Chat";
 import ContactsIcon from "@mui/icons-material/Contacts";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CallIcon from "@mui/icons-material/Call";
-import { useStyles } from "./styles/styles";
-import { Badge, Typography, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Badge from "@mui/material/Badge";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useStyles } from "./styles/styles";
 
 const NavigationTab = () => {
-  const classes = useStyles();
-  // const { toggleTabs, activeTab, friendRequests } = useContext(AppContext);
   const { toggleTabs, activeTab } = useContext(AppContext);
-  const {friendRequestsFrom} = useSelector((state) => state.friendRequests);
   const {notifications} = useSelector((state) => state.notifications);
+  
+  const classes = useStyles();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
 

@@ -1,25 +1,25 @@
 import React from "react";
-import { addFriend } from "../../features/users/usersSlice";
-import { useDispatch, useSelector } from "react-redux";
-import {useStyles} from './styles/styles';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Fab from "@mui/material/Fab";
 import DoneIcon from '@mui/icons-material/Done';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { addFriend } from "../../features/users/usersSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {useStyles} from './styles/styles';
 import { createNotification, deleteNotification, deleteNotificationFromState, convertNotification} from "../../features/notifications/notificationsSlice";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const FriendRequest = ({ requestSender }) => {
   
-  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const confirmFriendRequest = () => {
+    // Check that the request sender is not already an existing friend of the current user
     if(!currentUser.friends.some(e=> e.friendId === requestSender.sender_id)){
-      console.log('not yet friend')
       const data = {
         id: currentUser._id,
         username: currentUser.username,
@@ -46,7 +46,6 @@ const FriendRequest = ({ requestSender }) => {
 
   return (
       <Grid container spacing={2} className={classes.friendRequestContainer}>
-      <ToastContainer/>
         <Grid item xs={8} className={classes.friendRequestTextContainer}>
           <Typography variant="subtitle2" className={classes.friendRequestText}>
             Youv'e got a friend request from {requestSender.sender_name}

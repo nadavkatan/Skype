@@ -64,7 +64,7 @@ const EditPage = () => {
         <Box className={classes.formHeader}>
             <Box className={classes.editPageAvatarContainer}>
             <div className={classes.editPageAvatar}>
-            <Avatar  avatarDimensions={{ width: 150, height: 150 }} imgSrc={currentUser.avatar.secure_url}/>
+            <Avatar  avatarDimensions={{ width: 150, height: 150 }} imgSrc={currentUser.avatar.secure_url} loggedIn={currentUser.is_logged_in}/>
             </div>
               <Button variant="outlined" component='label'>
               Change profile picture

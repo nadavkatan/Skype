@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector, useDispatch } from "react-redux";
 import { useStyles } from "./styles/styles";
 import {changePassword} from '../../features/auth/authSlice';
@@ -14,11 +14,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ChangePasswordForm = () => {
+
   const { authMessage } = useSelector((state) => state.auth);
-  const currentPassword = useRef();
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  // Validation rules
   const formSchema = Yup.object().shape({
     new_password: Yup.string()
       .min(4, "Password length should be at least 4 characters")
@@ -37,8 +38,6 @@ const ChangePasswordForm = () => {
   });
 
   const onSubmit = (data) => {
-    console.log(currentPassword);
-    console.log(data);
     const newCredentials = {
         currentPassword: data.current_password,
         newPassword: data.new_password,
@@ -53,10 +52,8 @@ const ChangePasswordForm = () => {
   },[authMessage])
 
   return (
-    // <Box className={classes.editPageWrapper}>
     <Box className={classes.changePasswordContainer}>
     <ToastContainer/>
-      {/* <Box className={classes.editPageContainer}> */}
       <Box>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
           <Box className={classes.changePasswordHeader}>

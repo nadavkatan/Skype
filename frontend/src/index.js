@@ -7,7 +7,11 @@ import {Provider} from 'react-redux';
 import {store} from './app/store';
 import { createTheme, ThemeProvider } from '@mui/material';
 
-const theme = createTheme();
+const theme = createTheme({
+  typography: {
+    "fontFamily":'Segoe Ui.'
+  }
+});
 
 ReactDOM.render(
   <Provider store={store}>

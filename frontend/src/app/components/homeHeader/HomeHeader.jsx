@@ -1,18 +1,18 @@
 import React from "react";
+import Drawer from "../drawer/Drawer";
+import NavigationTab from "../navigationTab/NavigationTab";
 import SearchIcon from "@mui/icons-material/Search";
-import Avatar from "../avatar/Avatar";
 import Typography from "@mui/material/Typography";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import { useStyles } from "./styles/styles";
-import Drawer from "../drawer/Drawer";
-import NavigationTab from "../navigationTab/NavigationTab";
 import { useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const HomeHeader = () => {
-  const { toggleTabs } = useContext(AppContext);
   const { currentUser } = useSelector((state) => state.auth);
+  const { toggleTabs } = useContext(AppContext);
+  
   const classes = useStyles();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 

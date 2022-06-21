@@ -33,7 +33,6 @@ export const login = createAsyncThunk("auth/login",
 
 export const logout = createAsyncThunk("auth/logout",
     async(args, {getState})=>{
-        // const response = await axios.post(`${BASE_URL}/auth/logout`, {withCredentials: true})
         const response = await axios({
             method: 'POST',
             url:`${BASE_URL}/auth/logout`,
@@ -153,11 +152,17 @@ export const changePassword = createAsyncThunk("auth/changePassword",
             [registerUser.pending]: (state)=>{
                 state.status = "loading"
             },
+            // [registerUser.fulfilled]: (state, {payload})=>{
+            //     console.log(payload)
+            //     state.status = "success";
+            //     state.isAuth = payload.isAuth;
+            //     state.authMessage = payload.authMessage;
+            //     state.currentUser = payload.user;
+            // },
             [registerUser.fulfilled]: (state, {payload})=>{
-                console.log(payload)
                 state.status = "success";
-                state.isAuth = payload.isAuth;
-                state.authMessage = payload.authMessage;
+                // state.isAuth = payload.isAuth;
+                state.authMessage = payload.message;
                 state.currentUser = payload.user;
             },
             [registerUser.rejected]: (state)=>{

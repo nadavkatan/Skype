@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const participantSchema = new mongoose.Schema({
     participant_username: {type: String, required: true},
     participant_id: {type: String, required: true},
+    participant_avatar: {type: String, required: true}
 })
 
 const callSchema = new mongoose.Schema({

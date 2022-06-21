@@ -1,55 +1,25 @@
-import React from 'react'
-import { useState,useEffect } from 'react';
-import {getCurrentUser} from '../../features/users/usersSlice';
-import {useSelector, useDispatch} from 'react-redux';
-import {AppContext} from '../../context/Context';
-import { useContext } from 'react';
-import {setCurrentRoom} from '../../features/chat/chatSlice';
-import {setShowChat} from '../../features/chat/chatSlice';
+import React from 'react';
 import Contact from '../contact/Contact';
-import {addContact, initializeContacts} from '../../features/contacts/contacsSlice';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import {useSelector} from 'react-redux';
 
-const ContactsList = ({contacts}) => {
+const ContactsList = () => {
 
-  const {currentUser}= useSelector((state) => state.auth);
-  const {currentContact, contactsList} = useSelector((state) => state.contacts);
-  const {handleJoinRoom} = useContext(AppContext);
-
-
-  const dispatch = useDispatch();
-
-    // useEffect(()=>{
-    //   console.log('mount')
-    //   console.log(contacts);
-    //   console.log(currentUser)
-    // },[])
-
-    // useEffect(()=>{
-    //   console.log('users friends', currentUser.friends)
-    //   dispatch(initializeContacts(currentUser.friends))
-    // },[])
-
-    useEffect(()=>{
-      console.log(currentContact);
-    },[currentContact])
+  const {contactsList, status} = useSelector((state) => state.contacts);
 
   return (
     <>
-    {/* <h1>Contacts</h1> */}
-    {/* {
-     contacts && contacts.map(contact =>{
-        return <Contact key={contact.friendName} contact={contact}/>
-      })
-    } */}
-    {/* {
-     currentUser && currentUser.friends.length > 0 && currentUser.friends.map(friend => {
-        return <Contact key={friend.friendId} contact={friend}/>
-      })
-    } */}
     {
-      contactsList.length > 0 && contactsList.map(contact => {
+      status === "loading" && <div>Loading...</div>
+    }
+    {
+      contactsList.length > 0 ? contactsList.map(contact => {
         return <Contact key={contact._id} contact={contact}/>
       })
+      : <Box sx={{display: 'flex', justifyContent: 'center'}}>
+        <Typography sx={{width:'80%'}} variant="subtitle1">You currently don't have any contacts. Use the search bar to search and connect with other skype users!</Typography>
+        </Box>
     }
     </>
   )

@@ -1,23 +1,24 @@
 import React, { useState } from "react";
 import Typography from "@mui/material/Typography";
-import { useDispatch, useSelector } from "react-redux";
-import { useStyles } from "./styles/styles";
 import Avatar from "../avatar/Avatar";
 import QuickAction from "../quickAction/QuickAction";
 import connectPic from "../../assets/images/quick-action-pic1.png";
+import videoCallPic from '../../assets/images/videocall-icon.png'
 import Popover from '@mui/material/Popover';
-import {useNavigate} from 'react-router-dom';
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import {logout} from '../../features/auth/authSlice';
 import {setShowChat} from '../../features/chat/chatSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { useStyles } from "./styles/styles";
+import {useNavigate} from 'react-router-dom';
 
 const Welcome = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
   const { currentUser } = useSelector((state) => state.auth);
+
   const classes = useStyles();
   const dispatch= useDispatch();
   const navigate = useNavigate();
-
-  const [anchorEl, setAnchorEl] = useState(null);
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,7 +31,6 @@ const Welcome = () => {
   const open = Boolean(anchorEl);
 
 const handleLogout = () => {
-  console.log('logout');
   dispatch(logout());
   dispatch(setShowChat(false));
   navigate("/login");
@@ -42,7 +42,7 @@ const handleLogout = () => {
       <div className={classes.welcomContent}>
         <div className={classes.welcomeHeadingContainer}>
           <div className={classes.welcomeAvatarContainer}>
-          {currentUser && <Avatar avatarDimensions={{ width: 100, height: 100 }} imgSrc={currentUser.avatar.secure_url} />}
+          {currentUser && <Avatar noBadge={true} loggedIn={currentUser.is_logged_in} avatarDimensions={{ width: 100, height: 100 }} imgSrc={currentUser.avatar.secure_url} />}
           </div>
           <div>
             <Typography variant="h4">Welcome!</Typography>
@@ -52,7 +52,7 @@ const handleLogout = () => {
           </div>
         </div>
         <Typography className={classes.welcomeSubHeading} variant="h6">
-          Here are some quick actions to get you started
+          Here are some of the awesome features of Skype
         </Typography>
         <Grid container spacing={4}>
           <Grid item xs={6}>
@@ -66,10 +66,10 @@ const handleLogout = () => {
           </Grid>
           <Grid item xs={6}>
             <QuickAction
-              quickActionImg={connectPic}
-              title={"Easy chatting with anyone on Skype!"}
+              quickActionImg={videoCallPic}
+              title={"Make video call with your friends!"}
               subtitle={
-                "Skype let's you connect and maintain your relationship with your friends"
+                "Meet 'face'-to'face' with your friends and colleagues!"
               }
             />
           </Grid>

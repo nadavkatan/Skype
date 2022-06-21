@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema({
     friendRequestesTo:{type: [friendRequestToSchema]},
     socket_id:{type: String},
     avatar: AvatarSchema,
+    is_logged_in: {type: Boolean, default: false, required: true},
     hash: {type: String, required: true, trim: true},
     salt: {type: String, required: true, trim: true}
 });

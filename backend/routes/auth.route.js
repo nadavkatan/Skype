@@ -3,17 +3,28 @@ const passport = require('passport');
 const createUser = require('../controllers/auth.controller');
 const User = require('../models/user.model');
 
+// router.post("/register", async(req,res)=>{
+//     User.findOne({username: req.body.username}, async (err, user)=>{
+//        if(err) throw err;
+//        if(user) {
+//            res.json({isAuth: false, message: "Username is already taken"});
+//        }
+//        if(!user){
+//            const createdUser = await createUser(req.body);
+//            res.status(201).json({isAuth: true, message: "", user: createdUser});
+//        }
+//    })
+// });
+
 router.post("/register", async(req,res)=>{
     User.findOne({username: req.body.username}, async (err, user)=>{
        if(err) throw err;
        if(user) {
-           // console.log("User already exists")
-        //    res.send("User already exists");
-           res.json({isAuth: false, message: "Username is already taken"});
+           res.json({message: "Username is already taken"});
        }
        if(!user){
            const createdUser = await createUser(req.body);
-           res.status(201).json({isAuth: true, message: "", user: createdUser});
+           res.status(201).json({message: "Created", user: createdUser});
        }
    })
 });
@@ -22,17 +33,20 @@ router.post('/login', (req, res, next) => {
     passport.authenticate('local', (e, user, info) => {
         if(e) return next(e);
         if(info) return res.json({info, isAuth: false});
-        req.logIn(user, e => {
+        req.logIn(user, async(e) => {
             if(e) return next(e);
-            // console.log(req.user);
+            await User.findByIdAndUpdate({_id:req.user._id}, {is_logged_in:true}, {new:true})
+            req.user.is_logged_in = true;
+            console.log(req.user)
             return res.json({isAuth: true, userId: req.user._id, user:req.user}) 
             
         });
     })(req, res, next);
 });
 
-router.post('/logout', (req, res, next)=>{
-    // console.log(req.user)
+router.post('/logout', async(req, res, next)=>{
+    console.log("logout",req.user)
+   await User.findByIdAndUpdate({_id:req.user._id}, {is_logged_in:false}, {new:true})
     req.logout((err)=> {
       if (err) { return next(err); }
     req.session.destroy((err)=>{

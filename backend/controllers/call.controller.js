@@ -12,7 +12,9 @@ const storeCall = async(call)=>{
 
 const getParticipantCalls = async(id)=>{
     try{
-        const calls = await Call.find({participats: {$elemMatch: {participant_id:id}}})
+        const calls = await Call.find({participants: {$elemMatch: {participant_id:id}}})
+        console.log(id)
+        console.log("calls: ",calls)
         return calls
     }catch(e){
         console.log(e)

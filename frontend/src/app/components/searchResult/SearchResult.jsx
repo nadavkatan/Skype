@@ -3,27 +3,23 @@ import Avatar from "../avatar/Avatar";
 import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
 import Fab from "@mui/material/Fab";
-import { useStyles } from "./styles/styles";
 import ChatIcon from "@mui/icons-material/Chat";
 import PendingOutlinedIcon from '@mui/icons-material/PendingOutlined';
-// import {sendFriendRequest, storeFriendRequest} from '../../features/users/usersSlice';
-import {
-  sendFriendRequest,
-  storeFriendRequest,
-  setFriendRequestsTo
-} from "../../features/friendRequests/friendRequestsSlice";
+import { useStyles } from "./styles/styles";
+import { setFriendRequestsTo } from "../../features/friendRequests/friendRequestsSlice";
+import { createNotification } from "../../features/notifications/notificationsSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
-import { createNotification } from "../../features/notifications/notificationsSlice";
 
 const SearchResult = ({ foundUser, areFriends, chatId, alreadyRequested }) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
   const { toggleTabs, handleJoinRoom } = useContext(AppContext);
+
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
   const handleSendFriendRequest = () => {
     if (currentUser.friends.some((e) => e.friendId === foundUser._id)) {
@@ -47,21 +43,6 @@ const SearchResult = ({ foundUser, areFriends, chatId, alreadyRequested }) => {
     dispatch(createNotification(friendRequestData));
     toast.success("Connection request sent successfully")
     dispatch(setFriendRequestsTo({friend_id: foundUser._id}))
-    // const args = {
-    //   id: currentUser._id,
-    //   friendName: currentUser.username,
-    //   friendId: foundUser._id,
-    // };
-
-    // const storeFriendRequestArgs = {
-    //   sender_id: currentUser._id,
-    //   sender_name: currentUser.username,
-    //   receiver_id: foundUser._id,
-    //   receiver_name: foundUser.username,
-    // };
-
-    // dispatch(sendFriendRequest(args));
-    // dispatch(storeFriendRequest(storeFriendRequestArgs));
   };
 
   const openChat = () => {
@@ -73,7 +54,7 @@ const SearchResult = ({ foundUser, areFriends, chatId, alreadyRequested }) => {
     <div className={classes.searchResultContainer}>
       <ToastContainer />
       <div className={classes.searchResult}>
-        <Avatar imgSrc={foundUser.avatar.secure_url}/>
+        <Avatar imgSrc={foundUser.avatar.secure_url} loggedIn={foundUser.is_logged_in}/>
         <Typography variant="subtitle1" className={classes.searchResultText}>
           {foundUser.username}
         </Typography>

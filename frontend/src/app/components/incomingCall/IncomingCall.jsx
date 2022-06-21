@@ -1,26 +1,28 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setCallAnswered } from "../../features/videoCall/videoCallSlice";
-import { setCurrentContact } from "../../features/contacts/contacsSlice";
-import { AppContext } from "../../context/Context";
-import { useContext } from "react";
-import Paper from "@mui/material/Paper";
+import React from "react";
 import Avatar from "../avatar/Avatar";
-import { Fab, Typography, useMediaQuery } from "@mui/material";
-import { useStyles } from "./styles/styles";
+import { useMediaQuery } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Fab from "@mui/material/Fab";
 import CallIcon from "@mui/icons-material/Call";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import Backdrop from "@mui/material/Backdrop";
+import Paper from "@mui/material/Paper";
+import { setCallAnswered } from "../../features/videoCall/videoCallSlice";
+import { setCurrentContact } from "../../features/contacts/contacsSlice";
 import {setReceivingCall, setCaller} from '../../features/videoCall/videoCallSlice';
+import { useSelector, useDispatch } from "react-redux";
+import { AppContext } from "../../context/Context";
+import { useContext } from "react";
+import { useStyles } from "./styles/styles";
 
 const IncomingCall = () => {
   const { caller } = useSelector((state) => state.videoCall);
   const { socket, openModal, setOpenModal } = useContext(AppContext);
-  const {currentContact} = useSelector((state) => state.contacts)
-  const classes = useStyles();
-  const dispatch = useDispatch();
+  const {currentContact} = useSelector((state) => state.contacts);
 
+  const classes = useStyles();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+  const dispatch = useDispatch();
 
   const handleAnswerCall = () => {
     setOpenModal(false);
@@ -29,7 +31,6 @@ const IncomingCall = () => {
     socket.emit("answer_call", caller);
   };
 
-  //build decline call functionality
   const handleDeclineCall = ()=>{
     setOpenModal(false);
     dispatch(setReceivingCall(false))
@@ -49,7 +50,7 @@ const IncomingCall = () => {
         <Paper elevation={0} className={classes.incomingCallContainer}>
           <div className={classes.incomingCallBody}>
           {caller && <>
-          <Avatar imgSrc={currentContact.avatar.secure_url} avatarDimensions={isSmallScreen ? {width: 230, height: 230}: { width: 100, height: 100 }} />
+          <Avatar imgSrc={currentContact.avatar.secure_url} loggedIn={currentContact.is_logged_in} avatarDimensions={isSmallScreen ? {width: 230, height: 230}: { width: 100, height: 100 }} />
           <Typography variant="subtitle2" color="white">
               {caller.username}
             </Typography>

@@ -1,4 +1,5 @@
 import * as React from "react";
+import Avatar from '../avatar/Avatar';
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
@@ -7,22 +8,21 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import {useDispatch, useSelector} from 'react-redux';
-import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import EditIcon from '@mui/icons-material/Edit';
+import {useDispatch, useSelector} from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import {logout} from '../../features/auth/authSlice';
 import {setShowChat} from '../../features/chat/chatSlice';
-import Avatar from '../avatar/Avatar';
 
 export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     top: false,
   });
+  const {isAuth, currentUser} = useSelector((state)=> state.auth);
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const {isAuth, currentUser} = useSelector((state)=> state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -84,7 +84,7 @@ export default function TemporaryDrawer() {
           {["top"].map((anchor) => (
             <React.Fragment key={anchor}>
               <Button onClick={toggleDrawer(anchor, true)}>
-                <Avatar imgSrc={currentUser.avatar.secure_url}/>
+                <Avatar imgSrc={currentUser.avatar.secure_url} loggedIn={currentUser.is_logged_in} />
               </Button>
               <Drawer
                 anchor={anchor}
