@@ -1,17 +1,18 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import {getAllUsers} from '../../features/users/usersSlice';
-import {useSelector, useDispatch} from 'react-redux';
-import { useState } from 'react';
 import SearchResult from '../../components/searchResult/SearchResult';
+import {useSelector, useDispatch} from 'react-redux';
+
 
 const SearchPage = () => {
 
+    const [searchResults, setSearchResults] = useState([]);
     const {allUsers} = useSelector((state) => state.users);
     const {currentUser} = useSelector((state) => state.auth);
     const {friendRequestsTo} = useSelector((state) => state.friendRequests);
+
     const dispatch = useDispatch();
-    const [searchResults, setSearchResults] = useState([]);
 
     useEffect(()=>{
         dispatch(getAllUsers())
@@ -19,6 +20,9 @@ const SearchPage = () => {
 
     useEffect(()=>{
         console.log(allUsers)
+        if(allUsers.length){
+            setSearchResults(allUsers)
+        }
     },[allUsers])
 
     useEffect(()=>{

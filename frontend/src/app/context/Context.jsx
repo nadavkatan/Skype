@@ -4,81 +4,41 @@ import { useEffect } from 'react';
 import { createContext } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {io} from 'socket.io-client';
-import { getUpdatedCurrentUser } from '../features/auth/authSlice';
 import {setChatContent, setCurrentRoom, addMessageToUnread} from '../features/chat/chatSlice';
-import {setFriendRequestsFrom, initializeFriendRequestsTo, setNotifications} from '../features/friendRequests/friendRequestsSlice';
+import {setFriendRequestsFrom, initializeFriendRequestsTo} from '../features/friendRequests/friendRequestsSlice';
 import {getAllContacts, setCurrentContact} from '../features/contacts/contacsSlice';
 import {checkAuth} from '../features/auth/authSlice';
 import { getAllUserNotifications } from '../features/notifications/notificationsSlice';
-import { ToastContainer, toast } from "react-toastify";
-import {addContact} from '../features/contacts/contacsSlice';
 import "react-toastify/dist/ReactToastify.css";
-import Peer from "simple-peer";
-import {setReceivingCall, setCaller, setCallInitiator, setCallerSignal, setCallAnswered} from '../features/videoCall/videoCallSlice';
+import {setReceivingCall, setCaller, setCallInitiator, setCallAnswered} from '../features/videoCall/videoCallSlice';
 
 
 export const AppContext = createContext();
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const socket = io.connect(BASE_URL);
-// , { autoConnect: false }
-const Context = ({children}) => {
 
+const Context = ({children}) => {
     const{currentUser} = useSelector((state)=> state.auth);
     const{contactsList} = useSelector((state)=> state.contacts);
     const {receivingCall} = useSelector((state)=> state.videoCall);
     const {currentRoom} = useSelector((state)=> state.chat);
-    const {friendRequestsFrom, notifications} = useSelector((state)=> state.friendRequests);
     const [activeTab, setActiveTab] = useState("ChatsList");
     const [openModal, setOpenModal] = useState(false);
-    // const [currentContact, setCurrentContact] = useState("");
     const dispatch = useDispatch();
 
-
-    // socket.off("newFriendRequest").on("newFriendRequest", (friendRequest)=>{
-    //   console.log("currentUser: ",currentUser);
-    //   console.log("friendRequest from back: ", friendRequest);
-    //   if(friendRequest.receiver_id === currentUser._id){
-    //     console.log("relevant user")
-    //     const notification = {
-    //       title: "friendRequest",
-    //       content: friendRequest
-    //     }
-    //     dispatch(setFriendRequestsFrom([...friendRequestsFrom, friendRequest]));
-    //     dispatch(setNotifications([...friendRequestsFrom, notification]));
-    //   }
-    // })
-
     socket.off("addFriend").on("addFriend", (friend)=>{
-      // console.log("add friend event, ", friend)
-      // console.log("add friend event",friend.updateDescription.updatedFields)
-      // console.log("add friend event",friend.updateDescription.updatedFields.friendId)
         if(currentUser){
           const update =friend.updateDescription.updatedFields 
-          // console.log("test friend ",update[Object.keys(update)[0]].friendId)
           if(update[Object.keys(update)[0]].friendId){
              console.log("friends update")
              return dispatch(getAllContacts(currentUser._id))
           }
-          
-          // dispatch(getUpdatedCurrentUser(currentUser._id))
-          // dispatch(getAllContacts(currentUser._id))
-
-          // toast.success(`You are now connected with `);
-
         }
     })
 
     socket.off("notificationUpdate").on("notificationUpdate", (notification)=>{
-      console.log("notification update");
       dispatch(getAllUserNotifications(currentUser._id));
-
     });
-
-    // socket.off("incomingCall").on("incomingCall", (data)=>{
-    //   dispatch(setReceivingCall(true))
-    //   dispatch(setCaller(data.from))
-    //   dispatch(setCallerSignal(data.signal))
-    // })
 
     socket.off('receiving_call').on('receiving_call', (data)=>{
       console.log('received emit from back, receiving call', data);
@@ -115,7 +75,6 @@ const Context = ({children}) => {
     const value = {
         socket: socket,
         activeTab,
-        // currentContact,
         openModal,
         setOpenModal,
         joinRoom: (room)=>{
@@ -150,7 +109,6 @@ const Context = ({children}) => {
               default: return setActiveTab("ChatList");
           }
       },
-      //  handleJoinRoom:(chatId, friendName)=>{
        handleJoinRoom:(chatId, contact)=>{
         console.log(chatId)
           value.joinRoom(chatId)
@@ -177,8 +135,6 @@ const Context = ({children}) => {
       console.log('receiving call: ', receivingCall)
       console.log('open modal: ', openModal)
     }, [receivingCall])
-
-
 
 
     useEffect(()=>{

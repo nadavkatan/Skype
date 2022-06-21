@@ -26,7 +26,7 @@ export const useStyles = makeStyles({
         marginBottom: '3em'
     },
     welcomeSubHeading:{
-        marginBottom: '2em'
+        marginBottom: '2em!important'
     },
     welcomeAvatarContainer:{
         margin: '-1em 2em 0 0'

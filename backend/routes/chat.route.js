@@ -1,17 +1,19 @@
 const router = require('express').Router();
 const Chat = require('../models/chat.model');
-const {addMessage, getChat} = require('../controllers/chat.controller');
+const {addMessage, getChat, getUsersChats} = require('../controllers/chat.controller');
 
 router.post('/', async(req,res)=>{
-    // console.log(req.body.id)
     const chat = await getChat(req.body.id);
-    // console.log(chat);
     res.status(200).json(chat);
 });
 
+router.get('/:id', async(req,res)=>{
+    const chats = await getUsersChats(req.params.id);
+    res.status(200).json(chats);
+})
+
 router.put('/', async(req,res)=>{
     const updatedChat = await addMessage(req.body.id, req.body.message);
-    // console.log(updatedChat);
     res.status(200).json(updatedChat);
 })
 

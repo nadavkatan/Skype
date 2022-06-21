@@ -28,6 +28,10 @@ const SearchBar = ({ users, setSearchResults }) => {
     autoSearch(username);
   }, [username]);
 
+  useEffect(() => {
+    setSearchResults(users)
+  },[])
+
   return (
     <div className={classes.searchBarContainer}>
       <ArrowBackIcon

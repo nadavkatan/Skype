@@ -16,7 +16,47 @@ export const getStoredChatContent = createAsyncThunk('chat/getStoredChatContent'
                 id:chatId
             }
         });
-        // console.log(response);
+        return response.data;
+    }
+)
+
+// export const getAllChats = createAsyncThunk('chat/getAllChats',
+//     async(args, {getState})=>{
+//         const response = await axios({
+//             method: 'GET',
+//             url: `${BASE_URL}/chats`,
+//             headers:{
+//                 "Content-Type": "application/json"
+//             }
+//         });
+//         console.log(response)
+//         return response.data;
+//     }
+// )
+
+// export const getStoredChatContent = createAsyncThunk('chat/getStoredChatContent',
+//     async(chatId, {getState}) => {
+//         const response = await axios({
+//             method: 'GET',
+//             url: `${BASE_URL}/chats/${chatId}`,
+//             headers:{
+//                 "Content-Type": "application/json"
+//             }
+//         });
+//         return response.data;
+//     }
+// )
+
+export const getUsersChat = createAsyncThunk('chat/getUsersChat',
+    async(userId, {getState}) => {
+        const response = await axios({
+            method: 'GET',
+            url: `${BASE_URL}/chats/${userId}`,
+            headers:{
+                "Content-Type": "application/json"
+            }
+        });
+        console.log(response);
         return response.data;
     }
 )
@@ -32,28 +72,17 @@ export const storeSentMessage = createAsyncThunk('chat/storeSentMessage',
                 message:args.messageData
             }
         });
-        // console.log(response);
         return response.data;
     }
 )
-
-// export const sendMessage = createAsyncThunk('chat/sendMessage',
-//     async(messageData, {getState}) => {
-//         if(messageData.message !== ""){
-//             await socket.emit('send_message', messageData);
-//             return messageData;
-//         }
-//     }
-// )
-
 
 const initialState = {
     status:'idle',
     currentRoom:"",
     chatContent:[],
+    chats:[],
     showChat: false,
     unreadMessages:[]
-    // socket: socket,
 }
 
 const chatSlice = createSlice({
@@ -67,7 +96,6 @@ const chatSlice = createSlice({
             state.showChat = payload
         },
         setChatContent: (state, {payload}) =>{
-            // console.log(payload)
             state.chatContent = [...state.chatContent, payload]
         },
         addMessageToUnread: (state, {payload}) =>{
@@ -77,17 +105,6 @@ const chatSlice = createSlice({
             console.log(payload)
             state.unreadMessages = state.unreadMessages.filter(unreadMessage => unreadMessage.senderId !== payload);
         }
-        // joinRoom: (state, {payload})=>{
-        //     console.log(BASE_URL)
-        //     socket.emit("join_room", payload);
-        //     state.currentRoom = payload
-        // },
-        // receiveMessage: async(state, {payload})=>{
-        //     console.log(payload);
-        //    await socket.on("receive_message",(data)=>{
-        //         state.chatContent = [...state.chatContent, data]
-        //     })
-        // }
     },
     extraReducers:{
         [getStoredChatContent.pending]: (state)=>{
@@ -109,16 +126,18 @@ const chatSlice = createSlice({
         }, 
         [storeSentMessage.rejected]: (state, {payload})=>{
             state.status = "failed"
+        },
+        [getUsersChat.pending]: (state)=>{
+            state.status = "loading";
+        },
+        [getUsersChat.fulfilled]: (state, {payload})=>{
+            state.status = "success";
+            state.chats = payload;
+        },
+        [getUsersChat.rejected]: (state)=>{
+            state.status = "failed"
         }
-        // [sendMessage.pending]: (state)=>{
-        //     state.status = "loading"
-        // },
-        // [sendMessage.fulfilled]: (state, {payload})=>{
-        //     state.chatContent = [...state.chatContent, payload]
-        // },
-        // [sendMessage.failed]: (state)=>{
-        //     state.status = "failed"
-        // }
+
     }
 })
 

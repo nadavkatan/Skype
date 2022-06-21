@@ -1,7 +1,7 @@
 const Chat = require('../models/chat.model');
 
-const createNewChat = async()=>{
-    const newChat = new Chat();
+const createNewChat = async(members)=>{
+    const newChat = new Chat(members);
     try{
         newChat.save();
         return newChat;
@@ -28,4 +28,13 @@ const getChat = async(id)=>{
     }
 }
 
-module.exports = {createNewChat, addMessage, getChat};
+const getUsersChats = async(id)=>{
+    try{
+        const chats = await Chat.find({members:{$in:[id]}});
+        return chats;
+    }catch(e){
+        console.log(e)
+    }
+}
+
+module.exports = {createNewChat, addMessage, getChat, getUsersChats};

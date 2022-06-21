@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Contact from '../contact/Contact';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import { getAllContacts } from '../../features/contacts/contacsSlice';
 
 const ContactsList = () => {
 
   const {contactsList, status} = useSelector((state) => state.contacts);
+  const {currentUser} = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(getAllContacts(currentUser._id))
+  },[])
 
   return (
     <>

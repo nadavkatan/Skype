@@ -8,7 +8,8 @@ const messageSchema = new mongoose.Schema({
 })
 
 const chatSchema = new mongoose.Schema({
-    messages: {type: [messageSchema]}
+    members:{type: [String]},
+    messages: {type: [messageSchema], default: []}
 });
 
 const Chat = mongoose.model('Chat', chatSchema);

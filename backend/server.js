@@ -160,10 +160,13 @@ mongoose.connection.once("open", ()=>{
 
     const chatsChangeStream = mongoose.connection.collection('chats').watch();
     chatsChangeStream.on('change', async(change)=>{
-        const updatedChat = change.documentKey._id
-        const relevantUsers = await User.find({friends: {$elemMatch: {chatId:updatedChat}}})
-        io.to(relevantUsers[0].socket_id).emit("message_update", {updatedChat, messageInfo : {senderName: relevantUsers[1].username, senderId: relevantUsers[1]._id}})
-        io.to(relevantUsers[1].socket_id).emit("message_update", {updatedChat, messageInfo :{senderName: relevantUsers[0].username, senderId: relevantUsers[0]._id}})
+        console.log(change)
+        if(change.operationType === "update"){
+            const updatedChat = change.documentKey._id
+            const relevantUsers = await User.find({friends: {$elemMatch: {chatId:updatedChat}}})
+            io.to(relevantUsers[0].socket_id).emit("message_update", {updatedChat, messageInfo : {senderName: relevantUsers[1].username, senderId: relevantUsers[1]._id}})
+            io.to(relevantUsers[1].socket_id).emit("message_update", {updatedChat, messageInfo :{senderName: relevantUsers[0].username, senderId: relevantUsers[0]._id}})
+        }
     })
 
     const friendRequestsChangeStream = mongoose.connection.collection('friendrequests').watch();

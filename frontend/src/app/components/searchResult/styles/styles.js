@@ -3,7 +3,7 @@ import {makeStyles} from '@mui/styles';
 export const useStyles = makeStyles({
     searchResultContainer:{
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         alignItems: 'baseline'
         // height: '100%',
     },
@@ -15,9 +15,9 @@ export const useStyles = makeStyles({
         justifyContent: 'flex-start',
     },
     searchResultText:{
-        fontSize:'1em',
-        fontWeight:'bold',
-        marginLeft: '1em'
+        fontSize:'1em!important',
+        fontWeight:'bold!important',
+        marginLeft: '1em!important'
     },
     sendFriendRequest:{
         margin:'0.6em'
