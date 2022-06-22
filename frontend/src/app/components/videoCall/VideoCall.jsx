@@ -52,9 +52,11 @@ const VideoCall = () => {
 
       // Once the remote peer has answered the call, he/she sends their own mediaStream. The event bellow listens to incoming media streams 
       // and pushes them to the html video element that presents the remote peer.
-      call.on("stream", (remoteStream) => {
-        remoteVideoRef.current.srcObject = remoteStream;
-      });
+      if(call){
+        call.on("stream", (remoteStream) => {
+          remoteVideoRef.current.srcObject = remoteStream;
+        });
+      }
     });
     
     // Store the peer instance in useRef to have global access to it. 
