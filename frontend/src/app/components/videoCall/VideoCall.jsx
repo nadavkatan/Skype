@@ -52,11 +52,9 @@ const VideoCall = () => {
 
       // Once the remote peer has answered the call, he/she sends their own mediaStream. The event bellow listens to incoming media streams 
       // and pushes them to the html video element that presents the remote peer.
-      if(call){
         call.on("stream", (remoteStream) => {
           remoteVideoRef.current.srcObject = remoteStream;
         });
-      }
     });
     
     // Store the peer instance in useRef to have global access to it. 
@@ -75,8 +73,8 @@ const VideoCall = () => {
         navigator.mozGetUserMedia;
 
       getUserMedia({ video: true, audio: true }, (mediaStream) => {
-        if(currentUserVideoRef.current)currentUserVideoRef.current.srcObject = mediaStream;
-
+        // if(currentUserVideoRef.current)currentUserVideoRef.current.srcObject = mediaStream;
+        currentUserVideoRef.current.srcObject = mediaStream;
         // Answer the call and send the media stream to the remote user (the caller)
         call.answer(mediaStream);
         // take the stream receieved from the caller and push it to the  html video element of the remote peer.
@@ -152,11 +150,14 @@ const VideoCall = () => {
 
   useEffect(() => {
     // On componentDidMount, if the user is the call initiator, the callUser function will be called, of not, the answerCall function will be called.
-    if (callInitiator) {
-      return callUser(currentContact._id);
+    if(remoteVideoRef.current && remoteVideoRef.current){
+      if (callInitiator) {
+        callUser(currentContact._id);
+     }else{
+       answerCall();
+     }
     }
-    answerCall();
-  }, []);
+  }, [currentUserVideoRef, remoteVideoRef]);
 
   return (
     <div className={classes.videosPageContainer}>
