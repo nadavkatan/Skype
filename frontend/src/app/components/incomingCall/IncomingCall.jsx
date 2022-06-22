@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import { useStyles } from "./styles/styles";
+import CallingSound from '../../assets/sounds/phone-ring.mp3';
 
 const IncomingCall = () => {
   const { caller } = useSelector((state) => state.videoCall);
@@ -69,6 +70,7 @@ const IncomingCall = () => {
             </div>
           </div>
         </Paper>
+        {openModal && <audio src={CallingSound} autoPlay loop />}
       </div>
     </Backdrop>
   );
