@@ -5,7 +5,8 @@ export const useStyles = makeStyles({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        minHeight:'16em'
     },
     actionContentContainer:{
         width:'90%',

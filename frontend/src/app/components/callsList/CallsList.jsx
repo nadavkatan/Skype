@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserCalls } from "../../features/videoCall/videoCallSlice";
-import {useStyles} from "./styles/styles";
+import { useStyles } from "./styles/styles";
 
 const CallsList = () => {
   const { calls } = useSelector((state) => state.videoCall);
@@ -17,33 +17,47 @@ const CallsList = () => {
     dispatch(getUserCalls(currentUser._id));
   }, []);
 
-  useEffect(()=>{
-    console.log(calls)
-  }, [calls])
+  useEffect(() => {
+    console.log(calls);
+  }, [calls]);
 
   return (
-    <Box>
-      {calls.length > 0 &&
+    <Box className={classes.callListContainer}>
+      {calls.length > 0 ? (
         calls.map((call, i) => {
           const username = call.participants.filter(
             (participant) =>
               participant.participant_username !== currentUser.username
           );
           return (
-            <Box
-              key={i}
-              className={classes.callItemContainer}
-            >
-            <Box className={classes.callItemAvatarUsername}>
-            <Avatar imgSrc={username[0].participant_avatar} noBadge={true} />
-              <Typography variant="subtitle1" className={classes.callItemUsername}>
-                {username[0].participant_username}
-              </Typography>
-            </Box>
+            <Box key={i} className={classes.callItemContainer}>
+              <Box className={classes.callItemAvatarUsername}>
+                <Avatar
+                  imgSrc={username[0].participant_avatar}
+                  noBadge={true}
+                />
+                <Typography
+                  variant="subtitle1"
+                  className={classes.callItemUsername}
+                >
+                  {username[0].participant_username}
+                </Typography>
+              </Box>
               <Typography variant="subtitle1">{call.call_duration}</Typography>
             </Box>
           );
-        })}
+        })
+      ) : (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Typography
+            variant="subtitle1"
+            sx={{ width: "80%", textAlign: "center" }}
+          >
+            You haven't made any calls yet. Video call your contacts and your
+            call history will appear here!
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -2,17 +2,19 @@ import {makeStyles} from '@mui/styles';
 
 export const useStyles = makeStyles({
     chatBody:{
-        padding:'0.5em',
-        overflow: 'scroll',
-        height:'70vh'
+        // padding:'0.5em',
+        overflowY: 'scroll',
+        // height:'70vh'
+        height:'91%'
     },
     lgScreenChatBody:{
         padding:'0.5em',
-        overflow: 'scroll',
+        overflowY: 'scroll',
         height:'80vh'
     },
     chatFooter:{
         width:'100%',
+        height:'7%',
         display:'flex',
         justifyContent: 'center'
     },

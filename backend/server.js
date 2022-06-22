@@ -129,7 +129,7 @@ if (process.env.NODE_ENV === "production") {
 
 mongoose.connection.once("open", ()=>{
     console.log("Connected to database");
-    // mongoose.connection.collection('chats').deleteMany({})
+    mongoose.connection.collection('calls').deleteMany({})
 
     // === Listen to changes in mongodb === //
 
@@ -146,6 +146,10 @@ mongoose.connection.once("open", ()=>{
     const notificationsChangeStream = mongoose.connection.collection('notifications').watch();
     notificationsChangeStream.on('change', async(change)=>{
         if(change.operationType === "insert" && change.fullDocument.title === "friend_request"){
+            const relevantUser = await User.findById({_id: change.fullDocument.user_id})
+            io.to(relevantUser.socket_id).emit("notificationUpdate", change)
+        }
+        if(change.operationType === "insert" && change.fullDocument.title === "connection_confirmation"){
             const relevantUser = await User.findById({_id: change.fullDocument.user_id})
             io.to(relevantUser.socket_id).emit("notificationUpdate", change)
         }

@@ -28,10 +28,10 @@ const DesktopScreen = () => {
   return (
     <Grid container>
     <IncomingCall/>
-      <Grid item xs={3}>
+      <Grid item xs={4} lg={3}>
         <HomePage />
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={8} lg={9}>
         {activeTab === "Chat" ? (
           <div className={classes.lgScreenChatContainer}>
             <ChatHeeader />

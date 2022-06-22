@@ -6,7 +6,8 @@ export const useStyles = makeStyles({
         alignItems: 'center',
         justifyContent: 'space-around',
         padding:'1em',
-        borderBottom: '0.5px solid lightgray'
+        borderBottom: '0.5px solid lightgray',
+        height:'7%'
     },
     lgScreenChatHeaderContainer:{
         display: 'flex',
@@ -16,8 +17,8 @@ export const useStyles = makeStyles({
         borderBottom: '0.5px solid lightgray'
     },
     headerFriendName:{
-        fontWeight: 'bold',
-        marginLeft: '1.5em'
+        fontWeight: 'bold!important',
+        marginLeft: '1.5em!important'
     },
     chatHeaderUserInfo:{
         display: 'flex',

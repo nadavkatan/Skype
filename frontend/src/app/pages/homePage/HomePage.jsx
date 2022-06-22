@@ -9,6 +9,7 @@ import SearchPage from "../searchPage/SearchPage";
 import HomeHeader from "../../components/homeHeader/HomeHeader";
 import CallsList from '../../components/callsList/CallsList';
 import { useMediaQuery } from "@mui/material";
+import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
 import { AppContext } from "../../context/Context";
 
@@ -19,7 +20,7 @@ const HomePage = () => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   return (
-    <div>
+    <div style={{height: '100vh', overflow: 'hidden'}}>
       {activeTab === "Notifications" ? (
         <>
           {!isSmallScreen && <HomeHeader /> }
@@ -36,19 +37,19 @@ const HomePage = () => {
           <ContactsList contacts={currentUser.friends} />
         </>
       ) : isSmallScreen && activeTab === "Chat" ? (
-        <>
+        <Box style={{height: '90%'}}>
           <ChatHeader />
           <Chat />
-        </>
+        </Box>
       ) : activeTab === "Search" ? (
         <SearchPage />
       ) : (
-        <>
+        <Box style={{height: '90%'}}>
           <HomeHeader />
           <ChatsList contacts={currentUser.friends} />
-        </>
+        </Box>
       )}
-      <div style={{ display: "flex", justifyContent: "space-between" }}></div>
+      <div style={{ display: "flex", justifyContent: "space-between", height: '10%'}}></div>
        {isSmallScreen && <NavigationTab />}
     </div>
   );

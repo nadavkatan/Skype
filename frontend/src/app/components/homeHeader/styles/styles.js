@@ -29,6 +29,7 @@ export const useStyles = makeStyles({
     },
     lgScreenUserInfo:{
         display:'flex',
+        alignItems: 'center',
         width: '100%',
         padding: '1em 1em 0.3em 3.2em'
     },

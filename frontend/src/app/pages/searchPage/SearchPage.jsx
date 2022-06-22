@@ -42,7 +42,9 @@ const SearchPage = () => {
                     if(alreadyRequested){
                         return <SearchResult key={contact._id} foundUser={contact} areFriends={false} alreadyRequested={true}/>
                     }
-                    return <SearchResult key={contact._id} foundUser={contact} areFriends={false} alreadyRequested={false}/>
+                    if(contact._id !== currentUser._id){
+                        return <SearchResult key={contact._id} foundUser={contact} areFriends={false} alreadyRequested={false}/>
+                    }
                 })   
             }
         </div>

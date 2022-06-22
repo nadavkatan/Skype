@@ -28,9 +28,12 @@ const VideoCall = () => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const dispatch = useDispatch();
 
-  const remoteVideoRef = useRef(null);
-  const currentUserVideoRef = useRef(null);
-  const peerInstance = useRef(null);
+  // const remoteVideoRef = useRef(null);
+  // const currentUserVideoRef = useRef(null);
+  // const peerInstance = useRef(null);
+  const remoteVideoRef = useRef();
+  const currentUserVideoRef = useRef();
+  const peerInstance = useRef();
 
   const callUser = (remotePeerId) => {
     // Create the peer and set the peer id to the current user id

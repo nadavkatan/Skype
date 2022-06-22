@@ -5,7 +5,9 @@ export const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         padding: '0.5em',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        marginLeft: '0.5em!important',
+
     },
     contactName:{
         marginLeft: '0.5em!important',

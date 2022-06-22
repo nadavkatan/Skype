@@ -86,7 +86,7 @@ const Chat = () => {
   }, [currentContact]);
 
   return (
-    <div>
+    <div style={{height:'86%'}}>
       {receivingCall ? (
         <VideoCall />
       ) : callAnswered || callInitiator ? (
