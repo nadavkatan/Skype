@@ -73,13 +73,13 @@ const VideoCall = () => {
         navigator.mozGetUserMedia;
 
       getUserMedia({ video: true, audio: true }, (mediaStream) => {
-        currentUserVideoRef.current.srcObject = mediaStream;
+        if(currentUserVideoRef.current)currentUserVideoRef.current.srcObject = mediaStream;
 
         // Answer the call and send the media stream to the remote user (the caller)
         call.answer(mediaStream);
         // take the stream receieved from the caller and push it to the  html video element of the remote peer.
         call.on("stream", (remoteStream) => {
-          remoteVideoRef.current.srcObject = remoteStream;
+          if(remoteVideoRef.current)remoteVideoRef.current.srcObject = remoteStream;
         });
       });
     });
