@@ -38,7 +38,7 @@ const ChatsList = () => {
             if(chat.messages.length){
               const contactId = chat.members.filter(member => member !== currentUser._id);
               const correspondingContact = contactsList.find(contact => contact._id === contactId[0]);
-              return <Contact key={correspondingContact._id} contact={correspondingContact} />;
+              if(correspondingContact)  return <Contact key={correspondingContact._id} contact={correspondingContact} />;
             }
         })
         : <Box sx={{display: 'flex', justifyContent: 'center', overflowY:'scroll'}}>

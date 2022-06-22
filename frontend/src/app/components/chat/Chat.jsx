@@ -53,6 +53,12 @@ const Chat = () => {
     }
   };
 
+  const handleKeyPress =(e)=>{
+    if(e.key === 'Enter'){
+      handleSendMessage();
+    }
+  }
+
   // Auto scroll to the bottom of the chat
   useEffect(() => {
     if (chatBody.current) {
@@ -122,6 +128,7 @@ const Chat = () => {
                 placeholder="Type a message"
                 value={currentMessage}
                 onChange={(e) => setCurrentMessage(e.target.value)}
+                onKeyPress={e => handleKeyPress(e)}
               />
               <SendIcon
                 className={classes.sendIcon}
