@@ -37,7 +37,7 @@ export const useStyles = makeStyles({
         maxHeight:'60vh'
     },
     smScreenPartnerVideoContainer:{
-        backgroundColor: 'yellow',
+        background: 'linear-gradient(0.25turn, #1B2430, #51557E, #816797)',
         transform: 'translateX(-30%)',
         height:'100%',
         zIndex:0,
