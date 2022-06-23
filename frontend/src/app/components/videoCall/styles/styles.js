@@ -33,7 +33,8 @@ export const useStyles = makeStyles({
         width: '100%',
         zIndex:0,
         borderRadius:'20px',
-        boxShadow: '0 0 5px white '
+        boxShadow: '0 0 5px white',
+        maxHeight:'60vh'
     },
     smScreenPartnerVideoContainer:{
         backgroundColor: 'yellow',
