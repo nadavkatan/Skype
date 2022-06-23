@@ -10,7 +10,8 @@ export const useStyles = makeStyles({
     lgScreenChatBody:{
         padding:'0.5em',
         overflowY: 'scroll',
-        height:'80vh'
+        // height:'80vh',
+        height:'93%',
     },
     chatFooter:{
         width:'100%',

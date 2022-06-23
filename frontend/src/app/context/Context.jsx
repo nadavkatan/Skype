@@ -78,7 +78,7 @@ const Context = ({children}) => {
         openModal,
         setOpenModal,
         joinRoom: (room)=>{
-            console.log(BASE_URL)
+            // console.log(BASE_URL)
             socket.emit("join_room", room);
         },
         sendMessage: async(messageData, cb)=>{
@@ -110,7 +110,6 @@ const Context = ({children}) => {
           }
       },
        handleJoinRoom:(chatId, contact)=>{
-        console.log(chatId)
           value.joinRoom(chatId)
           dispatch(setCurrentRoom(chatId))
           // setCurrentContact(friendName)
@@ -122,14 +121,10 @@ const Context = ({children}) => {
     }
 
     useEffect(()=>{
-      console.log("currentUser: ", currentUser)
+      // console.log("currentUser: ", currentUser)
       dispatch(checkAuth());
 
     },[])
-
-    useEffect(()=>{
-      console.log('contacts: ', contactsList)
-    }, [contactsList])
 
     useEffect(()=>{
       console.log('receiving call: ', receivingCall)
@@ -139,7 +134,7 @@ const Context = ({children}) => {
 
     useEffect(()=>{
       if(currentUser){
-        console.log('currentUser: ', currentUser)
+        // console.log('currentUser: ', currentUser)
         dispatch(setFriendRequestsFrom(currentUser.friendRequestesFrom))
         dispatch(initializeFriendRequestsTo(currentUser.friendRequestesTo))
         dispatch(getAllUserNotifications(currentUser._id));

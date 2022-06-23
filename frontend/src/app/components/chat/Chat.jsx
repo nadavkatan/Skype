@@ -61,13 +61,11 @@ const Chat = () => {
 
   // Auto scroll to the bottom of the chat
   useEffect(() => {
-    if (chatBody.current) {
-      chatBody.current.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-      });
+    if(chatBody.current){
+      chatBody.current.scrollIntoView({ behavior: "smooth", block:'end' })
     }
-  }, [chatContent]);
+
+  },[chatContent])
 
   // When message is receieved it is added to the chat content and displayed
   useEffect(() => {
@@ -103,16 +101,17 @@ const Chat = () => {
             className={
               isSmallScreen ? classes.chatBody : classes.lgScreenChatBody
             }
-            ref={chatBody}
+            
           >
             {chatContent.length > 0 &&
               chatContent.map((message, i) => {
                 return message.author === currentUser.username ? (
-                  <Message key={i} message={message} />
+                  <Message  key={i} message={message} />
                 ) : (
                   <MessageFriend key={i} message={message} />
                 );
               })}
+              <div ref={chatBody} />
           </div>
           <div className={classes.chatFooter}>
             <div

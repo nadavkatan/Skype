@@ -5,7 +5,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export const getStoredChatContent = createAsyncThunk('chat/getStoredChatContent',
     async(chatId, {getState}) => {
-        console.log(chatId)
         const response = await axios({
             method: 'POST',
             url: `${BASE_URL}/chats`,
@@ -20,33 +19,6 @@ export const getStoredChatContent = createAsyncThunk('chat/getStoredChatContent'
     }
 )
 
-// export const getAllChats = createAsyncThunk('chat/getAllChats',
-//     async(args, {getState})=>{
-//         const response = await axios({
-//             method: 'GET',
-//             url: `${BASE_URL}/chats`,
-//             headers:{
-//                 "Content-Type": "application/json"
-//             }
-//         });
-//         console.log(response)
-//         return response.data;
-//     }
-// )
-
-// export const getStoredChatContent = createAsyncThunk('chat/getStoredChatContent',
-//     async(chatId, {getState}) => {
-//         const response = await axios({
-//             method: 'GET',
-//             url: `${BASE_URL}/chats/${chatId}`,
-//             headers:{
-//                 "Content-Type": "application/json"
-//             }
-//         });
-//         return response.data;
-//     }
-// )
-
 export const getUsersChat = createAsyncThunk('chat/getUsersChat',
     async(userId, {getState}) => {
         const response = await axios({
@@ -56,7 +28,7 @@ export const getUsersChat = createAsyncThunk('chat/getUsersChat',
                 "Content-Type": "application/json"
             }
         });
-        console.log(response);
+        // console.log(response);
         return response.data;
     }
 )
@@ -102,7 +74,7 @@ const chatSlice = createSlice({
             state.unreadMessages.push(payload)
         },
         deleteMessagesFromUnread: (state, {payload}) =>{
-            console.log(payload)
+            // console.log(payload)
             state.unreadMessages = state.unreadMessages.filter(unreadMessage => unreadMessage.senderId !== payload);
         }
     },
@@ -111,7 +83,7 @@ const chatSlice = createSlice({
             state.status = "loading";
         },
         [getStoredChatContent.fulfilled]: (state, {payload})=>{
-            console.log(payload);
+            // console.log(payload);
             state.status = "success";
             if(payload)state.chatContent = payload.messages;
         },
