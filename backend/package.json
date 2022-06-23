@@ -4,7 +4,7 @@
   "description": "skype clone",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --testEnvironment=node --runInBand ./tests",
     "dev": "nodemon server.js"
   },
   "repository": {
@@ -33,7 +33,9 @@
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "jest": "^28.1.1",
+    "nodemon": "^2.0.16",
+    "supertest": "^6.2.3"
   },
   "engines": {
     "node": "16.13.0"

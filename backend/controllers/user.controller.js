@@ -42,7 +42,7 @@ const getUserByUsername = async(username)=>{
 const addFriend = async(id,username, friendId, friendName)=>{
     try{
         const newChat = await createNewChat({members:[id, friendId]});
-        console.log(newChat);
+        // console.log(newChat);
         const updatedUser1 = await User.findByIdAndUpdate({_id:id},{$push: {friends: [{friendId: friendId, friendName: friendName, chatId: newChat._id}]}, $pull: {friendRequestesFrom: {sender_id: friendId, sender_name: friendName}}}, { safe: true });
         const updatedUser2 = await User.findByIdAndUpdate({_id:friendId},{$push: {friends: [{friendId: id, friendName: username, chatId: newChat._id}]}, $pull: {friendRequestesTo: {friend_id: id}}}, { safe: true });
         return updatedUser1
@@ -103,6 +103,7 @@ const updateUserCredentials = async(id, update)=>{
 
 const changePassword = async(id, update)=>{
     const {salt, hash} = await User.findById({_id:id})
+    const user =  await User.findById({_id:id})
     const valid = validatePassword(update.currentPassword, hash, salt);
     if(valid){
         const saltAndHash = genPassword(update.newPassword);

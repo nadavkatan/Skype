@@ -129,7 +129,6 @@ if (process.env.NODE_ENV === "production") {
 
 mongoose.connection.once("open", ()=>{
     console.log("Connected to database");
-    mongoose.connection.collection('calls').deleteMany({})
 
     // === Listen to changes in mongodb === //
 
@@ -171,4 +170,4 @@ mongoose.connection.once("open", ()=>{
     });
 })
 
-
+module.exports = app;
