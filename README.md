@@ -1,5 +1,6 @@
 This is my final project for the fullstack web development course. <br />
-I have chosen to create a clone of Skype.<br />
+I have chosen to create a clone of Skype. The final result can be viewed here: https://my-skype-clone.herokuapp.com/<br />
+<br />
 **This project includes the following features:** <br />
 
 - Users can register to the app. <br />
