@@ -24,7 +24,6 @@ const DesktopScreen = () => {
   if(callInitiator && callAnswered) return <VideoCall/>;
   if(receivingCall && callAnswered) return <VideoCall/>;
   if(callInitiator) return <CallingScreen/>
-
   return (
     <Grid container>
     <IncomingCall/>

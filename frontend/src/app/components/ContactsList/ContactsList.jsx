@@ -25,7 +25,7 @@ const ContactsList = () => {
       contactsList.length > 0 ? contactsList.map(contact => {
         return <Contact key={contact._id} contact={contact}/>
       })
-      : <Box sx={{display: 'flex', justifyContent: 'center', width:'80%'}}>
+      : <Box sx={{display: 'flex', justifyContent: 'center', marginTop:'0.5em'}}>
         <Typography sx={{width:'80%', textAlign: 'center'}} variant="subtitle1">You currently don't have any contacts. Use the search bar to search and connect with other skype users!</Typography>
         </Box>
     }

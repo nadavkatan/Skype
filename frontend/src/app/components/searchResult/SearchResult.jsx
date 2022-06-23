@@ -52,7 +52,6 @@ const SearchResult = ({ foundUser, areFriends, chatId, alreadyRequested }) => {
 
   return (
     <div className={classes.searchResultContainer}>
-      <ToastContainer />
       <div className={classes.searchResult}>
         <Avatar imgSrc={foundUser.avatar.secure_url} loggedIn={foundUser.is_logged_in}/>
         <Typography variant="subtitle1" className={classes.searchResultText}>
@@ -62,7 +61,7 @@ const SearchResult = ({ foundUser, areFriends, chatId, alreadyRequested }) => {
       {areFriends ? (
         <Fab
           size="small"
-          color="secondary"
+          color="success"
           onClick={openChat}
           className={classes.sendFriendRequest}
         >
@@ -71,7 +70,7 @@ const SearchResult = ({ foundUser, areFriends, chatId, alreadyRequested }) => {
       ) : alreadyRequested ? (
         <Fab
           size="small"
-          color="secondary"
+          color="warning"
           onClick={()=> toast.error("Connection request was already sent to this contact")}
           className={classes.sendFriendRequest}
         >
@@ -80,13 +79,14 @@ const SearchResult = ({ foundUser, areFriends, chatId, alreadyRequested }) => {
       ) : (
         <Fab
           size="small"
-          color="secondary"
+          color="primary"
           onClick={handleSendFriendRequest}
           className={classes.sendFriendRequest}
         >
           <AddIcon />
         </Fab>
       )}
+      <ToastContainer />
     </div>
   );
 };

@@ -28,7 +28,8 @@ export const useStyles = makeStyles({
         boxShadow: '0 0 4px black '
     },
     partnerVideoContainer:{
-        backgroundColor: 'yellow',
+        // backgroundColor: 'black',
+        background: 'linear-gradient(0.25turn, #1B2430, #51557E, #816797)',
         width: '100%',
         zIndex:0,
         borderRadius:'20px',

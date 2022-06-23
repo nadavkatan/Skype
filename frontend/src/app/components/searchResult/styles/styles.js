@@ -4,12 +4,12 @@ export const useStyles = makeStyles({
     searchResultContainer:{
         display: 'flex',
         justifyContent: 'space-around',
-        alignItems: 'baseline'
+        alignItems: 'baseline',
         // height: '100%',
     },
     searchResult:{
         display: 'flex',
-        margin:'0.6em',
+        margin:'1em',
         alignItems: 'center',
         width:'50%',
         justifyContent: 'flex-start',
@@ -21,5 +21,5 @@ export const useStyles = makeStyles({
     },
     sendFriendRequest:{
         margin:'0.6em'
-    }
+    },
 })

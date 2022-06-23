@@ -41,7 +41,7 @@ const ChatsList = () => {
               if(correspondingContact)  return <Contact key={correspondingContact._id} contact={correspondingContact} />;
             }
         })
-        : <Box sx={{display: 'flex', justifyContent: 'center', overflowY:'scroll'}}>
+        : <Box sx={{display: 'flex', justifyContent: 'center', overflowY:'scroll', marginTop:'0.5em'}}>
         <Typography sx={{width:'80%', textAlign: 'center'}} variant="subtitle1">You currently don't have any active chats. Start chatting with your contacts and your chats will appear here.</Typography>
         </Box>
         }

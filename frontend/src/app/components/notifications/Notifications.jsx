@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import FriendRequest from "../friendRequest/FriendRequest";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import {deleteAllConnectionNotifications} from '../../features/notifications/notificationsSlice';
 import { useSelector, useDispatch } from "react-redux";
 import { useStyles } from "./styles/styles";
@@ -36,12 +38,14 @@ const Notifications = () => {
           }
           if(notification.title === "connection_confirmation"){
             return (
-            <Typography variant="subtitle1" key={notification.content.confirmation_text}>{notification.content.confirmation_text}</Typography>
+              <Box key={notification.content.confirmation_text} className={classes.connectionConfirmationContainer}>
+              <Typography variant="subtitle1" className={classes.connectionConfirmationText}>{notification.content.confirmation_text}</Typography>
+              </Box>
             )
           }
 
         })
-        : <Typography variant="subtitle2" sx={{textAlign:'center'}}>No new notifications</Typography>
+        : <Typography variant="subtitle1" sx={{textAlign:'center', marginTop:'0.5em'}}>No new notifications</Typography>
         }
     </div>
   );

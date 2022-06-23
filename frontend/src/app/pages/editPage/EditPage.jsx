@@ -6,6 +6,7 @@ import Avatar from "../../components/avatar/Avatar";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+import { useMediaQuery } from "@mui/material";
 import { updateUserCredentials } from "../../features/auth/authSlice";
 import { useStyles } from "./styles/styles";
 import { useForm } from "react-hook-form";
@@ -19,6 +20,7 @@ const EditPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const {
     register,
     handleSubmit,
@@ -42,7 +44,7 @@ const EditPage = () => {
 
   return (
     <Box className={classes.editPageWrapper}>
-      <Box className={classes.editPageContainer}>
+      <Box className={isSmallScreen? classes.smScreenEditPageContainer :classes.editPageContainer}>
         <Box className={classes.editPageHeader}>
           <Typography variant="h3">Edit profile</Typography>
           <Typography variant="subtitle1">
@@ -58,8 +60,8 @@ const EditPage = () => {
           component="form"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <Box className={classes.formHeader}>
-            <Box className={classes.editPageAvatarContainer}>
+          <Box className={isSmallScreen? classes.smScreenFormHeader :classes.formHeader}>
+            <Box className={isSmallScreen? classes.smScreenEditPageAvatarContainer : classes.editPageAvatarContainer}>
               <div className={classes.editPageAvatar}>
                 <Avatar
                   avatarDimensions={{ width: 150, height: 150 }}
@@ -67,7 +69,7 @@ const EditPage = () => {
                   loggedIn={currentUser.is_logged_in}
                 />
               </div>
-              <Button variant="outlined" component="label">
+              <Button variant="outlined" component="label" className={isSmallScreen? classes.smScreenChangePictureBtn : null}>
                 Change profile picture
                 <input
                   style={{
@@ -125,8 +127,8 @@ const EditPage = () => {
         </Box>
         <ChangePasswordForm />
       </Box>
-      <Box className={classes.backBtnContainer}>
-        <Button variant="contained" onClick={() => navigate("/")}>
+      <Box className={isSmallScreen? classes.smScreenBackBtnContainer : classes.backBtnContainer}>
+        <Button variant="contained" onClick={() => navigate("/")} className={isSmallScreen? classes.smScreenBackBtn: null}>
           Back
         </Button>
       </Box>

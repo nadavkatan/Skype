@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { useMediaQuery } from "@mui/material";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,8 +17,10 @@ import 'react-toastify/dist/ReactToastify.css';
 const ChangePasswordForm = () => {
 
   const { authMessage } = useSelector((state) => state.auth);
+
   const classes = useStyles();
   const dispatch = useDispatch();
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   // Validation rules
   const formSchema = Yup.object().shape({
@@ -50,14 +53,14 @@ const ChangePasswordForm = () => {
         toast.success(authMessage);
     }
   },[authMessage])
-
+  
   return (
     <Box className={classes.changePasswordContainer}>
     <ToastContainer/>
       <Box>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-          <Box className={classes.changePasswordHeader}>
-            <Typography variant="h4">Change your password</Typography>
+          <Box className={isSmallScreen? classes.smScreenChangePasswordHeader : classes.changePasswordHeader}>
+            <Typography variant="h4" className={isSmallScreen? classes.smScreenChangePasswordHeaderText : classes.changePasswordHeadertext}>Change your password</Typography>
             <Button type="submit" variant="contained">
               Save new password
             </Button>
