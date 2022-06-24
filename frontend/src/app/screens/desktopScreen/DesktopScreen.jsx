@@ -17,10 +17,6 @@ const DesktopScreen = () => {
 
   const classes = useStyles();
 
-  // useEffect(() => {
-  //   console.log(callAnswered)
-  // },[callAnswered])
-
   if(callInitiator && callAnswered) return <VideoCall/>;
   if(receivingCall && callAnswered) return <VideoCall/>;
   if(callInitiator) return <CallingScreen/>

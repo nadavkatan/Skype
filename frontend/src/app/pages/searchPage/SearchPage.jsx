@@ -24,9 +24,9 @@ const SearchPage = () => {
         }
     },[allUsers])
 
-    useEffect(()=>{
-        console.log("search results: ", searchResults)
-    },[searchResults])
+    // useEffect(()=>{
+    //     console.log("search results: ", searchResults)
+    // },[searchResults])
 
   return (
     <div>

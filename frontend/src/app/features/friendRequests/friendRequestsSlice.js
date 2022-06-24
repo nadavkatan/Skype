@@ -13,7 +13,6 @@ async(args, {getState})=>{
             friendId: args.friendId,
         }
     })
-    console.log(response);
     return response.data
 }
 )
@@ -21,7 +20,6 @@ async(args, {getState})=>{
 
 export const storeFriendRequest = createAsyncThunk("users/storeFriendRequest",
 async(args, {getState})=>{
-    console.log("args: ",args)
     const response = await axios({
         method: 'POST',
         url:`${BASE_URL}/friend-requests`,
@@ -32,20 +30,17 @@ async(args, {getState})=>{
             receiver_name:args.receiver_name
         }
     });
-    console.log(response);
     return response.data
 }
 )
 
 export const deleteFriendRequest = createAsyncThunk("users/deleteFriendRequest",
 async(friendRequest, {getState})=>{
-    console.log("friendRequest: ",friendRequest)
     const response = await axios({
         method:'DELETE',
         url:`${BASE_URL}/friend-requests`,
         data:friendRequest
     });
-    console.log(response);
     return response.data
 }
 )

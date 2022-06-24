@@ -5,7 +5,6 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 export const checkAuth = createAsyncThunk("auth/checkAuth",
     async(args, {getState})=>{
         const response = await axios.get(`${BASE_URL}/auth/check-auth`,{withCredentials: true} );
-        console.log("check auth response: ",response);
         return response.data;
     }
     );
@@ -38,7 +37,6 @@ export const logout = createAsyncThunk("auth/logout",
             url:`${BASE_URL}/auth/logout`,
             withCredentials: true
         })
-        console.log(response);
         return response.data;
     }
 ) 
@@ -61,7 +59,6 @@ export const getUpdatedCurrentUser = createAsyncThunk("auth/getUpdatedCurrentUse
             url: `${BASE_URL}/users/${id}`,
         });
 
-        console.log(response);
         return response.data;
     }
 )
@@ -75,7 +72,6 @@ async(args, {getState})=>{
             url: `${BASE_URL}/users/edit-credentials/${auth.currentUser._id}`,
             data: args
         })
-        console.log(response)
         return response.data
     }catch(e){
         console.log(e)
@@ -92,7 +88,6 @@ export const changePassword = createAsyncThunk("auth/changePassword",
                 url: `${BASE_URL}/users/change-password/${auth.currentUser._id}`,
                 data: args
             });
-            console.log(response)
             return response.data
         }catch(e){
             console.log(e);

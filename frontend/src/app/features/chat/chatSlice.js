@@ -28,14 +28,12 @@ export const getUsersChat = createAsyncThunk('chat/getUsersChat',
                 "Content-Type": "application/json"
             }
         });
-        // console.log(response);
         return response.data;
     }
 )
 
 export const storeSentMessage = createAsyncThunk('chat/storeSentMessage',
     async(args, {getState}) => {
-        console.log('asyncThunk: ', args)
         const response = await axios({
             method: 'PUT',
             url: `${BASE_URL}/chats`,
@@ -74,7 +72,6 @@ const chatSlice = createSlice({
             state.unreadMessages.push(payload)
         },
         deleteMessagesFromUnread: (state, {payload}) =>{
-            // console.log(payload)
             state.unreadMessages = state.unreadMessages.filter(unreadMessage => unreadMessage.senderId !== payload);
         }
     },
@@ -83,7 +80,6 @@ const chatSlice = createSlice({
             state.status = "loading";
         },
         [getStoredChatContent.fulfilled]: (state, {payload})=>{
-            // console.log(payload);
             state.status = "success";
             if(payload)state.chatContent = payload.messages;
         },

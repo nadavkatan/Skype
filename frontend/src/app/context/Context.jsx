@@ -30,7 +30,6 @@ const Context = ({children}) => {
         if(currentUser){
           const update =friend.updateDescription.updatedFields 
           if(update[Object.keys(update)[0]].friendId){
-             console.log("friends update")
              return dispatch(getAllContacts(currentUser._id))
           }
         }
@@ -78,7 +77,6 @@ const Context = ({children}) => {
         openModal,
         setOpenModal,
         joinRoom: (room)=>{
-            // console.log(BASE_URL)
             socket.emit("join_room", room);
         },
         sendMessage: async(messageData, cb)=>{
@@ -112,8 +110,6 @@ const Context = ({children}) => {
        handleJoinRoom:(chatId, contact)=>{
           value.joinRoom(chatId)
           dispatch(setCurrentRoom(chatId))
-          // setCurrentContact(friendName)
-          // dispatch(setCurrentContact(contact))
         },
         notifyServerForUserConnection: (user)=>{
           socket.emit("user_connected", user);
@@ -121,7 +117,6 @@ const Context = ({children}) => {
     }
 
     useEffect(()=>{
-      // console.log("currentUser: ", currentUser)
       dispatch(checkAuth());
 
     },[])
@@ -134,7 +129,6 @@ const Context = ({children}) => {
 
     useEffect(()=>{
       if(currentUser){
-        // console.log('currentUser: ', currentUser)
         dispatch(setFriendRequestsFrom(currentUser.friendRequestesFrom))
         dispatch(initializeFriendRequestsTo(currentUser.friendRequestesTo))
         dispatch(getAllUserNotifications(currentUser._id));

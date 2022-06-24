@@ -25,7 +25,6 @@ router.post('/login', (req, res, next) => {
             if(e) return next(e);
             await User.findByIdAndUpdate({_id:req.user._id}, {is_logged_in:true}, {new:true})
             req.user.is_logged_in = true;
-            console.log(req.user)
             return res.json({isAuth: true, userId: req.user._id, user:req.user}) 
             
         });

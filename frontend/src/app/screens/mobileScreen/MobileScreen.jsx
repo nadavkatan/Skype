@@ -9,10 +9,6 @@ import { useSelector } from "react-redux";
 const MobileScreen = () => {
   const {callInitiator, receivingCall, callAnswered} = useSelector((state) => state.videoCall);
 
-  // useEffect(() => {
-  //   console.log(callAnswered)
-  // },[callAnswered])
-
   if(callInitiator && callAnswered) return <VideoCall/>;
   if(receivingCall && callAnswered) return <VideoCall/>;
   if(callInitiator) return <CallingScreen/>

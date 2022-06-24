@@ -14,7 +14,6 @@ export const findUser = createAsyncThunk("users/findUser",
                 username:username
             }
         });
-        console.log(response);
         return response.data;
     }
     ); 
@@ -25,7 +24,6 @@ export const findUser = createAsyncThunk("users/findUser",
                 method: "GET",
                 url: `${BASE_URL}/users`,
             });
-            console.log(reponse);
             return reponse.data;
         }
     )
@@ -43,7 +41,6 @@ export const findUser = createAsyncThunk("users/findUser",
                         friendName: args.friendName
                     }
                 });
-                console.log(response);
                 return {friendId: args.friendId, friendName: args.friendName}
             }catch(e){
                 console.log(e);

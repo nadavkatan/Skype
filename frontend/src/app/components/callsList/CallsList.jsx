@@ -17,10 +17,6 @@ const CallsList = () => {
     dispatch(getUserCalls(currentUser._id));
   }, []);
 
-  useEffect(() => {
-    console.log(calls);
-  }, [calls]);
-
   return (
     <Box className={classes.callListContainer}>
       {calls.length > 0 ? (

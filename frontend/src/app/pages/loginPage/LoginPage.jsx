@@ -36,7 +36,6 @@ const {
 
   const onSubmit = async(data) => {
      const attempt = await dispatch(login(data));
-     console.log(attempt)
      if(attempt.payload.isAuth){
       notifyServerForUserConnection(data)
       navigate("/")
