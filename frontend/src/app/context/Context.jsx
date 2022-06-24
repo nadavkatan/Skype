@@ -20,7 +20,7 @@ const socket = io.connect(BASE_URL);
 const Context = ({children}) => {
     const{currentUser} = useSelector((state)=> state.auth);
     const{contactsList} = useSelector((state)=> state.contacts);
-    const {receivingCall} = useSelector((state)=> state.videoCall);
+    const {receivingCall, callAnswered} = useSelector((state)=> state.videoCall);
     const {currentRoom} = useSelector((state)=> state.chat);
     const [activeTab, setActiveTab] = useState("ChatsList");
     const [openModal, setOpenModal] = useState(false);
@@ -136,6 +136,10 @@ const Context = ({children}) => {
         value.notifyServerForUserConnection(currentUser)
       }
     },[currentUser])
+
+    useEffect(()=>{
+      console.log('call answered:, ', callAnswered)
+    },[callAnswered])
 
 
   return (

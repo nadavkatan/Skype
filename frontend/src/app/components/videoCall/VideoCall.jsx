@@ -28,9 +28,6 @@ const VideoCall = () => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const dispatch = useDispatch();
 
-  // const remoteVideoRef = useRef(null);
-  // const currentUserVideoRef = useRef(null);
-  // const peerInstance = useRef(null);
   const remoteVideoRef = useRef();
   const currentUserVideoRef = useRef();
   const peerInstance = useRef();
@@ -43,16 +40,17 @@ const VideoCall = () => {
       navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia;
 
-    // Get the users video and audio
+    // Get the user's video and audio
     getUserMedia({ video: true, audio: true }, (mediaStream) => {
       currentUserVideoRef.current.srcObject = mediaStream;
-
+      console.log('got user media and now calling remote user')
       // Call remote peer and pass the mediaStream receieved through getUserMedia
       const call = peer.call(remotePeerId, mediaStream);
 
       // Once the remote peer has answered the call, he/she sends their own mediaStream. The event bellow listens to incoming media streams 
       // and pushes them to the html video element that presents the remote peer.
         call.on("stream", (remoteStream) => {
+          console.log("peerjs received remote stream")
           remoteVideoRef.current.srcObject = remoteStream;
         });
     });
@@ -63,10 +61,12 @@ const VideoCall = () => {
 
   const answerCall = () => {
     // Create the peer and set the peer id to the current user id
+    console.log("answerCall, myId: " + currentUser._id);
     const peer = new Peer(currentUser._id);
     
     //Listen for incoming calls. Once receieved, get the user video and audio and push it to the html video element of the current user.
     peer.on("call", (call) => {
+      console.log('peerjs received call');
       let getUserMedia =
         navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
@@ -152,6 +152,7 @@ const VideoCall = () => {
     // On componentDidMount, if the user is the call initiator, the callUser function will be called, of not, the answerCall function will be called.
     if(remoteVideoRef.current && remoteVideoRef.current){
       if (callInitiator) {
+        console.log('calling user: ', currentContact._id)
         callUser(currentContact._id);
      }else{
        answerCall();

@@ -34,16 +34,16 @@ const sessionStore = MongoStore.create({
 
 // === socket.io listeners and emitters === //
 io.on("connection", (socket) => {
-    console.log(`User Connected: ${socket.id}`);
+    // console.log(`User Connected: ${socket.id}`);
     
     socket.on("user_connected", async(user)=>{
         const updatedUser = await User.findOneAndUpdate({username: user.username}, {socket_id: socket.id}, {new:true})
-        console.log(`User Connected: ${updatedUser}`)
+        // console.log(`User Connected: ${updatedUser}`)
     })
 
     socket.on("join_room", (data) => {
       socket.join(data);
-      console.log(`User with ID: ${socket.id} joined room: ${data}`);
+    //   console.log(`User with ID: ${socket.id} joined room: ${data}`);
     });
   
     socket.on("send_message", (data) => {
@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("disconnect", () => {
-      console.log("User Disconnected", socket.id);
+    //   console.log("User Disconnected", socket.id);
     });
   });
 

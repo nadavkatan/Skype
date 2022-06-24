@@ -91,11 +91,11 @@ const Chat = () => {
 
   return (
     <div style={{height:'86%'}}>
-      {receivingCall ? (
+      {/* {receivingCall ? (
         <VideoCall />
       ) : callAnswered || callInitiator ? (
         <VideoCall />
-      ) : (
+      ) : ( */}
         <>
           <div
             className={
@@ -136,7 +136,7 @@ const Chat = () => {
             </div>
           </div>
         </>
-      )}
+      {/* )} */}
     </div>
   );
 };

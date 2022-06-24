@@ -32,7 +32,6 @@ router.post('/login', (req, res, next) => {
 });
 
 router.post('/logout', async(req, res, next)=>{
-    console.log("logout",req.user)
    await User.findByIdAndUpdate({_id:req.user._id}, {is_logged_in:false}, {new:true})
     req.logout((err)=> {
       if (err) { return next(err); }
