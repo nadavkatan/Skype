@@ -16,5 +16,5 @@ MERN (Mongoose, Express, React, and Node), Material Ui for design and responsivi
 - Users will additionally be able to edit their profile. They will be able to change any of their personal information, as well as their login password, as long as it passes the standard validations. Furthermore, the users will also be able to modify their default profile picture to a picture of their own which will be displayed to other users of the app.
   <br />
   <br />
-  Check the README at the testing branch for a more elaborate description of my working process and approach. <br/>
+  Check out the README at the testing branch for a more elaborate description of my working process and approach. <br/>
   The project can be viewed here: https://my-skype-clone.herokuapp.com/<br />
