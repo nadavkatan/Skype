@@ -25,7 +25,7 @@ const ChatsList = () => {
   },[chats])
 
   return (
-    <>
+    <Box style={{overflowY:'scroll', display: 'flex', flexDirection:'column', height:'74%'}}>
       {status === "loading" && (
         <div
           style={{ display: "flex", justifyContent: "center", width: "100%" }}
@@ -45,7 +45,7 @@ const ChatsList = () => {
         <Typography sx={{width:'80%', textAlign: 'center'}} variant="subtitle1">You currently don't have any active chats. Start chatting with your contacts and your chats will appear here.</Typography>
         </Box>
         }
-    </>
+        </Box>
   );
 };
 

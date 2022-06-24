@@ -6,7 +6,16 @@ export const useStyles = makeStyles({
         marginTop:'0.5em',
         display:'flex',
         flexDirection:'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        height:'74%'
+    },
+    smScreenCallListContainer:{
+        overflowY:'scroll',
+        marginTop:'0.5em',
+        display:'flex',
+        flexDirection:'column',
+        alignItems: 'center',
+        height:'70%'
     },
     callItemContainer:{
         display: "flex",

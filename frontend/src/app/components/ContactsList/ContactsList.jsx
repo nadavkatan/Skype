@@ -17,7 +17,7 @@ const ContactsList = () => {
   },[])
 
   return (
-    <Box sx={{overflowY:'scroll', display: 'flex', flexDirection:'column'}}>
+    <Box style={{overflowY:'scroll', display: 'flex', flexDirection:'column', height:'75%'}}>
     {
       status === "loading" && <></>
     }
