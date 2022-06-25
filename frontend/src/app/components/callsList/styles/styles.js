@@ -6,7 +6,8 @@ export const useStyles = makeStyles({
         marginTop:'0.5em',
         display:'flex',
         flexDirection:'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        height:'73%'
     },
     callItemContainer:{
         display: "flex",
