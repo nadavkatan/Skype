@@ -68,7 +68,7 @@ const videoCallSlice = createSlice({
         },
         [getUserCalls.fulfilled]: (state, {payload})=>{
             state.status = 'success';
-            state.calls = payload;
+            state.calls = payload.reverse();
         },
         [getUserCalls.rejected]: (state)=>{
             state.status = 'failed'

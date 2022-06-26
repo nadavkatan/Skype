@@ -20,8 +20,9 @@ const CallsList = () => {
   useEffect(() => {
     dispatch(getUserCalls(currentUser._id));
   }, []);
-
+ 
   return (
+
     <Box className={isSmallScreen? classes.smScreenCallListContainer : classes.callListContainer}>
       {calls.length > 0 ? (
         calls.map((call, i) => {
