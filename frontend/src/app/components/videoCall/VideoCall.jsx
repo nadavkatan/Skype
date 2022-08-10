@@ -13,7 +13,7 @@ import {
   setReceivingCall,
   setCallInitiator,
   storeCall,
-  setOngoingCall
+  setOngoingCall,
 } from "../../features/videoCall/videoCallSlice";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
@@ -36,56 +36,47 @@ const VideoCall = () => {
   const callUser = (remotePeerId) => {
     // Create the peer and set the peer id to the current user id
     const peer = new Peer(currentUser._id);
-    let getUserMedia =
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia;
 
     // Get the user's video and audio
-    getUserMedia({ video: true, audio: true }, (mediaStream) => {
-      currentUserVideoRef.current.srcObject = mediaStream;
-      console.log('got user media and now calling remote user')
-      // Call remote peer and pass the mediaStream receieved through getUserMedia
-      const call = peer.call(remotePeerId, mediaStream);
-
-      // Once the remote peer has answered the call, he/she sends their own mediaStream. The event bellow listens to incoming media streams 
-      // and pushes them to the html video element that presents the remote peer.
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((mediaStream) => {
+        currentUserVideoRef.current.srcObject = mediaStream;
+        console.log("got user media and now calling remote user");
+        // Call remote peer and pass the mediaStream receieved through getUserMedia
+        const call = peer.call(remotePeerId, mediaStream);
+        // Once the remote peer has answered the call, he/she sends their own mediaStream. The event bellow listens to incoming media streams
+        // and pushes them to the html video element that presents the remote peer.
         call.on("stream", (remoteStream) => {
-          console.log("peerjs received remote stream")
+          console.log("peerjs received remote stream");
           remoteVideoRef.current.srcObject = remoteStream;
         });
-    });
-    
-    // Store the peer instance in useRef to have global access to it. 
+      });
+    // Store the peer instance in useRef to have global access to it.
     peerInstance.current = peer;
   };
 
   const answerCall = () => {
     // Create the peer and set the peer id to the current user id
-    console.log("answerCall, myId: " + currentUser._id);
     const peer = new Peer(currentUser._id);
-    
     //Listen for incoming calls. Once receieved, get the user video and audio and push it to the html video element of the current user.
     peer.on("call", (call) => {
-      console.log('peerjs received call');
-      let getUserMedia =
-        navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia;
-
-      getUserMedia({ video: true, audio: true }, (mediaStream) => {
-        // if(currentUserVideoRef.current)currentUserVideoRef.current.srcObject = mediaStream;
-        currentUserVideoRef.current.srcObject = mediaStream;
-        // Answer the call and send the media stream to the remote user (the caller)
-        call.answer(mediaStream);
-        // take the stream receieved from the caller and push it to the  html video element of the remote peer.
-        call.on("stream", (remoteStream) => {
-          if(remoteVideoRef.current)remoteVideoRef.current.srcObject = remoteStream;
+      console.log("peerjs received call");
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((mediaStream) => {
+          // if(currentUserVideoRef.current)currentUserVideoRef.current.srcObject = mediaStream;
+          currentUserVideoRef.current.srcObject = mediaStream;
+          // Answer the call and send the media stream to the remote user (the caller)
+          call.answer(mediaStream);
+          // take the stream receieved from the caller and push it to the  html video element of the remote peer.
+          call.on("stream", (remoteStream) => {
+            if (remoteVideoRef.current)
+              remoteVideoRef.current.srcObject = remoteStream;
+          });
         });
-      });
     });
-
-     // Store the peer instance in useRef to have global access to it. 
+    // Store the peer instance in useRef to have global access to it.
     peerInstance.current = peer;
   };
 
@@ -109,27 +100,26 @@ const VideoCall = () => {
       dispatch(storeCall(callData));
     }
 
-    if(remoteVideoRef.current.srcObject){
+    if (remoteVideoRef.current.srcObject) {
       const remotePartnerStream = remoteVideoRef.current.srcObject;
       const remotePartnerTracks = remotePartnerStream.getTracks();
       remotePartnerTracks.forEach(function (track) {
         track.stop();
       });
       remoteVideoRef.current.srcObject = null;
-
     }
 
-    if(currentUserVideoRef.current.srcObject){
+    if (currentUserVideoRef.current.srcObject) {
       const myStream = currentUserVideoRef.current.srcObject;
       const myTracks = myStream.getTracks();
-  
+
       // Stop getting user media
       myTracks.forEach(function (track) {
         track.stop();
       });
       currentUserVideoRef.current.srcObject = null;
     }
- 
+
     peerInstance.current.destroy();
 
     //reset video call states
@@ -152,13 +142,13 @@ const VideoCall = () => {
 
   useEffect(() => {
     // On componentDidMount, if the user is the call initiator, the callUser function will be called, of not, the answerCall function will be called.
-    if(remoteVideoRef.current && remoteVideoRef.current){
+    if (remoteVideoRef.current && remoteVideoRef.current) {
       if (callInitiator) {
-        console.log('calling user: ', currentContact._id)
+        console.log("calling user: ", currentContact._id);
         callUser(currentContact._id);
-     }else{
-       answerCall();
-     }
+      } else {
+        answerCall();
+      }
     }
   }, [currentUserVideoRef, remoteVideoRef]);
 
