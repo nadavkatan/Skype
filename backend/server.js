@@ -1,6 +1,7 @@
 require('dotenv').config({ silent: process.env.NODE_ENV === 'production' });
 const express = require('express');
 const cors = require('cors');
+const enforce = require('express-sslify');
 const mongoose = require('mongoose');
 const mongoConnect = require('./config/mongoose.config');
 const session = require('express-session');
@@ -79,7 +80,7 @@ io.on("connection", (socket) => {
         const caller = await User.findById(data.caller._id);
         console.log(caller);
         io.to(caller.socket_id).emit('busy_contact', data);
-        
+
     })
 
     socket.on("disconnect", () => {
@@ -94,8 +95,9 @@ app.use(cors({
     credentials: true,
     origin: 'http://localhost:3000'
 }))
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
