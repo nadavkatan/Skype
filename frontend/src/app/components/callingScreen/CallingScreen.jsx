@@ -6,7 +6,7 @@ import Fab from "@mui/material/Fab";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import callRing from "../../assets/sounds/call-ring-macos.mp3";
 import { useDispatch, useSelector } from "react-redux";
-import { setCallInitiator } from "../../features/videoCall/videoCallSlice";
+import { setCallInitiator, setOngoingCall } from "../../features/videoCall/videoCallSlice";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import { useStyles } from "./styles/styles";
@@ -21,6 +21,7 @@ const CallingScreen = () => {
   //Cancel video call, update server and peer
   const cancelCall = () => {
     dispatch(setCallInitiator(false));
+    dispatch(setOngoingCall(false));
     socket.emit("cancel_call", currentContact);
   };
 

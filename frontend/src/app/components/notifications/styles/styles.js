@@ -2,9 +2,8 @@ import {makeStyles} from '@mui/styles';
 
 export const useStyles = makeStyles({
     notificationsContainer:{
-        // margin:'1em',
         overflowY: 'scroll',
-        height: '90vh'
+        flex:10
 
     },
     notificationsHeading:{

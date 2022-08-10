@@ -67,7 +67,7 @@ const handleLogout = () => {
           <Grid item xs={6}>
             <QuickAction
               quickActionImg={videoCallPic}
-              title={"Make video call with your friends!"}
+              title={"Make video calls with your friends!"}
               subtitle={
                 "Meet 'face'-to'face' with your friends and colleagues!"
               }

@@ -16,7 +16,7 @@ const CallsList = () => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
 
-  //Fetch all calls from database. In return, filter the calls to keep the ones relevant to the current user.
+  //Fetch all calls from database. In the return, filter the calls to keep the ones relevant to the current user.
   useEffect(() => {
     dispatch(getUserCalls(currentUser._id));
   }, []);

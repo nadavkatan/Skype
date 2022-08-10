@@ -15,7 +15,8 @@ export const useStyles = makeStyles({
         display:'flex',
         flexDirection:'column',
         alignItems: 'center',
-        height:'70%'
+        // height:'70%'
+        flex:8
     },
     callItemContainer:{
         display: "flex",

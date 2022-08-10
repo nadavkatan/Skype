@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import Chat from "../../components/chat/Chat";
-import ChatHeeader from "../../components/chatHeader/ChatHeader";
+import ChatHeader from "../../components/chatHeader/ChatHeader";
 import HomePage from "../../pages/homePage/HomePage";
 import Welcome from "../../components/welcome/Welcome";
 import VideoCall from "../../components/videoCall/VideoCall";
@@ -17,8 +17,9 @@ const DesktopScreen = () => {
 
   const classes = useStyles();
 
-  if(callInitiator && callAnswered) return <VideoCall/>;
-  if(receivingCall && callAnswered) return <VideoCall/>;
+  // if(callInitiator && callAnswered) return <VideoCall/>;
+  // if(receivingCall && callAnswered) return <VideoCall/>;
+  if(callAnswered) return <VideoCall/>;
   if(callInitiator) return <CallingScreen/>
   return (
     <Grid container>
@@ -29,7 +30,7 @@ const DesktopScreen = () => {
       <Grid item xs={8} lg={9}>
         {activeTab === "Chat" ? (
           <div className={classes.lgScreenChatContainer}>
-            <ChatHeeader />
+            <ChatHeader />
             <Chat />
           </div>
         ) : (

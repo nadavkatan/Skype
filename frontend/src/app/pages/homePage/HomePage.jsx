@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import ContactsList from "../../components/ContactsList/ContactsList";
 import ChatsList from "../../components/chatsList/ChatsList";
 import Notifications from "../../components/notifications/Notifications";
@@ -20,7 +20,7 @@ const HomePage = () => {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   return (
-    <div style={{ height: "100vh", overflow: "hidden" }}>
+    <div style={{ height: "100vh", overflow: "hidden", display: "flex", flexDirection: "column", flex: 1 }}>
       {activeTab === "Notifications" ? (
         <>
           {!isSmallScreen && <HomeHeader />}
@@ -37,29 +37,20 @@ const HomePage = () => {
           <ContactsList contacts={currentUser.friends} />
         </>
       ) : isSmallScreen && activeTab === "Chat" ? (
-        <Box style={{ height: "90%" }}>
+        <Box style={{ height: "90%", flex: 10 }}>
           <ChatHeader />
           <Chat />
         </Box>
       ) : activeTab === "Search" ? (
         <SearchPage />
       ) : (
-        <Box style={{ height: "100%" }}>
+        <>
+        {/* <Box style={{ height: "100%", display: "flex", flexDirection: "column", flex: 10 }}> */}
           <HomeHeader />
           <ChatsList contacts={currentUser.friends} />
-        </Box>
+        {/* </Box> */}
+        </>
       )}
-      {/* {isSmallScreen && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            height: "10%",
-          }}
-        >
-          <NavigationTab />
-        </div>
-      )} */}
       {isSmallScreen &&  <NavigationTab />}
     </div>
   );

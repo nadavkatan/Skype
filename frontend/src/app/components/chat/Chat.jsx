@@ -10,21 +10,21 @@ import {
   setChatContent,
   deleteMessagesFromUnread,
 } from "../../features/chat/chatSlice";
+import { setBusyContact } from '../../features/videoCall/videoCallSlice';
 import MessageFriend from "../messageFriend/MessageFriend";
 import Message from "../message/Message";
 import { useStyles } from "./styles/styles";
 import SendIcon from "@mui/icons-material/Send";
 import { useRef } from "react";
 import { useMediaQuery } from "@mui/material";
-import VideoCall from "../videoCall/VideoCall";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const { currentRoom, chatContent } = useSelector((state) => state.chat);
+  const { busyContact } = useSelector((state) => state.videoCall)
   const { currentUser } = useSelector((state) => state.auth);
-  const { receivingCall, callAnswered, callInitiator } = useSelector(
-    (state) => state.videoCall
-  );
   const { currentContact } = useSelector((state) => state.contacts);
   const { sendMessage, socket } = useContext(AppContext);
 
@@ -35,14 +35,15 @@ const Chat = () => {
 
   const handleSendMessage = () => {
     if (currentRoom !== "" && currentMessage !== "") {
+     let date = new Date(Date.now());
+     let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+     let formattedTime = date.toLocaleTimeString('en-GB',{ timeZone: timeZone, hour: '2-digit', minute:'2-digit'});
       const messageData = {
         room: currentRoom,
         author: currentUser.username,
         message: currentMessage,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
+        // time: hours + ":" + minutes 
+        time: formattedTime
       };
       // Send the message with socket.io
       sendMessage(messageData);
@@ -74,6 +75,15 @@ const Chat = () => {
     });
   }, [socket]);
 
+  useEffect(() =>{
+    if(busyContact){
+      toast.error(`${busyContact.username} is on another call. Please try again later.`)
+      setTimeout(() =>{
+        dispatch(setBusyContact(null));
+      },500)
+    }
+  },[busyContact])
+
 
   useEffect(() => {
     // When user enters chat, the messages stored in mongodb are presented.
@@ -90,12 +100,8 @@ const Chat = () => {
   }, [currentContact]);
 
   return (
-    <div style={{height:'86%'}}>
-      {/* {receivingCall ? (
-        <VideoCall />
-      ) : callAnswered || callInitiator ? (
-        <VideoCall />
-      ) : ( */}
+    <div style={{height:'86%', flex: 8}}>
+    <ToastContainer/>
         <>
           <div
             className={

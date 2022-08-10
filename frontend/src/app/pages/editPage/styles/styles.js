@@ -7,7 +7,14 @@ export const useStyles = makeStyles({
         flexDirection:'column',
         alignItems: 'center',
         // backgroundColor: '#F2F2F2',
-        // backgroundImage: 'url("https://www.transparenttextures.com/patterns/axiom-pattern.png"")'
+        // backgroundColor: '#8CC0DE',
+        // backgroundImage: 'url("https://i.pinimg.com/564x/e4/e5/13/e4e51394878a07da16a7f385ac5a75c5.jpg")',
+        // backgroundSize: 'contain',
+        // backgroundRepeat: 'no-repeat',
+        // backgroundImage: 'url("https://www.transparenttextures.com/patterns/cubes.png")',
+        // backgroundImage: 'url("https://i.pinimg.com/originals/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg")',
+        // backgroundColor: '#567499',
+        // backgroundImage: 'url("https://www.transparenttextures.com/patterns/back-pattern.png")'
     },
     editPageContainer:{
         width:'60%',
@@ -22,6 +29,10 @@ export const useStyles = makeStyles({
     },
     editPageHeader:{
 
+    },
+    editPageTitle:{
+        fontWeight:'bold!important',
+        marginBottom:'0.6em!important'
     },
     formHeader:{
         margin: '1em 0 2em 0',
@@ -45,7 +56,10 @@ export const useStyles = makeStyles({
         alignItems: 'center'
     },
     editPageAvatar:{
-        marginBottom:'1em'
+        marginBottom:'1em',
+        borderRadius: '50%',
+        width:'9.4em',
+        boxShadow: '-5px 0 16px gray'
     },
     smScreenChangePictureBtn:{
         width: '100%!important',

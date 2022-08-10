@@ -4,9 +4,10 @@ export const useStyles = makeStyles({
     navTabContainer:{
         display: 'flex',
         justifyContent: 'space-around',
-        position: 'fixed',
-        bottom: 0,
-        width:'100%',
+        // position: 'fixed',
+        // bottom: 0,
+        // width:'100%',
+        flex:1,
         padding: '1em',
         borderTop: '0.5px solid gray'
     },

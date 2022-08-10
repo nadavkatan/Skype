@@ -13,6 +13,7 @@ import {
   setReceivingCall,
   setCallInitiator,
   storeCall,
+  setOngoingCall
 } from "../../features/videoCall/videoCallSlice";
 import { AppContext } from "../../context/Context";
 import { useContext } from "react";
@@ -134,6 +135,7 @@ const VideoCall = () => {
     //reset video call states
     dispatch(setCallEnded(true));
     dispatch(setCallAnswered(false));
+    dispatch(setOngoingCall(false));
     dispatch(setCallInitiator(false));
     dispatch(setReceivingCall(false));
   };

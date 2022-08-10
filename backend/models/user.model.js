@@ -9,8 +9,6 @@ const friendSchema= new mongoose.Schema({
 const friendRequestSchema = new mongoose.Schema({
     sender_id: {type: String, required: true},
     sender_name: {type: String, required: true},
-    // receiver_id: {type: String, required: true},
-    // receiver_name: {type: String, required: true},
 })
 
 const friendRequestToSchema = new mongoose.Schema({
@@ -30,9 +28,7 @@ const userSchema = new mongoose.Schema({
     last_name: {type: String, required: true, trim: true},
     username: {type: String, required: true, trim: true, unique: true},
     email: {type: String, required: true, trim: true},
-    // friends:{type:[String]},
     friends: {type: [friendSchema], required: true},
-    // friendRequestesFrom: {type: [String]},
     friendRequestesFrom: {type: [friendRequestSchema]},
     friendRequestesTo:{type: [friendRequestToSchema]},
     socket_id:{type: String},

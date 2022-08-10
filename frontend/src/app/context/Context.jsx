@@ -10,7 +10,7 @@ import {getAllContacts, setCurrentContact} from '../features/contacts/contacsSli
 import {checkAuth} from '../features/auth/authSlice';
 import { getAllUserNotifications } from '../features/notifications/notificationsSlice';
 import "react-toastify/dist/ReactToastify.css";
-import {setReceivingCall, setCaller, setCallInitiator, setCallAnswered} from '../features/videoCall/videoCallSlice';
+import {setReceivingCall, setCaller, setCallInitiator, setCallAnswered, setOngoingCall, setBusyContact} from '../features/videoCall/videoCallSlice';
 
 
 export const AppContext = createContext();
@@ -18,9 +18,8 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 const socket = io.connect(BASE_URL);
 
 const Context = ({children}) => {
-    const{currentUser} = useSelector((state)=> state.auth);
-    const{contactsList} = useSelector((state)=> state.contacts);
-    const {receivingCall, callAnswered} = useSelector((state)=> state.videoCall);
+    const {currentUser} = useSelector((state)=> state.auth);
+    const {receivingCall, callAnswered, ongoingCall, callInitiator} = useSelector((state)=> state.videoCall);
     const {currentRoom} = useSelector((state)=> state.chat);
     const [activeTab, setActiveTab] = useState("ChatsList");
     const [openModal, setOpenModal] = useState(false);
@@ -28,7 +27,7 @@ const Context = ({children}) => {
 
     socket.off("addFriend").on("addFriend", (friend)=>{
         if(currentUser){
-          const update =friend.updateDescription.updatedFields 
+          const update = friend.updateDescription.updatedFields 
           if(update[Object.keys(update)[0]].friendId){
              return dispatch(getAllContacts(currentUser._id))
           }
@@ -41,28 +40,41 @@ const Context = ({children}) => {
 
     socket.off('receiving_call').on('receiving_call', (data)=>{
       console.log('received emit from back, receiving call', data);
-      setOpenModal(true)
-      dispatch(setCurrentContact(data.from))
-      dispatch(setCurrentRoom(data.room))
-      dispatch(setCaller(data.from))
-      dispatch(setReceivingCall(true))
+      //if user is not already on another call, not currently receiving another call, or currently calling
+      if(!ongoingCall && !receivingCall && !callInitiator){
+        setOpenModal(true)
+        dispatch(setCurrentContact(data.from))
+        dispatch(setCurrentRoom(data.room))
+        // dispatch(setCaller(data.from))
+        dispatch(setReceivingCall(true))
+      }else{
+        socket.emit('busy', {caller: data.from, receiver: currentUser})
+      }
     });
 
     socket.off('call_answered').on('call_answered', (data)=>{
       console.log('received emit from back, call answered');
       dispatch(setCallAnswered(true));
+      dispatch(setOngoingCall(true));
     })
 
     socket.off('call_cancelled').on('call_cancelled', (data)=>{
       console.log('received emit from back, cancel call');
-      dispatch(setReceivingCall(false))
-      setOpenModal(false)
-      dispatch(setCaller(null))
-      //add missed call notification
+      if(receivingCall){
+        dispatch(setReceivingCall(false))
+        setOpenModal(false)
+        dispatch(setCaller(null))
+        //add missed call notification
+      }
     });
 
     socket.off("call_declined").on("call_declined", (data)=>{
       dispatch(setCallInitiator(false));
+    });
+
+    socket.off("busy_contact").on("busy_contact", (data)=>{
+      dispatch(setCallInitiator(false));
+      dispatch(setBusyContact(data.receiver));
     });
 
     socket.off("message_update").on("message_update", data=>{
@@ -118,7 +130,6 @@ const Context = ({children}) => {
 
     useEffect(()=>{
       dispatch(checkAuth());
-
     },[])
 
     useEffect(()=>{

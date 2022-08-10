@@ -8,7 +8,7 @@ import { AppContext } from "../../context/Context";
 import { useContext } from "react";
 import { useStyles } from "./styles/styles";
 import { useMediaQuery } from "@mui/material";
-import { setCallInitiator } from "../../features/videoCall/videoCallSlice";
+import { setCallInitiator, setOngoingCall } from "../../features/videoCall/videoCallSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const ChatHeader = () => {
@@ -24,6 +24,7 @@ const ChatHeader = () => {
   // Once a user starts a call, socket emits an event to the server and the callInitiator is updated.
   const handleVideoCall = () => {
     dispatch(setCallInitiator(true));
+    // dispatch(setOngoinCall(true));
     socket.emit("initiate_call", {
       to: currentContact._id,
       from: currentUser,

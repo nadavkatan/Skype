@@ -7,7 +7,8 @@ export const useStyles = makeStyles({
         justifyContent: 'space-around',
         padding:'1em',
         borderBottom: '0.5px solid lightgray',
-        height:'7%'
+        // height:'7%'
+        flex:1
     },
     lgScreenChatHeaderContainer:{
         display: 'flex',

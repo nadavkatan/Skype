@@ -6,6 +6,7 @@ export const useStyles = makeStyles({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        flex: 1,
     },
     searchContainerLink:{
         border: 'none',

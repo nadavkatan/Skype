@@ -30,6 +30,8 @@ const initialState = {
     callEnded: false,
     callInitiator: false,
     callAnswered: false,
+    ongoingCall: false,
+    busyContact: null,
     calls:[]
 }
 
@@ -51,6 +53,12 @@ const videoCallSlice = createSlice({
         },
         setCallAnswered: (state, {payload})=>{
             state.callAnswered = payload
+        },
+        setOngoingCall: (state, {payload})=>{
+            state.ongoingCall = payload
+        },
+        setBusyContact: (state, {payload})=>{
+            state.busyContact = payload
         }
     },
     extraReducers: {
@@ -76,5 +84,5 @@ const videoCallSlice = createSlice({
     }
 });
 
-export const {setCallAnswered, setReceivingCall,setCallInitiator, setCaller, setCallEnded} = videoCallSlice.actions;
+export const {setCallAnswered, setReceivingCall,setOngoingCall, setCallInitiator, setCaller, setCallEnded, setBusyContact} = videoCallSlice.actions;
 export default videoCallSlice.reducer;

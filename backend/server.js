@@ -73,6 +73,13 @@ io.on("connection", (socket) => {
     socket.on("decline_call", async(data) => {
         const relevantUser = await User.findById(data._id);
         io.to(relevantUser.socket_id).emit('call_declined', data);
+    });
+
+    socket.on("busy", async(data) => {
+        const caller = await User.findById(data.caller._id);
+        console.log(caller);
+        io.to(caller.socket_id).emit('busy_contact', data);
+        
     })
 
     socket.on("disconnect", () => {

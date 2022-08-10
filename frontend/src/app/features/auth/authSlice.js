@@ -65,7 +65,7 @@ export const getUpdatedCurrentUser = createAsyncThunk("auth/getUpdatedCurrentUse
 
 export const updateUserCredentials = createAsyncThunk("auth/updateUserCredentials",
 async(args, {getState})=>{
-        const{auth} = getState();
+        const { auth } = getState();
     try{
         const response = await axios({
             method: 'PUT',

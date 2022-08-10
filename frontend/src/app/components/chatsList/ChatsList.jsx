@@ -25,7 +25,7 @@ const ChatsList = () => {
   },[chats])
 
   return (
-    <Box style={{overflowY:'scroll', display: 'flex', flexDirection:'column', height:'74%'}}>
+    <Box style={{overflowY:'scroll', display: 'flex', flexDirection:'column', flex:8}}>
       {status === "loading" && (
         <div
           style={{ display: "flex", justifyContent: "center", width: "100%" }}

@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import editBackground from '../../assets/images/edit-background.jpeg';
 
 const EditPage = () => {
   const { currentUser } = useSelector((state) => state.auth);
@@ -45,7 +46,7 @@ const EditPage = () => {
   return (
     <>
       {currentUser && (
-        <Box className={classes.editPageWrapper}>
+        <Box className={classes.editPageWrapper} style={{backgroundImage:`url(${editBackground})`, backgroundSize: 'contain',}}>
           <Box
             className={
               isSmallScreen
@@ -54,15 +55,15 @@ const EditPage = () => {
             }
           >
             <Box className={classes.editPageHeader}>
-              <Typography variant="h3">Edit profile</Typography>
+              <Typography variant="h3" className={classes.editPageTitle}>Edit profile</Typography>
               <Typography variant="subtitle1">
                 People on Skype will get to know you with the info below
               </Typography>
             </Box>
-            <Grid container spacing={2}>
+            {/* <Grid container spacing={2}>
               <Grid item md={6} xs={12}></Grid>
               <Grid item md={6} xs={12}></Grid>
-            </Grid>
+            </Grid> */}
             <Box
               className={classes.editPageFormContainer}
               component="form"

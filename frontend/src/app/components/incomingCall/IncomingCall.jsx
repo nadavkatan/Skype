@@ -7,7 +7,7 @@ import CallIcon from "@mui/icons-material/Call";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import Backdrop from "@mui/material/Backdrop";
 import Paper from "@mui/material/Paper";
-import { setCallAnswered } from "../../features/videoCall/videoCallSlice";
+import { setCallAnswered, setOngoingCall } from "../../features/videoCall/videoCallSlice";
 import { setCurrentContact } from "../../features/contacts/contacsSlice";
 import {setReceivingCall, setCaller} from '../../features/videoCall/videoCallSlice';
 import { useSelector, useDispatch } from "react-redux";
@@ -28,14 +28,17 @@ const IncomingCall = () => {
   const handleAnswerCall = () => {
     setOpenModal(false);
     dispatch(setCallAnswered(true));
-    dispatch(setCurrentContact(caller));
-    socket.emit("answer_call", caller);
+    dispatch(setOngoingCall(true));
+    // dispatch(setCurrentContact(caller));
+    // socket.emit("answer_call", caller);
+    socket.emit("answer_call", currentContact);
   };
 
   const handleDeclineCall = ()=>{
     setOpenModal(false);
     dispatch(setReceivingCall(false))
-    socket.emit("decline_call", caller);
+    // socket.emit("decline_call", caller);
+    socket.emit("decline_call", currentContact);
     dispatch(setCaller(null));
   }
 
@@ -50,10 +53,17 @@ const IncomingCall = () => {
       <div className={ isSmallScreen ? classes.smScreenIncomingCallModal : classes.incomingCallModal}>
         <Paper elevation={0} className={classes.incomingCallContainer}>
           <div className={classes.incomingCallBody}>
-          {caller && <>
+          {/* {caller && <>
           <Avatar imgSrc={currentContact.avatar.secure_url} loggedIn={currentContact.is_logged_in} avatarDimensions={isSmallScreen ? {width: 230, height: 230}: { width: 100, height: 100 }} />
           <Typography variant="subtitle2" color="white">
               {caller.username}
+            </Typography>
+            </>
+          } */}
+          {currentContact && <>
+          <Avatar imgSrc={currentContact.avatar.secure_url} loggedIn={currentContact.is_logged_in} avatarDimensions={isSmallScreen ? {width: 230, height: 230}: { width: 100, height: 100 }} />
+          <Typography variant="subtitle2" color="white">
+              {currentContact.username}
             </Typography>
             </>
           }
