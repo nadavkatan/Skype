@@ -6,25 +6,36 @@ import { useMediaQuery } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserCalls } from "../../features/videoCall/videoCallSlice";
 import { useStyles } from "./styles/styles";
+import { MrMiyagi } from "@uiball/loaders";
 
 const CallsList = () => {
-  const { calls } = useSelector((state) => state.videoCall);
+  const { calls, status } = useSelector((state) => state.videoCall);
   const { currentUser } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const classes = useStyles();
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
-
   //Fetch all calls from database. In the return, filter the calls to keep the ones relevant to the current user.
   useEffect(() => {
     dispatch(getUserCalls(currentUser._id));
   }, []);
- 
-  return (
 
-    <Box className={isSmallScreen? classes.smScreenCallListContainer : classes.callListContainer}>
-      {calls.length > 0 ? (
+  return (
+    <Box
+      className={
+        isSmallScreen
+          ? classes.smScreenCallListContainer
+          : classes.callListContainer
+      }
+    >
+      {status === "loading" ? (
+        <div
+          style={{ display: "flex", justifyContent: "center", width: "100%" }}
+        >
+          <MrMiyagi size={35} lineWeight={3.5} speed={1} color="#54BAB9" />
+        </div>
+      ) : calls.length > 0 ? (
         calls.map((call, i) => {
           const username = call.participants.filter(
             (participant) =>

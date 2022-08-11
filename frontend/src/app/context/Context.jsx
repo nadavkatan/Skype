@@ -129,6 +129,7 @@ const Context = ({children}) => {
     }
 
     useEffect(()=>{
+      console.log(BASE_URL)
       dispatch(checkAuth());
     },[])
 

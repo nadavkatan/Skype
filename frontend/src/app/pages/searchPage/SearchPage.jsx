@@ -16,7 +16,6 @@ const SearchPage = () => {
     const dispatch = useDispatch();
 
     useEffect(()=>{
-        console.log('contacts: ' + contactsList)
         dispatch(getAllUsers())
     },[])
 
@@ -26,14 +25,10 @@ const SearchPage = () => {
         }
     },[allUsers])
 
-    // useEffect(()=>{
-    //     console.log("search results: ", searchResults)
-    // },[searchResults])
-
   return (
     <div>
         <SearchBar users={allUsers} setSearchResults={setSearchResults} />
-        <div>
+        <div style={{height: '85vh', overflowY: 'scroll'}}>
             {
                 searchResults.length > 0 && searchResults.map(contact=>{
                     const friend = contactsList.find(friend => friend._id === contact._id);
