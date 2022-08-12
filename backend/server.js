@@ -42,10 +42,10 @@ io.on("connection", (socket) => {
   socket.on("user_connected", async (user) => {
     const updatedUser = await User.findOneAndUpdate(
       { username: user.username },
-      { socket_id: socket.id },
+      { socket_id: socket.id, is_logged_in: true },
       { new: true }
     );
-    // console.log(`User Connected: ${updatedUser}`)
+    io.to(updatedUser.socket_id).emit("user_updated", updatedUser);
   });
 
   socket.on("join_room", (data) => {
@@ -87,12 +87,15 @@ io.on("connection", (socket) => {
 
   socket.on("busy", async (data) => {
     const caller = await User.findById(data.caller._id);
-    console.log(caller);
     io.to(caller.socket_id).emit("busy_contact", data);
   });
 
-  socket.on("disconnect", () => {
-    //   console.log("User Disconnected", socket.id);
+  socket.on("disconnect", async () => {
+    await User.findOneAndUpdate(
+      { socket_id: socket.id },
+      { is_logged_in: false },
+      { new: true }
+    );
   });
 });
 
